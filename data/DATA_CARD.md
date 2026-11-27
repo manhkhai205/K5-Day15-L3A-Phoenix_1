@@ -77,4 +77,4 @@
 
 ---
 
-**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được **Vũ Đức Anh** kiểm chéo và chạy script tự động ngày 27/11/2026 (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng và tách rời không trùng marker; kịch bản thời tiết `seed=42`; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.
+**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được **Vũ Đức Anh** đối chiếu bản đồ OpenStreetMap Nominatim (28/11/2026) và chạy script kiểm tự động (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín bám ranh giới đất liền thật, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng và tách rời không trùng marker; kịch bản thời tiết `seed=42`; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.

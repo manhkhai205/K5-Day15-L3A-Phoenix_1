@@ -12,6 +12,26 @@ function shortenName(name) {
   return s.length > 22 ? s.slice(0, 21) + "…" : s;
 }
 
+function buildRouteGeoJson(dayItems) {
+  const coords = (dayItems || [])
+    .filter((it) => typeof it.lng === "number" && typeof it.lat === "number")
+    .map((it) => [it.lng, it.lat]);
+
+  return {
+    type: "FeatureCollection",
+    features:
+      coords.length >= 2
+        ? [
+            {
+              type: "Feature",
+              geometry: { type: "LineString", coordinates: coords },
+              properties: {},
+            },
+          ]
+        : [],
+  };
+}
+
 export default function ParkMap({
   zonesData,
   dayItems,
@@ -27,6 +47,7 @@ export default function ParkMap({
   const zoneMarkersRef = useRef([]);
   const hotelMarkersRef = useRef([]);
   const libertyLoadedRef = useRef(false);
+  const styleLoadedRef = useRef(false);
   const fallbackTriggeredRef = useRef(false);
   const lastFitSigRef = useRef("");
 
@@ -42,26 +63,110 @@ export default function ParkMap({
     return FALLBACK_ZONES_GEOJSON;
   }, [zonesData]);
 
+  const latestZonesRef = useRef(effectiveZones);
+  const latestDayItemsRef = useRef(dayItems);
+  const onSelectItemRef = useRef(onSelectItem);
+
+  latestZonesRef.current = effectiveZones;
+  latestDayItemsRef.current = dayItems;
+  onSelectItemRef.current = onSelectItem;
+
   const gmapsUrl = useMemo(() => buildGoogleMapsDirectionsUrl(dayItems), [dayItems]);
 
-  // Khởi tạo MapLibre GL JS + OpenFreeMap Liberty + dự phòng ngoại tuyến
+  function syncGeoJsonLayers(map) {
+    if (!map || !styleLoadedRef.current) return;
+    try {
+      const zonesGeo = latestZonesRef.current;
+      const zonesSource = map.getSource("zones-geojson");
+      if (zonesSource) {
+        zonesSource.setData(zonesGeo);
+      } else {
+        map.addSource("zones-geojson", {
+          type: "geojson",
+          data: zonesGeo,
+        });
+        map.addLayer({
+          id: "zones-fill",
+          type: "fill",
+          source: "zones-geojson",
+          paint: {
+            "fill-color": ["coalesce", ["get", "color"], "#2c6ab0"],
+            "fill-opacity": 0.22,
+          },
+        });
+        map.addLayer({
+          id: "zones-line",
+          type: "line",
+          source: "zones-geojson",
+          paint: {
+            "line-color": ["coalesce", ["get", "color"], "#2c6ab0"],
+            "line-width": 1.6,
+            "line-opacity": 0.85,
+          },
+        });
+      }
+
+      const routeGeoJson = buildRouteGeoJson(latestDayItemsRef.current);
+      const routeSource = map.getSource("route-line");
+      if (routeSource) {
+        routeSource.setData(routeGeoJson);
+      } else {
+        map.addSource("route-line", {
+          type: "geojson",
+          data: routeGeoJson,
+        });
+        map.addLayer({
+          id: "route-line-layer",
+          type: "line",
+          source: "route-line",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#2c6ab0",
+            "line-width": 3.5,
+            "line-opacity": 0.85,
+            "line-dasharray": [2, 1.2],
+          },
+        });
+      }
+    } catch {
+      // Style có thể đang chuyển đổi sang fallback; lần style.load tiếp theo sẽ đồng bộ lại
+    }
+  }
+
+  // Khởi tạo MapLibre GL JS + ResizeObserver + dự phòng ngoại tuyến
   useEffect(() => {
-    if (!containerRef.current) return undefined;
+    const el = containerRef.current;
+    if (!el) return undefined;
 
     const map = new maplibregl.Map({
-      container: containerRef.current,
+      container: el,
       style: OPENFREEMAP_STYLE_URL,
-      center: [103.858, 10.324],
-      zoom: 14.2,
+      center: [103.857, 10.331],
+      zoom: 13.2,
       attributionControl: { compact: true },
     });
 
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: false, showZoom: true }), "bottom-right");
     mapRef.current = map;
 
+    let rafResize = 0;
+    const ro = new ResizeObserver(() => {
+      if (rafResize) window.cancelAnimationFrame(rafResize);
+      rafResize = window.requestAnimationFrame(() => {
+        if (mapRef.current) {
+          mapRef.current.resize();
+        }
+      });
+    });
+    ro.observe(el);
+
     const triggerFallback = () => {
       if (fallbackTriggeredRef.current) return;
       fallbackTriggeredRef.current = true;
+      styleLoadedRef.current = false;
       setIsOfflineFallback(true);
       try {
         map.setStyle(MAP_FALLBACK_STYLE);
@@ -77,10 +182,12 @@ export default function ParkMap({
     }, 3000);
 
     map.on("style.load", () => {
+      styleLoadedRef.current = true;
       if (!fallbackTriggeredRef.current) {
         libertyLoadedRef.current = true;
         window.clearTimeout(timerId);
       }
+      syncGeoJsonLayers(map);
       setStyleReadyTick((t) => t + 1);
     });
 
@@ -99,18 +206,20 @@ export default function ParkMap({
 
     return () => {
       window.clearTimeout(timerId);
+      if (rafResize) window.cancelAnimationFrame(rafResize);
+      ro.disconnect();
       itemMarkersRef.current.forEach((m) => m.remove());
       zoneMarkersRef.current.forEach((m) => m.remove());
       hotelMarkersRef.current.forEach((m) => m.remove());
       itemMarkersRef.current = [];
       zoneMarkersRef.current = [];
       hotelMarkersRef.current = [];
+      styleLoadedRef.current = false;
       map.remove();
       mapRef.current = null;
     };
   }, []);
 
-  // Chuyển đổi góc nhìn 2D / 3D
   function handleToggle3D() {
     const map = mapRef.current;
     const next = !is3D;
@@ -124,82 +233,17 @@ export default function ParkMap({
     }
   }
 
-  // Đồng bộ GeoJSON 8 phân khu + tuyến LineString + HTML markers
+  // Đồng bộ GeoJSON layers khi style sẵn sàng
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !map.isStyleLoaded()) return;
+    if (!map || !styleLoadedRef.current) return;
+    syncGeoJsonLayers(map);
+  }, [effectiveZones, dayItems, styleReadyTick]);
 
-    const zonesSource = map.getSource("zones-geojson");
-    if (zonesSource) {
-      zonesSource.setData(effectiveZones);
-    } else {
-      map.addSource("zones-geojson", {
-        type: "geojson",
-        data: effectiveZones,
-      });
-      map.addLayer({
-        id: "zones-fill",
-        type: "fill",
-        source: "zones-geojson",
-        paint: {
-          "fill-color": ["coalesce", ["get", "color"], "#2c6ab0"],
-          "fill-opacity": 0.22,
-        },
-      });
-      map.addLayer({
-        id: "zones-line",
-        type: "line",
-        source: "zones-geojson",
-        paint: {
-          "line-color": ["coalesce", ["get", "color"], "#2c6ab0"],
-          "line-width": 1.6,
-          "line-opacity": 0.85,
-        },
-      });
-    }
-
-    const coords = (dayItems || [])
-      .filter((it) => typeof it.lng === "number" && typeof it.lat === "number")
-      .map((it) => [it.lng, it.lat]);
-
-    const routeGeoJson = {
-      type: "FeatureCollection",
-      features:
-        coords.length >= 2
-          ? [
-              {
-                type: "Feature",
-                geometry: { type: "LineString", coordinates: coords },
-                properties: {},
-              },
-            ]
-          : [],
-    };
-
-    const routeSource = map.getSource("route-line");
-    if (routeSource) {
-      routeSource.setData(routeGeoJson);
-    } else {
-      map.addSource("route-line", {
-        type: "geojson",
-        data: routeGeoJson,
-      });
-      map.addLayer({
-        id: "route-line-layer",
-        type: "line",
-        source: "route-line",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#2c6ab0",
-          "line-width": 3.5,
-          "line-opacity": 0.85,
-          "line-dasharray": [2, 1.2],
-        },
-      });
-    }
+  // Đồng bộ HTML Markers & fitBounds (LUÔN chạy, không phụ thuộc isStyleLoaded của tile ngoài)
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return undefined;
 
     zoneMarkersRef.current.forEach((m) => m.remove());
     zoneMarkersRef.current = [];
@@ -228,7 +272,7 @@ export default function ParkMap({
       btn.textContent = `${idx + 1} · ${shortenName(it.name)} · ${it.start}`;
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        onSelectItem(it);
+        onSelectItemRef.current?.(it);
       });
 
       const marker = new maplibregl.Marker({ element: btn, anchor: "center" })
@@ -252,11 +296,17 @@ export default function ParkMap({
       });
     }
 
+    const coords = (dayItems || [])
+      .filter((it) => typeof it.lng === "number" && typeof it.lat === "number")
+      .map((it) => [it.lng, it.lat]);
+
     const fitSig =
       coords.length > 0
         ? coords.map((c) => `${c[0].toFixed(4)},${c[1].toFixed(4)}`).join("|")
         : `hotels:${(hotels || []).map((h) => h.id).join(",")}`;
 
+    let tFit1 = 0;
+    let tFit2 = 0;
     if (fitSig !== lastFitSigRef.current) {
       lastFitSigRef.current = fitSig;
       const boundsCoords =
@@ -266,21 +316,38 @@ export default function ParkMap({
               .filter((h) => typeof h.lng === "number" && typeof h.lat === "number")
               .map((h) => [h.lng, h.lat]);
 
-      if (boundsCoords.length >= 2) {
-        const bounds = boundsCoords.reduce(
-          (b, c) => b.extend(c),
-          new maplibregl.LngLatBounds(boundsCoords[0], boundsCoords[0])
-        );
-        map.fitBounds(bounds, {
-          padding: { top: 76, bottom: 92, left: 48, right: 48 },
-          maxZoom: 16.2,
-          duration: 600,
-        });
-      } else if (boundsCoords.length === 1) {
-        map.easeTo({ center: boundsCoords[0], zoom: 15.2, duration: 500 });
+      const runFit = (duration) => {
+        const m = mapRef.current;
+        if (!m) return;
+        m.resize();
+        if (boundsCoords.length >= 2) {
+          const bounds = boundsCoords.reduce(
+            (b, c) => b.extend(c),
+            new maplibregl.LngLatBounds(boundsCoords[0], boundsCoords[0])
+          );
+          m.fitBounds(bounds, {
+            padding: { top: 76, bottom: 92, left: 48, right: 48 },
+            maxZoom: 16.5,
+            duration,
+          });
+        } else if (boundsCoords.length === 1) {
+          m.easeTo({ center: boundsCoords[0], zoom: 15.2, duration });
+        }
+      };
+
+      runFit(500);
+      // Căn lại sau khi hiệu ứng mở rộng cột 40% -> 71% (950ms) hoàn tất
+      if (boundsCoords.length >= 1) {
+        tFit1 = window.setTimeout(() => runFit(350), 500);
+        tFit2 = window.setTimeout(() => runFit(350), 1020);
       }
     }
-  }, [effectiveZones, dayItems, hotels, selectedItemId, styleReadyTick, onSelectItem]);
+
+    return () => {
+      if (tFit1) window.clearTimeout(tFit1);
+      if (tFit2) window.clearTimeout(tFit2);
+    };
+  }, [effectiveZones, dayItems, hotels, selectedItemId]);
 
   useEffect(() => {
     const map = mapRef.current;

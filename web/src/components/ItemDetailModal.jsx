@@ -99,23 +99,62 @@ export default function ItemDetailModal({
 
         {/* Media Hybrid (YouTube embed hoặc ảnh link chính thức + onError fallback) */}
         <div className="media-box">
-          {embedUrl ? (
-            <iframe
-              className="media-frame"
-              src={embedUrl}
-              title={item.name}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+          {loadingInfo ? (
+            <div className="media-empty">
+              <span>Đang tải media...</span>
+            </div>
+          ) : embedUrl ? (
+            <>
+              <iframe
+                className="media-frame"
+                src={embedUrl}
+                title={item.name}
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+              {(media.caption || media.source_url) && (
+                <div className="media-caption">
+                  <span>{media.caption || item.name}</span>
+                  {media.source_url && (
+                    <a
+                      href={media.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--brand)", fontWeight: 600, whiteSpace: "nowrap" }}
+                    >
+                      Nguồn chính thức ↗
+                    </a>
+                  )}
+                </div>
+              )}
+            </>
           ) : hasWorkingImage ? (
-            <img
-              className="media-img"
-              src={media.image_url}
-              alt={media.caption || item.name}
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              onError={() => setImgFailed(true)}
-            />
+            <>
+              <img
+                className="media-img"
+                src={media.image_url}
+                alt={media.caption || item.name}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                onError={() => setImgFailed(true)}
+              />
+              {(media.caption || media.source_url) && (
+                <div className="media-caption">
+                  <span>{media.caption || item.name}</span>
+                  {media.source_url && (
+                    <a
+                      href={media.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--brand)", fontWeight: 600, whiteSpace: "nowrap" }}
+                    >
+                      Nguồn chính thức ↗
+                    </a>
+                  )}
+                </div>
+              )}
+            </>
           ) : (
             <div className="media-empty">
               <span>Chưa có media</span>
