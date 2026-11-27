@@ -1,0 +1,464 @@
+{
+  "session_id": "mock_demo",
+  "reply": "Mình đã xếp lịch 2 ngày xuất phát từ **VinHolidays Fiesta Phú Quốc** (`0 vi phạm` qua `kiem_lich_trinh`).\n- Ngày 1: VinWonders Phú Quốc (ưu tiên trò hợp cả 2 bé 110cm & 95cm, tránh nắng trưa tại Cung điện Hải Vương, giữ show Nàng tiên cá & Once Show).\n- Ngày 2: Vinpearl Safari buổi sáng (về trước 15:20) & Grand World buổi tối.",
+  "status": "ok",
+  "missing_fields": [],
+  "hotels": [
+    {
+      "id": "HT-01",
+      "name": "VinHolidays Fiesta Phú Quốc",
+      "lat": 10.3282,
+      "lng": 103.8576,
+      "distance_to_gate_m": 800,
+      "price_ref_vnd": 1450000,
+      "rooms_left": 3,
+      "rooms_is_synthetic": true,
+      "fit_score": 92,
+      "fit_note": "Còn 3 phòng gia đình (dữ liệu mô phỏng) · 800m tới cổng",
+      "booking_url": "https://vinpearl.com/vi/hotels/vinholidays-fiesta-phu-quoc"
+    },
+    {
+      "id": "HT-02",
+      "name": "Wyndham Garden Grandworld Phú Quốc",
+      "lat": 10.3256,
+      "lng": 103.8554,
+      "distance_to_gate_m": 1100,
+      "price_ref_vnd": 1850000,
+      "rooms_left": 5,
+      "rooms_is_synthetic": true,
+      "fit_score": 87,
+      "fit_note": "Còn 5 phòng gần khu Grand World (dữ liệu mô phỏng) · 1.1km tới cổng",
+      "booking_url": "https://vinpearl.com/vi"
+    },
+    {
+      "id": "HT-03",
+      "name": "Radisson Blu Resort Phú Quốc",
+      "lat": 10.3198,
+      "lng": 103.851,
+      "distance_to_gate_m": 650,
+      "price_ref_vnd": 3200000,
+      "rooms_left": 2,
+      "rooms_is_synthetic": true,
+      "fit_score": 84,
+      "fit_note": "Còn 2 phòng hướng vườn (dữ liệu mô phỏng) · 650m tới cổng",
+      "booking_url": "https://www.radissonhotels.com/"
+    }
+  ],
+  "selected_hotel_id": "HT-01",
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-12-12",
+      "weather": {
+        "trang_thai": "nang_gat",
+        "co_mua": false,
+        "khung_gio_mua": null
+      },
+      "summary": {
+        "cost_vnd": 4550000,
+        "n_items": 9,
+        "kid_ok_count": 7,
+        "total_rides": 7
+      },
+      "items": [
+        {
+          "id": "HT-01",
+          "type": "hotel",
+          "category": "hotel",
+          "name": "VinHolidays Fiesta Phú Quốc",
+          "zone_id": "HOTEL",
+          "venue_id": "hotel",
+          "start": "08:35",
+          "end": "08:55",
+          "lat": 10.3282,
+          "lng": 103.8576,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Điểm xuất phát (tham khảo, ngoài phạm vi chấm eval/)."
+        },
+        {
+          "id": "VW-Z2-01",
+          "type": "ride",
+          "category": "ride",
+          "name": "Đu quay Thumbelina",
+          "zone_id": "Z2_FAIRY",
+          "venue_id": "vinwonders",
+          "start": "09:00",
+          "end": "09:20",
+          "lat": 10.31652,
+          "lng": 103.852,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Đu quay cổ tích nhẹ nhàng, trẻ dưới 100cm cần có người lớn ngồi cùng."
+        },
+        {
+          "id": "VW-Z2-05",
+          "type": "ride",
+          "category": "play_area",
+          "name": "Khu vui chơi trong nhà & nhà bóng cổ tích",
+          "zone_id": "Z2_FAIRY",
+          "venue_id": "vinwonders",
+          "start": "09:25",
+          "end": "10:05",
+          "lat": 10.31725,
+          "lng": 103.8527,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Không gian có điều hòa, an toàn cho cả bé 95cm và 110cm."
+        },
+        {
+          "id": "VW-Z6-01",
+          "type": "ride",
+          "category": "sightseeing",
+          "name": "Khám phá Cung điện Hải Vương — Bể chính & đường hầm cá mập",
+          "zone_id": "Z6_SEASHELL",
+          "venue_id": "vinwonders",
+          "start": "10:15",
+          "end": "11:05",
+          "lat": 10.31566,
+          "lng": 103.85456,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Thủy cung trong nhà có điều hòa, mở 10:00–18:00."
+        },
+        {
+          "id": "VW-MEAL-02",
+          "type": "meal",
+          "category": "meal",
+          "name": "Ăn trưa Nhà hàng Deep Sea (trong Cung điện Hải Vương)",
+          "zone_id": "Z6_SEASHELL",
+          "venue_id": "vinwonders",
+          "start": "11:15",
+          "end": "12:15",
+          "lat": 10.3163,
+          "lng": 103.85506,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Ăn trưa trong nhà hàng thủy cung mát mẻ, thuận tiện ghép trước show Nàng tiên cá."
+        },
+        {
+          "id": "SH-MERMAID-1",
+          "type": "show",
+          "category": "show",
+          "name": "Biểu diễn Nàng tiên cá (suất 1)",
+          "zone_id": "Z6_SEASHELL",
+          "venue_id": "vinwonders",
+          "start": "13:50",
+          "end": "14:20",
+          "lat": 10.31715,
+          "lng": 103.85475,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Đến sớm 10 phút trước 14:00 tại bể chính Cung điện Hải Vương."
+        },
+        {
+          "id": "VW-Z1-04",
+          "type": "ride",
+          "category": "ride",
+          "name": "Rạp phim & trải nghiệm tương tác trung cổ trong nhà",
+          "zone_id": "Z1_EURO",
+          "venue_id": "vinwonders",
+          "start": "14:35",
+          "end": "15:05",
+          "lat": 10.31475,
+          "lng": 103.8522,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 90,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Trải nghiệm ngồi rạp trong nhà có điều hòa, phù hợp trẻ từ 90cm."
+        },
+        {
+          "id": "SH-CARNIVAL",
+          "type": "show",
+          "category": "show",
+          "name": "Carnival Đại lộ châu Âu",
+          "zone_id": "Z1_EURO",
+          "venue_id": "vinwonders",
+          "start": "16:50",
+          "end": "17:30",
+          "lat": 10.31545,
+          "lng": 103.85265,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Hoạt náo đường phố ngoài trời tại Đại lộ Châu Âu."
+        },
+        {
+          "id": "SH-ONCE",
+          "type": "show",
+          "category": "show",
+          "name": "Show Once (Phượng hoàng lửa)",
+          "zone_id": "Z1_EURO",
+          "venue_id": "vinwonders",
+          "start": "18:30",
+          "end": "19:05",
+          "lat": 10.31545,
+          "lng": 103.85415,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Đến sớm 15 phút trước 18:45 tại Quảng trường Phượng Hoàng Lửa."
+        }
+      ],
+      "check": {
+        "hop_le": true,
+        "so_vi_pham": 0,
+        "vi_pham": [],
+        "canh_bao": [
+          {
+            "code": "COMPANION_REQUIRED",
+            "item_id": "VW-Z2-01",
+            "message": "Bé 95cm chơi được Đu quay Thumbelina nhưng dưới 100cm nên bắt buộc có người lớn đi kèm."
+          }
+        ],
+        "dieu_kien": {
+          "gio_mo_cua": true,
+          "chong_gio": true,
+          "ngan_sach": true,
+          "chieu_cao": true,
+          "mua": true
+        }
+      }
+    },
+    {
+      "day": 2,
+      "date": "2026-12-13",
+      "weather": {
+        "trang_thai": "nang",
+        "co_mua": false,
+        "khung_gio_mua": null
+      },
+      "summary": {
+        "cost_vnd": 2650000,
+        "n_items": 8,
+        "kid_ok_count": 6,
+        "total_rides": 6
+      },
+      "items": [
+        {
+          "id": "HT-01",
+          "type": "hotel",
+          "category": "hotel",
+          "name": "VinHolidays Fiesta Phú Quốc",
+          "zone_id": "HOTEL",
+          "venue_id": "hotel",
+          "start": "08:35",
+          "end": "08:55",
+          "lat": 10.3282,
+          "lng": 103.8576,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Xuất phát đi Vinpearl Safari bằng xe VinBus (~20 phút)."
+        },
+        {
+          "id": "SF-Z7-02",
+          "type": "ride",
+          "category": "sightseeing",
+          "name": "Vườn thú mở Open Zoo (hồng hạc, vượn, hổ, gấu)",
+          "zone_id": "Z7_SAFARI",
+          "venue_id": "safari",
+          "start": "09:15",
+          "end": "10:05",
+          "lat": 10.3338,
+          "lng": 103.8736,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Khu đi bộ ngắm thú buổi sáng mát mẻ; Safari đóng cửa 16:00."
+        },
+        {
+          "id": "SF-Z7-01",
+          "type": "ride",
+          "category": "ride",
+          "name": "Xe buýt chuyên dụng khu thú bán hoang dã (Safari Tour)",
+          "zone_id": "Z7_SAFARI",
+          "venue_id": "safari",
+          "start": "10:15",
+          "end": "11:00",
+          "lat": 10.3352,
+          "lng": 103.8758,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Xe buýt kín điều hòa; chuyến cuối xuất phát 15:20."
+        },
+        {
+          "id": "SF-MEAL-01",
+          "type": "meal",
+          "category": "meal",
+          "name": "Ăn trưa Nhà hàng Giraffe / Flamingo (Vinpearl Safari)",
+          "zone_id": "Z7_SAFARI",
+          "venue_id": "safari",
+          "start": "11:15",
+          "end": "12:05",
+          "lat": 10.3332,
+          "lng": 103.8745,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Nghỉ ăn trưa có mái che trong Safari."
+        },
+        {
+          "id": "SF-Z7-03",
+          "type": "ride",
+          "category": "sightseeing",
+          "name": "Khu Kid Zoo & cho hươu cao cổ ăn (Nhà hàng Giraffe)",
+          "zone_id": "Z7_SAFARI",
+          "venue_id": "safari",
+          "start": "12:15",
+          "end": "12:50",
+          "lat": 10.3328,
+          "lng": 103.8748,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Trải nghiệm gần gũi phù hợp cả 2 bé."
+        },
+        {
+          "id": "GW-Z8-01",
+          "type": "ride",
+          "category": "sightseeing",
+          "name": "Bảo tàng Gấu Teddy (Teddy Bear Museum)",
+          "zone_id": "Z8_GRANDWORLD",
+          "venue_id": "grandworld",
+          "start": "15:00",
+          "end": "15:45",
+          "lat": 10.3243,
+          "lng": 103.8522,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Di chuyển VinBus từ Safari sang Grand World (~20 phút)."
+        },
+        {
+          "id": "GW-MEAL-01",
+          "type": "meal",
+          "category": "meal",
+          "name": "Ăn tối / ăn trưa phố ẩm thực Grand World",
+          "zone_id": "Z8_GRANDWORLD",
+          "venue_id": "grandworld",
+          "start": "18:00",
+          "end": "18:50",
+          "lat": 10.3224,
+          "lng": 103.8534,
+          "indoor": true,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Ăn tối ngay gần hồ Venice."
+        },
+        {
+          "id": "SH-GW-VENICE",
+          "type": "show",
+          "category": "show",
+          "name": "Show nhạc nước Sắc màu Venice (Hồ Tình Yêu)",
+          "zone_id": "Z8_GRANDWORLD",
+          "venue_id": "grandworld",
+          "start": "21:15",
+          "end": "22:00",
+          "lat": 10.3237,
+          "lng": 103.8529,
+          "indoor": false,
+          "cost_vnd": 0,
+          "min_height_cm": 0,
+          "height_labels": [
+            { "child_cm": 110, "ok": true },
+            { "child_cm": 95, "ok": true }
+          ],
+          "notes": "Show nhạc nước miễn phí trên mặt hồ Venice."
+        }
+      ],
+      "check": {
+        "hop_le": true,
+        "so_vi_pham": 0,
+        "vi_pham": [],
+        "canh_bao": [],
+        "dieu_kien": {
+          "gio_mo_cua": true,
+          "chong_gio": true,
+          "ngan_sach": true,
+          "chieu_cao": true,
+          "mua": true
+        }
+      }
+    }
+  ],
+  "steps": [
+    { "step": 1, "name": "Kiểm tra an toàn đầu vào", "status": "ok", "detail": "Hợp lệ, trong phạm vi Phú Quốc United Center" },
+    { "step": 2, "name": "Trích ràng buộc gia đình (G10)", "status": "ok", "detail": "2 lớn, 2 bé (110cm, 95cm), 2 ngày" },
+    { "step": 3, "name": "Gọi công cụ đọc dữ liệu", "status": "ok", "detail": "tra_thoi_tiet, tra_lich_show, tra_diem_choi, tinh_chi_phi" },
+    { "step": 4, "name": "Lập lịch & kiểm cứng kiem_lich_trinh", "status": "ok", "detail": "0 vi phạm (đã áp Combo VinWonders + Safari)" },
+    { "step": 5, "name": "Tổng hợp lịch & chi phí", "status": "ok", "detail": "Xuất lịch 2 ngày kèm nhãn chiều cao từng bé" }
+  ],
+  "can_undo": true
+}

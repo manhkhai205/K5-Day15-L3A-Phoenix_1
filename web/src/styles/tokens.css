@@ -1,0 +1,26 @@
+:root {
+  --bg-page: #e9eff5;
+  --bg-card: #ffffff;
+  --bg-soft: #f4f8fc;
+  --bg-soft-hover: #eaf1f8;
+  --bg-pale: #dce8f5;
+  --ink: #111a24;
+  --muted: #4a5664;
+  --subtle: #5f6b79;
+  --line-soft: #e1e8ef;
+  --line: #d6dfe8;
+  --line-strong: #c3ceda;
+  --brand: #2c6ab0;
+  --brand-dark: #1f5a9e;
+  --go: #2e7d5b;
+  --warn: #e07b3c;
+  --rust: #a34f1b;
+  --danger: #c43e3e;
+  --stream-grad: linear-gradient(90deg, #2c6ab0, #7b6fd6, #d96570, #7b6fd6, #2c6ab0);
+
+  /* 4 màu mốc lộ trình JoyPlan AI */
+  --pin-hotel: #8b5a2b;
+  --pin-ride: #2e7d5b;
+  --pin-show: #6d4fc2;
+  --pin-meal: #e07b3c;
+}
