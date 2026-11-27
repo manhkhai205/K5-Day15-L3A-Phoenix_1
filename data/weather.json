@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "seed": 42,
+    "last_verified": "2026-11-27",
+    "default_date": "2026-11-28",
+    "sources": [
+      "Quy luật mùa khô (tháng 11–4) & mùa mưa (tháng 5–10) tại Phú Quốc; spec.md §0, §2"
+    ],
+    "notes": "Dữ liệu kịch bản thời tiết mô phỏng (synthetic, seed=42) có tính xác định để công cụ tra_thoi_tiet và kiem_lich_trinh tái lập kết quả ổn định khi kiểm thử mưa/nắng."
+  },
+  "conditions": {
+    "nang": {
+      "trang_thai": "nang",
+      "label": "Nắng nhẹ / trời quang",
+      "co_mua": false,
+      "khung_gio_mua": null,
+      "dong_ngoai_troi": false,
+      "dong_cong_vien_nuoc": false,
+      "canh_bao_nang_gat": false,
+      "khung_nang_gat": null,
+      "ghi_chu": "Thời tiết thuận lợi cả ngày cho các khu ngoài trời, Công viên nước và Once Show buổi tối."
+    },
+    "nang_gat": {
+      "trang_thai": "nang_gat",
+      "label": "Nắng gắt giữa trưa (11:00–15:00)",
+      "co_mua": false,
+      "khung_gio_mua": null,
+      "dong_ngoai_troi": false,
+      "dong_cong_vien_nuoc": false,
+      "canh_bao_nang_gat": true,
+      "khung_nang_gat": ["11:00", "15:00"],
+      "ghi_chu": "Nắng gắt khung 11:00–15:00; gia đình có trẻ nhỏ nên ưu tiên ăn trưa, nghỉ ngơi và tham quan Cung điện Hải Vương trong nhà vào buổi trưa."
+    },
+    "mua_chieu": {
+      "trang_thai": "mua_chieu",
+      "label": "Mưa rào chiều (14:00–16:00)",
+      "co_mua": true,
+      "khung_gio_mua": ["14:00", "16:00"],
+      "dong_ngoai_troi": true,
+      "dong_cong_vien_nuoc": true,
+      "canh_bao_nang_gat": false,
+      "khung_nang_gat": null,
+      "ghi_chu": "Mưa rào khung 14:00–16:00 làm tạm dừng các trò ngoài trời và Công viên nước Thế giới Lốc xoáy trong khung mưa; cần chuyển sang điểm trong nhà."
+    },
+    "mua_toi": {
+      "trang_thai": "mua_toi",
+      "label": "Mưa tối (18:30–19:30)",
+      "co_mua": true,
+      "khung_gio_mua": ["18:30", "19:30"],
+      "dong_ngoai_troi": true,
+      "dong_cong_vien_nuoc": false,
+      "canh_bao_nang_gat": false,
+      "khung_nang_gat": null,
+      "ghi_chu": "Mưa lớn khung 18:30–19:30 có thể làm tạm hoãn Once Show ngoài trời tại Quảng trường Phượng Hoàng Lửa."
+    },
+    "mua_lon": {
+      "trang_thai": "mua_lon",
+      "label": "Mưa lớn cả ngày (09:00–19:30)",
+      "co_mua": true,
+      "khung_gio_mua": ["09:00", "19:30"],
+      "dong_ngoai_troi": true,
+      "dong_cong_vien_nuoc": true,
+      "canh_bao_nang_gat": false,
+      "khung_nang_gat": null,
+      "ghi_chu": "Mưa lớn cả ngày làm đóng toàn bộ trò ngoài trời, Công viên nước và show ngoài trời; chỉ nên xếp Cung điện Hải Vương (10:00–18:00) và các điểm trong nhà."
+    }
+  },
+  "scenarios_by_date": {
+    "2026-11-27": "nang_gat",
+    "2026-11-28": "nang_gat",
+    "2026-11-29": "nang",
+    "2026-07-15": "mua_chieu",
+    "2026-08-20": "mua_lon",
+    "2026-09-10": "mua_toi"
+  },
+  "monthly_default": {
+    "dry_months": [11, 12, 1, 2, 3, 4],
+    "dry_condition": "nang_gat",
+    "rainy_months": [5, 6, 7, 8, 9, 10],
+    "rainy_condition": "mua_chieu"
+  }
+}
