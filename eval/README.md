@@ -5,17 +5,17 @@
 
 ## 1. Dataset → xử lý
 
-Dữ liệu chạy thử do nhóm tự dựng (có seed, nhãn synthetic) từ thông tin vận hành công khai của VinWonders Phú Quốc: 6 phân khu và giờ mở cửa lệch nhau, lịch show, chiều cao tối thiểu từng trò, khu trong/ngoài trời, trạng thái mưa, bảng giá vé/ăn uống/dịch vụ, ma trận thời gian đi bộ (chi tiết: `data/DATA_CARD.md` — Đức Anh). Bằng chứng pain: 60 review 1–3 sao công khai trên Tripadvisor và Google Maps, đã mã hoá ở `evidence/review-coding.csv` (repo chỉ giữ tóm tắt và số tổng hợp).
+Dữ liệu chạy thử kết hợp thông tin vận hành công khai 2025–2026 của **cụm Phú Quốc United Center** (`3` tổ hợp: **VinWonders Phú Quốc** mặc định · mở rộng **Vinpearl Safari** · **Grand World**; `8` phân khu có giờ mở/đóng lệch nhau, `44` điểm chơi/ăn nghỉ, `10` suất show cố định, chiều cao tối thiểu từng trò, khu trong/ngoài trời, bảng giá vé lẻ/Combo/ăn uống/phụ phí, ma trận di chuyển `8×8` phân biệt đi bộ vs xe VinBus `15–20` phút và kịch bản thời tiết `seed=42`; chi tiết: `data/DATA_CARD.md`). Bằng chứng pain: 60 review 1–3 sao công khai trên Tripadvisor và Google Maps, đã mã hoá ở `evidence/review-coding.csv` (repo chỉ giữ tóm tắt và số tổng hợp).
 
 ## 2. Bộ câu thử dựng ra sao
 
-> `eval/benchmark.csv` do Dũng dựng (theo `docs/cp2-plan.md`); Quang và Dũng rà mục này cùng nhau trước khi push.
+> `B01–B14` do Dũng & Quang dựng ở CP2; bổ sung `B15–B24` cho mốc CP3 (giữ nguyên 100% `B01–B14` và chuẩn "đạt" đã khoá).
 
-- `eval/benchmark.csv`: 14 câu (thuong 4 · kho 8 · tu_choi 2, trong đó 2 câu tấn công: B11 prompt injection + đặt vé bằng thẻ, B12 ép xác nhận giờ mở cửa sai + đặt khách sạn/vé máy bay)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung 2 · data_that 4 · tu_viet 6 · sinh_seed 2 → từ người dùng / data thật 6/14 (cần ≥1/3)
-- Độ phủ — lưới input 4 chiều: (a) đủ / thiếu thông tin · (b) chiều cao bé: thường / sát biên 1,0m–1,4m / nhiều bé khác nhau · (c) thời gian: cả ngày / đến muộn / sự cố giữa ngày (mưa, hủy show) · (d) ngân sách: đủ / sát nút / không đủ
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (nguồn sự thật — không bịa suất show / thời gian chờ không có trong data): B10, B14 · lớp 2 (thiếu thông tin): B05 · lớp 3 (ngoài phạm vi / thẩm quyền): B11, B12 (tu_choi) · lớp 4 (đặc thù lĩnh vực — mưa, biên chiều cao, ngân sách không đủ, đến muộn sát giờ đóng khu): B06, B07, B08, B09, B13
-- Câu `data_that` lấy từ review đã mã hoá: mưa đóng trò (T04, T25, T27), phụ phí bên trong (G10, G15), chiều cao bé (T02, T38), không trụ tới show tối (T01)
+- `eval/benchmark.csv`: **24 câu** (`thuong 7 · kho 14 · tu_choi 3`, trong đó 3 câu tấn công: `B11` prompt injection + đặt vé bằng thẻ, `B12` ép xác nhận giờ mở cửa VinWonders sai + đặt khách sạn/vé máy bay, `B24` ép xác nhận giờ mở cửa Safari `20:00` + đặt vé)
+- Nguồn (`python run.py check` in sẵn): `nguoi_dung 3 · data_that 8 · tu_viet 9 · sinh_seed 4` → từ người dùng / data thật **`11/24` (`45,8%`, đạt ngưỡng ≥1/3)**
+- Độ phủ — lưới input 5 chiều: (a) đủ / thiếu thông tin · (b) chiều cao bé & đối tượng: dưới `1m` / biên `1,0m–1,4m` / nhiều bé chênh chiều cao / người cao tuổi `>=60` · (c) thời gian: cả ngày / đến trưa-muộn / sự cố giữa ngày (mưa, hủy show, xếp hàng lâu) · (d) ngân sách: đủ / sát nút đổi gói ăn / không đủ · (e) phạm vi tổ hợp: đơn khu VinWonders (`B01–B19`), đơn khu Safari (`B20, B24`), đa tổ hợp Safari + VinWonders + Grand World có tự áp Combo & đệm VinBus (`B21–B23`)
+- Câu `kho` & `tu_choi` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (nguồn sự thật — không bịa suất show / thời gian chờ): `B10, B14` · lớp 2 (thiếu thông tin): `B05` · lớp 3 (ngoài phạm vi / ép giờ sai): `B11, B12, B24` (`tu_choi`) · lớp 4 (đặc thù lĩnh vực — mưa, biên chiều cao `<1m`–`1,4m`, người cao tuổi, ngân sách sát nút/không đủ, đến muộn sát giờ đóng `Z5/Z6 18:00` hoặc Safari `16:00` / xe bus `15:20`, ghép 3 khu quá sức trẻ nhỏ): `B06, B07, B08, B09, B13, B15, B16, B17, B18, B21, B23`
+- Câu `data_that` & `nguoi_dung` lấy từ review đã mã hoá và khảo sát: mưa & chênh chiều cao con (`T04, T25, T27, T38`), phụ phí & miễn vé dưới `1m` (`G10, G15, G18`), không trụ tới show tối / nắng nóng / mở khu lệch `10:00` (`T01, T14, T35, T39`), đoàn đông vượt ngân sách / xếp hàng (`S05, S08, S09`)
 
 ## 3. Metric và cách chấm
 

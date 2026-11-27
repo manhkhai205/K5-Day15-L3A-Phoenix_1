@@ -8,10 +8,12 @@ Khung tự ghi mỗi lần gọi công cụ vào trace (tên, input, output rút
     tra_diem_choi · tra_lich_show · tra_thoi_tiet · uoc_thoi_gian_di · tinh_chi_phi · kiem_lich_trinh
 Dữ liệu đọc từ data/ và mô tả tại data/DATA_CARD.md.
 """
+import datetime
 import json
 import os
 import re
 import unicodedata
+import urllib.parse
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from tracing import tool, TOOLS  # noqa: F401
@@ -49,6 +51,60 @@ _ZONE_ALIASES = {
     "thuy cung": "Z6_SEASHELL",
     "the sea shell": "Z6_SEASHELL",
     "aquarium": "Z6_SEASHELL",
+    "z7": "Z7_SAFARI",
+    "z7_safari": "Z7_SAFARI",
+    "safari": "Z7_SAFARI",
+    "vinpearl safari": "Z7_SAFARI",
+    "vinpearl safari phu quoc": "Z7_SAFARI",
+    "vuon thu": "Z7_SAFARI",
+    "ban hoang da": "Z7_SAFARI",
+    "z8": "Z8_GRANDWORLD",
+    "z8_grandworld": "Z8_GRANDWORLD",
+    "grand world": "Z8_GRANDWORLD",
+    "grandworld": "Z8_GRANDWORLD",
+    "grand world phu quoc": "Z8_GRANDWORLD",
+    "venice": "Z8_GRANDWORLD",
+    "tinh hoa viet nam": "Z8_GRANDWORLD",
+    "thanh pho khong ngu": "Z8_GRANDWORLD",
+}
+
+_VENUE_ALIASES = {
+    "vw": "vinwonders",
+    "vinwonder": "vinwonders",
+    "vinwonders": "vinwonders",
+    "vinwonders phu quoc": "vinwonders",
+    "cong vien chu de": "vinwonders",
+    "sf": "safari",
+    "safari": "safari",
+    "vinpearl safari": "safari",
+    "vinpearl safari phu quoc": "safari",
+    "vuon thu": "safari",
+    "ban hoang da": "safari",
+    "gw": "grandworld",
+    "grandworld": "grandworld",
+    "grand world": "grandworld",
+    "grand world phu quoc": "grandworld",
+    "thanh pho khong ngu": "grandworld",
+    "venice": "grandworld",
+}
+
+_VENUE_ORDER = ("safari", "vinwonders", "grandworld")
+
+_GW_PAID_ALIASES = {
+    "gw_teddy": "gw_teddy",
+    "gw-z8-01": "gw_teddy",
+    "bao tang gau teddy": "gw_teddy",
+    "teddy": "gw_teddy",
+    "teddy bear": "gw_teddy",
+    "gw_venice_boat": "gw_venice_boat",
+    "gw-z8-02": "gw_venice_boat",
+    "thuyen gondola": "gw_venice_boat",
+    "thuyen venice": "gw_venice_boat",
+    "gondola": "gw_venice_boat",
+    "gw_tinh_hoa": "gw_tinh_hoa",
+    "sh-gw-tinhhoa": "gw_tinh_hoa",
+    "tinh hoa viet nam": "gw_tinh_hoa",
+    "gw_combo_tinh_hoa_teddy": "gw_combo_tinh_hoa_teddy",
 }
 
 _MEAL_ALIASES = {
@@ -115,6 +171,40 @@ def _resolve_zone_id(raw_zone: Optional[str]) -> Optional[str]:
     if norm_underscore in _ZONE_ALIASES:
         return _ZONE_ALIASES[norm_underscore]
     return cleaned.upper()
+
+
+def _resolve_venues(raw_venues: Optional[Union[str, List[str], Tuple[str, ...]]]) -> List[str]:
+    """Chuẩn hóa danh sách tổ hợp (vinwonders | safari | grandworld); mặc định ['vinwonders']."""
+    if raw_venues is None:
+        return ["vinwonders"]
+    tokens: List[str] = []
+    if isinstance(raw_venues, str):
+        parts = re.split(r"[,;+|]+", raw_venues)
+        tokens = [p.strip() for p in parts if p.strip()]
+    elif isinstance(raw_venues, (list, tuple, set)):
+        tokens = [str(p).strip() for p in raw_venues if str(p).strip()]
+    else:
+        raise ValueError("to_hop phải là chuỗi hoặc danh sách tên tổ hợp, nhận được: %r" % (raw_venues,))
+
+    if not tokens:
+        return ["vinwonders"]
+
+    found: List[str] = []
+    for tok in tokens:
+        norm = _strip_accents(tok)
+        norm_us = norm.replace(" ", "_")
+        if norm in ("all", "ca cum", "3 khu", "ba khu", "united center", "phu quoc united center") or norm_us in ("all", "ca_cum", "united_center"):
+            for vid in _VENUE_ORDER:
+                if vid not in found:
+                    found.append(vid)
+            continue
+        mapped = _VENUE_ALIASES.get(norm) or _VENUE_ALIASES.get(norm_us)
+        if not mapped:
+            raise ValueError("Tổ hợp không hợp lệ: %r (hợp lệ: vinwonders, safari, grandworld)" % (tok,))
+        if mapped not in found:
+            found.append(mapped)
+
+    return [v for v in _VENUE_ORDER if v in found] or ["vinwonders"]
 
 
 def _normalize_height_cm(val: Optional[Union[int, float]]) -> Optional[int]:
@@ -298,6 +388,8 @@ def _compute_cost(
     goi_an: Optional[str] = None,
     dich_vu: Optional[List[str]] = None,
     ngan_sach_vnd: Optional[int] = None,
+    to_hop: Optional[Union[str, List[str]]] = None,
+    diem_ve_le: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Hàm dùng chung để tính chi phí cho tinh_chi_phi và kiem_lich_trinh."""
     counts = {
@@ -315,6 +407,7 @@ def _compute_cost(
         raise ValueError("Tổng số thành viên phải >= 1.")
 
     pricing = _load_json("pricing.json")
+    resolved_venues = _resolve_venues(to_hop)
     extracted_meal: Optional[str] = None
     extras_tokens: List[str] = []
     for raw_item in (dich_vu or []):
@@ -335,16 +428,75 @@ def _compute_cost(
         valid_meals = ", ".join(sorted(pricing["meals"].keys()))
         raise ValueError("goi_an không hợp lệ: %r (hợp lệ: %s)" % (raw_meal, valid_meals))
 
-    t = pricing["tickets"]
+    def _calc_tier_cost(tier: Dict[str, Any]) -> int:
+        return (
+            so_nguoi_lon * tier["adult"]
+            + so_tre_em_1m_1m4 * tier["child_100_140"]
+            + so_nguoi_cao_tuoi * tier["senior"]
+            + so_tre_duoi_1m * tier["child_under_100"]
+        )
+
+    notes: List[str] = []
+    vt = pricing.get("venue_tickets", {})
+    has_vw = "vinwonders" in resolved_venues
+    has_sf = "safari" in resolved_venues
+    combo_savings = 0
+
     if da_co_ve:
-        ticket_cost = 0
-    else:
-        ticket_cost = (
+        gate_ticket_cost = 0
+        loai_ve = "da_co_ve"
+    elif has_vw and has_sf and "combo_vinwonders_safari" in vt:
+        gate_ticket_cost = _calc_tier_cost(vt["combo_vinwonders_safari"])
+        separate_cost = _calc_tier_cost(vt["vinwonders"]) + _calc_tier_cost(vt["safari"])
+        combo_savings += max(0, separate_cost - gate_ticket_cost)
+        loai_ve = "combo_vinwonders_safari"
+        if combo_savings > 0:
+            notes.append(
+                "Tự động áp dụng vé Combo 1 ngày VinWonders + Vinpearl Safari: tiết kiệm %sđ so với mua 2 vé lẻ."
+                % f"{combo_savings:,}"
+            )
+    elif has_sf and "safari" in vt:
+        gate_ticket_cost = _calc_tier_cost(vt["safari"])
+        loai_ve = "safari"
+    elif has_vw:
+        t = pricing["tickets"]
+        gate_ticket_cost = (
             so_nguoi_lon * t["adult"]["price_vnd"]
             + so_tre_em_1m_1m4 * t["child_100_140"]["price_vnd"]
             + so_nguoi_cao_tuoi * t["senior"]["price_vnd"]
             + so_tre_duoi_1m * t["child_under_100"]["price_vnd"]
         )
+        loai_ve = "vinwonders"
+    else:
+        gate_ticket_cost = 0
+        loai_ve = "grandworld_free_entry"
+        notes.append("Grand World vào cổng miễn phí; chỉ tính vé tại các điểm tham quan/show thu phí riêng nếu chọn.")
+
+    # Tính vé điểm lẻ Grand World (nếu có) và tự ghép Combo Tinh hoa + Gấu Teddy nếu đi cả 2
+    gw_catalog = pricing.get("grandworld_paid_items", {})
+    paid_set: set = set()
+    for raw_p in (diem_ve_le or []):
+        p_norm = _strip_accents(str(raw_p))
+        mapped_p = _GW_PAID_ALIASES.get(p_norm) or _GW_PAID_ALIASES.get(p_norm.replace(" ", "_"))
+        if mapped_p and mapped_p in gw_catalog:
+            paid_set.add(mapped_p)
+
+    if ("gw_teddy" in paid_set and "gw_tinh_hoa" in paid_set and "gw_combo_tinh_hoa_teddy" in gw_catalog):
+        gw_combo_cost = _calc_tier_cost(gw_catalog["gw_combo_tinh_hoa_teddy"])
+        gw_sep_cost = _calc_tier_cost(gw_catalog["gw_teddy"]) + _calc_tier_cost(gw_catalog["gw_tinh_hoa"])
+        gw_saved = max(0, gw_sep_cost - gw_combo_cost)
+        combo_savings += gw_saved
+        paid_set.discard("gw_teddy")
+        paid_set.discard("gw_tinh_hoa")
+        paid_set.add("gw_combo_tinh_hoa_teddy")
+        if gw_saved > 0:
+            notes.append(
+                "Tự động áp dụng Combo Tinh hoa Việt Nam + Bảo tàng Gấu Teddy (tiết kiệm %sđ)."
+                % f"{gw_saved:,}"
+            )
+
+    gw_items_cost = sum(_calc_tier_cost(gw_catalog[k]) for k in sorted(paid_set) if k in gw_catalog)
+    ticket_cost = gate_ticket_cost + gw_items_cost
 
     m = pricing["meals"][meal_key]
     meal_cost = (
@@ -358,7 +510,6 @@ def _compute_cost(
     refundable_deposit = 0
     extras_breakdown: Dict[str, int] = {}
     unknown_extras: List[str] = []
-    notes: List[str] = []
 
     for raw_extra in extras_tokens:
         norm = _strip_accents(raw_extra)
@@ -397,7 +548,10 @@ def _compute_cost(
     return {
         "don_vi_tien": pricing["currency"],
         "so_luong_khach": counts,
+        "to_hop": resolved_venues,
         "da_co_ve": bool(da_co_ve),
+        "loai_ve_ap_dung": loai_ve,
+        "tiet_kiem_combo_vnd": combo_savings,
         "goi_an": meal_key,
         "chi_phi_ve_vnd": ticket_cost,
         "chi_phi_an_vnd": meal_cost,
@@ -406,6 +560,8 @@ def _compute_cost(
         "tien_coc_hoan_lai_vnd": refundable_deposit,
         "chi_tiet": {
             "ve_vnd": ticket_cost,
+            "ve_vao_cong_vnd": gate_ticket_cost,
+            "ve_diem_le_grandworld_vnd": gw_items_cost,
             "an_uong_vnd": meal_cost,
             "dich_vu_vnd": extras_breakdown,
         },
@@ -499,7 +655,13 @@ def _extract_group_params(rang_buoc: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _build_budget_relaxations(cost_summary: Dict[str, Any], budget_vnd: int, gp: Dict[str, Any]) -> List[str]:
+def _build_budget_relaxations(
+    cost_summary: Dict[str, Any],
+    budget_vnd: int,
+    gp: Dict[str, Any],
+    to_hop: Optional[Union[str, List[str]]] = None,
+    diem_ve_le: Optional[List[str]] = None,
+) -> List[str]:
     """Sinh gợi ý giảm chi phí cụ thể khi vượt ngân sách."""
     over = cost_summary["tong_chi_phi_vnd"] - budget_vnd
     suggestions = [
@@ -516,6 +678,8 @@ def _build_budget_relaxations(cost_summary: Dict[str, Any], budget_vnd: int, gp:
             goi_an="fastfood",
             dich_vu=gp["dich_vu"],
             ngan_sach_vnd=budget_vnd,
+            to_hop=to_hop,
+            diem_ve_le=diem_ve_le,
         )
         saved = cost_summary["tong_chi_phi_vnd"] - alt["tong_chi_phi_vnd"]
         if saved > 0:
@@ -538,11 +702,19 @@ def _build_budget_relaxations(cost_summary: Dict[str, Any], budget_vnd: int, gp:
             goi_an=cost_summary["goi_an"],
             dich_vu=kept,
             ngan_sach_vnd=budget_vnd,
+            to_hop=to_hop,
+            diem_ve_le=diem_ve_le,
         )
         saved2 = cost_summary["tong_chi_phi_vnd"] - alt2["tong_chi_phi_vnd"]
         suggestions.append(
             "Bỏ dịch vụ bổ sung %s giúp tiết kiệm %sđ (còn %sđ)."
             % (", ".join(optional_tokens), f"{saved2:,}", f"{alt2['tong_chi_phi_vnd']:,}")
+        )
+    gw_paid_cost = int(cost_summary.get("chi_tiet", {}).get("ve_diem_le_grandworld_vnd", 0))
+    if gw_paid_cost > 0:
+        suggestions.append(
+            "Giữ các điểm/show miễn phí tại Grand World (dạo phố Venice, Sắc màu Venice 21:30) thay cho điểm thu phí riêng giúp giảm %sđ."
+            % f"{gw_paid_cost:,}"
         )
     if not gp["da_co_ve"]:
         suggestions.append(
@@ -559,21 +731,30 @@ def tra_diem_choi(
     tags: Optional[List[str]] = None,
     mo_luc: Optional[str] = None,
     gom_an_nghi: bool = True,
+    to_hop: Optional[Union[str, List[str]]] = None,
 ) -> Dict[str, Any]:
-    """Tên: tra_diem_choi — Tra cứu và lọc điểm chơi, ăn uống, nghỉ ngơi tại VinWonders Phú Quốc.
-    Input: phan_khu (str | None), chieu_cao_min (int | float | None — cm hoặc mét), trong_nha (bool | None), tags (list[str] | None), mo_luc ("HH:MM" | None), gom_an_nghi (bool).
-    Output: dict gồm so_luong, bi_loai_do_chieu_cao, diem_choi (kèm chiều cao tối thiểu, indoor, giờ mở/đóng và cờ can_nguoi_lon_di_kem).
+    """Tên: tra_diem_choi — Tra cứu và lọc điểm chơi, ăn uống, nghỉ ngơi trong cụm Phú Quốc United Center (mặc định VinWonders).
+    Input: phan_khu (str | None), chieu_cao_min (int | float | None — cm hoặc mét), trong_nha (bool | None), tags (list[str] | None), mo_luc ("HH:MM" | None), gom_an_nghi (bool), to_hop (str | list[str] | None — 'vinwonders', 'safari', 'grandworld').
+    Output: dict gồm so_luong, bi_loai_do_chieu_cao, diem_choi (kèm venue_id, lat, lng, chiều cao tối thiểu, indoor, giờ mở/đóng và cờ can_nguoi_lon_di_kem).
     Tác động ra ngoài: Không (chỉ đọc dữ liệu tĩnh trong data/attractions.json)."""
     height_cm = _normalize_height_cm(chieu_cao_min)
     open_at_min = _parse_time_to_min(mo_luc) if mo_luc is not None else None
     norm_zone = _resolve_zone_id(phan_khu)
     norm_tags = {_strip_accents(str(t)).replace(" ", "_") for t in (tags or []) if str(t).strip()}
 
+    allowed_venues: Optional[set] = None
+    if to_hop is not None:
+        allowed_venues = set(_resolve_venues(to_hop))
+    elif norm_zone is None:
+        allowed_venues = {"vinwonders"}
+
     attractions = _load_json("attractions.json")
     matched: List[Dict[str, Any]] = []
     excluded_by_height = 0
 
     for item in attractions:
+        if allowed_venues is not None and item.get("venue_id", "vinwonders") not in allowed_venues:
+            continue
         if not gom_an_nghi and item.get("category") in ("meal", "rest"):
             continue
         if norm_zone and item["zone_id"] != norm_zone:
@@ -611,10 +792,11 @@ def tra_lich_show(
     ngay: Optional[str] = None,
     phan_khu: Optional[str] = None,
     bo_qua_show: Optional[List[str]] = None,
+    to_hop: Optional[Union[str, List[str]]] = None,
 ) -> Dict[str, Any]:
-    """Tên: tra_lich_show — Tra giờ mở cửa công viên, 6 phân khu và lịch biểu diễn show cố định kèm tác động thời tiết theo ngày.
-    Input: ngay (str | None — 'YYYY-MM-DD' hoặc mô tả thời tiết), phan_khu (str | None), bo_qua_show (list[str] | None).
-    Output: dict gồm ngay, gio_mo_cua_cong_vien, phan_khu, show_kha_dung và show_anh_huong_thoi_tiet.
+    """Tên: tra_lich_show — Tra giờ mở cửa công viên/tổ hợp, các phân khu và lịch biểu diễn show cố định kèm tác động thời tiết theo ngày.
+    Input: ngay (str | None — 'YYYY-MM-DD' hoặc mô tả thời tiết), phan_khu (str | None), bo_qua_show (list[str] | None), to_hop (str | list[str] | None).
+    Output: dict gồm ngay, gio_mo_cua_cong_vien, to_hop, phan_khu, show_kha_dung và show_anh_huong_thoi_tiet.
     Tác động ra ngoài: Không (chỉ đọc data/park_zones.json, data/shows.json và data/weather.json)."""
     zones_data = _load_json("park_zones.json")
     shows_data = _load_json("shows.json")
@@ -624,11 +806,24 @@ def tra_lich_show(
     excluded_ids = {str(sid).strip().upper() for sid in (bo_qua_show or []) if str(sid).strip()}
     rain_span = _parse_rain_window(weather_info["khung_gio_mua"]) if weather_info["co_mua"] else None
 
-    zones = [z for z in zones_data["zones"] if not norm_zone or z["id"] == norm_zone]
+    if to_hop is not None:
+        allowed_venues = set(_resolve_venues(to_hop))
+    elif norm_zone is not None:
+        matched_zones = [z for z in zones_data["zones"] if z["id"] == norm_zone]
+        allowed_venues = {z.get("venue_id", "vinwonders") for z in matched_zones} or {"vinwonders"}
+    else:
+        allowed_venues = {"vinwonders"}
+
+    zones = [
+        z for z in zones_data["zones"]
+        if z.get("venue_id", "vinwonders") in allowed_venues and (not norm_zone or z["id"] == norm_zone)
+    ]
     available_shows: List[Dict[str, Any]] = []
     weather_impacted: List[Dict[str, Any]] = []
 
     for show in shows_data:
+        if show.get("venue_id", "vinwonders") not in allowed_venues:
+            continue
         if show["id"].upper() in excluded_ids:
             continue
         if norm_zone and show["zone_id"] != norm_zone:
@@ -648,9 +843,14 @@ def tra_lich_show(
         else:
             available_shows.append(show_copy)
 
+    venues_meta = {
+        vid: vmeta for vid, vmeta in zones_data.get("venues", {}).items() if vid in allowed_venues
+    }
+
     return {
         "ngay": weather_info["ngay"],
         "gio_mo_cua_cong_vien": zones_data["park"],
+        "to_hop": venues_meta,
         "phan_khu": zones,
         "show_kha_dung": available_shows,
         "show_anh_huong_thoi_tiet": weather_impacted,
@@ -666,12 +866,8 @@ def tra_thoi_tiet(ngay: Optional[str] = None, khung_gio: Optional[Any] = None) -
     return _get_weather(ngay=ngay, khung_gio=khung_gio)
 
 
-@tool
-def uoc_thoi_gian_di(khu_a: str, khu_b: str) -> Dict[str, Any]:
-    """Tên: uoc_thoi_gian_di — Ước lượng thời gian đi bộ (phút) giữa hai phân khu trong VinWonders Phú Quốc.
-    Input: khu_a (str — mã hoặc tên phân khu xuất phát), khu_b (str — mã hoặc tên phân khu đích).
-    Output: dict gồm khu_a, ten_khu_a, khu_b, ten_khu_b, thoi_gian_phut, ghi_chu.
-    Tác động ra ngoài: Không (chỉ đọc ma trận đi bộ tĩnh trong data/park_zones.json)."""
+def _get_transfer_min(khu_a: str, khu_b: str) -> Tuple[int, str]:
+    """Tra nội bộ (không @tool) thời gian di chuyển (phút) và phương tiện ('di_bo' | 'vinbus') giữa 2 phân khu."""
     zones_data = _load_json("park_zones.json")
     zones_by_id = {z["id"]: z for z in zones_data["zones"]}
     matrix = zones_data["walking_matrix_min"]
@@ -683,13 +879,36 @@ def uoc_thoi_gian_di(khu_a: str, khu_b: str) -> Dict[str, Any]:
         raise ValueError("Phân khu không hợp lệ (%r, %r). Các phân khu hợp lệ: %s" % (khu_a, khu_b, valid))
 
     walk_min = matrix[z_a][z_b]
+    v_a = zones_by_id[z_a].get("venue_id", "vinwonders")
+    v_b = zones_by_id[z_b].get("venue_id", "vinwonders")
+    return walk_min, ("vinbus" if v_a != v_b else "di_bo")
+
+
+@tool
+def uoc_thoi_gian_di(khu_a: str, khu_b: str) -> Dict[str, Any]:
+    """Tên: uoc_thoi_gian_di — Ước lượng thời gian di chuyển (phút) giữa hai phân khu/tổ hợp trong cụm Phú Quốc United Center.
+    Input: khu_a (str — mã hoặc tên phân khu xuất phát), khu_b (str — mã hoặc tên phân khu đích).
+    Output: dict gồm khu_a, ten_khu_a, khu_b, ten_khu_b, phuong_tien ('di_bo' | 'vinbus'), thoi_gian_phut, ghi_chu.
+    Tác động ra ngoài: Không (chỉ đọc ma trận di chuyển tĩnh 8x8 trong data/park_zones.json)."""
+    zones_data = _load_json("park_zones.json")
+    zones_by_id = {z["id"]: z for z in zones_data["zones"]}
+    z_a = _resolve_zone_id(khu_a)
+    z_b = _resolve_zone_id(khu_b)
+    walk_min, mode = _get_transfer_min(khu_a, khu_b)
+    is_cross_venue = mode == "vinbus"
+
     return {
         "khu_a": z_a,
-        "ten_khu_a": zones_by_id[z_a]["name"],
+        "ten_khu_a": zones_by_id[z_a]["name"],  # type: ignore[index]
         "khu_b": z_b,
-        "ten_khu_b": zones_by_id[z_b]["name"],
+        "ten_khu_b": zones_by_id[z_b]["name"],  # type: ignore[index]
+        "phuong_tien": mode,
         "thoi_gian_phut": walk_min,
-        "ghi_chu": "Ước lượng đi bộ trung bình cho gia đình có trẻ nhỏ (tăng thêm 3–5 phút vào giờ cao điểm).",
+        "ghi_chu": (
+            "Di chuyển liên tổ hợp bằng xe điện VinBus miễn phí / taxi nội khu (đã gồm thời gian chờ xe ~5–10 phút)."
+            if is_cross_venue
+            else "Ước lượng đi bộ trung bình cho gia đình có trẻ nhỏ (tăng thêm 3–5 phút vào giờ cao điểm)."
+        ),
     }
 
 
@@ -703,10 +922,12 @@ def tinh_chi_phi(
     da_co_ve: bool = False,
     goi_an: Optional[str] = None,
     ngan_sach_vnd: Optional[int] = None,
+    to_hop: Optional[Union[str, List[str]]] = None,
+    diem_ve_le: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    """Tên: tinh_chi_phi — Tính tổng chi phí vé, ăn uống, phụ phí (xe đẩy, tủ đồ, xe điện, fastpass…) và đối chiếu ngân sách.
-    Input: so_nguoi_lon (int), so_tre_em_1m_1m4 (int), so_tre_duoi_1m (int), dich_vu (list[str] | None), so_nguoi_cao_tuoi (int), da_co_ve (bool), goi_an (str | None), ngan_sach_vnd (int | None).
-    Output: dict gồm chi_phi_ve_vnd, chi_phi_an_vnd, chi_phi_dich_vu_vnd, tong_chi_phi_vnd, tien_coc_hoan_lai_vnd, chi_tiet, dich_vu_khong_ro, trong_ngan_sach, chenh_lech_ngan_sach_vnd.
+    """Tên: tinh_chi_phi — Tính tổng chi phí vé (tự áp Combo VinWonders+Safari nếu đi cả 2, vé lẻ Grand World), ăn uống, phụ phí và đối chiếu ngân sách.
+    Input: so_nguoi_lon (int), so_tre_em_1m_1m4 (int), so_tre_duoi_1m (int), dich_vu (list[str] | None), so_nguoi_cao_tuoi (int), da_co_ve (bool), goi_an (str | None), ngan_sach_vnd (int | None), to_hop (str | list[str] | None), diem_ve_le (list[str] | None).
+    Output: dict gồm loai_ve_ap_dung, tiet_kiem_combo_vnd, chi_phi_ve_vnd, chi_phi_an_vnd, chi_phi_dich_vu_vnd, tong_chi_phi_vnd, tien_coc_hoan_lai_vnd, chi_tiet, dich_vu_khong_ro, trong_ngan_sach, chenh_lech_ngan_sach_vnd.
     Tác động ra ngoài: Không (chỉ đọc bảng giá tĩnh trong data/pricing.json và tính toán)."""
     return _compute_cost(
         so_nguoi_lon=so_nguoi_lon,
@@ -717,6 +938,8 @@ def tinh_chi_phi(
         goi_an=goi_an,
         dich_vu=dich_vu,
         ngan_sach_vnd=ngan_sach_vnd,
+        to_hop=to_hop,
+        diem_ve_le=diem_ve_le,
     )
 
 
@@ -768,8 +991,24 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
 
     raw_canceled = rang_buoc.get("show_bi_huy", rang_buoc.get("canceled_shows")) or []
     canceled_set = {str(sid).strip().upper() for sid in raw_canceled if str(sid).strip()}
+
+    raw_venues = rang_buoc.get("to_hop", rang_buoc.get("venues"))
+    explicit_venues = set(_resolve_venues(raw_venues)) if raw_venues is not None else set()
+    scheduled_venues: set = set()
+    for entry in (lich or []):
+        eid = str(entry.get("id", entry.get("ma", entry.get("ma_diem", "")))).strip()
+        emeta = catalog.get(eid)
+        if emeta and emeta.get("zone_id") in zones_by_id:
+            scheduled_venues.add(zones_by_id[emeta["zone_id"]].get("venue_id", "vinwonders"))
+    combined_venues = scheduled_venues | explicit_venues
+    active_venues = [v for v in _VENUE_ORDER if v in combined_venues] or ["vinwonders"]
+
+    default_end = (
+        "22:00" if "grandworld" in active_venues
+        else ("16:00" if active_venues == ["safari"] else "19:30")
+    )
     start_time = str(rang_buoc.get("gio_bat_dau", rang_buoc.get("start_time", "09:00")))
-    end_time = str(rang_buoc.get("gio_ket_thuc", rang_buoc.get("end_time", "19:30")))
+    end_time = str(rang_buoc.get("gio_ket_thuc", rang_buoc.get("end_time", default_end)))
     trip_start = _parse_time_to_min(start_time)
     trip_end = _parse_time_to_min(end_time)
 
@@ -964,15 +1203,26 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
             })
             continue
         walk_min = walking_matrix[prev_it["meta"]["zone_id"]][curr_it["meta"]["zone_id"]]
+        prev_venue = zones_by_id[prev_it["meta"]["zone_id"]].get("venue_id", "vinwonders")
+        curr_venue = zones_by_id[curr_it["meta"]["zone_id"]].get("venue_id", "vinwonders")
         gap_min = curr_it["s_min"] - prev_it["e_min"]
         if gap_min < walk_min:
-            violations.append({
-                "code": "INSUFFICIENT_WALK_TIME",
-                "item_id": curr_it["id"],
-                "message": "Từ %s sang %s cần tối thiểu %d phút đi bộ, hiện chỉ có %d phút (%s → %s)."
-                % (prev_it["meta"]["name"], curr_it["meta"]["name"], walk_min, gap_min,
-                   prev_it["end_str"], curr_it["start_str"]),
-            })
+            if prev_venue != curr_venue:
+                violations.append({
+                    "code": "INSUFFICIENT_TRANSFER_TIME",
+                    "item_id": curr_it["id"],
+                    "message": "Di chuyển bằng xe VinBus từ %s sang %s cần tối thiểu %d phút, hiện chỉ có %d phút (%s → %s)."
+                    % (prev_it["meta"]["name"], curr_it["meta"]["name"], walk_min, gap_min,
+                       prev_it["end_str"], curr_it["start_str"]),
+                })
+            else:
+                violations.append({
+                    "code": "INSUFFICIENT_WALK_TIME",
+                    "item_id": curr_it["id"],
+                    "message": "Từ %s sang %s cần tối thiểu %d phút đi bộ, hiện chỉ có %d phút (%s → %s)."
+                    % (prev_it["meta"]["name"], curr_it["meta"]["name"], walk_min, gap_min,
+                       prev_it["end_str"], curr_it["start_str"]),
+                })
 
     if parsed_items:
         total_span = max(x["e_min"] for x in parsed_items) - min(x["s_min"] for x in parsed_items)
@@ -983,6 +1233,22 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
                 "item_id": None,
                 "message": "Lịch trình kéo dài >= 5 tiếng nhưng chưa có khoảng ăn trưa hoặc nghỉ ngơi cho trẻ nhỏ.",
             })
+        has_young_kids = (
+            (gp["min_child_height_cm"] is not None and gp["min_child_height_cm"] < 140)
+            or (gp["children_100_140"] + gp["children_under_100"] > 0)
+        )
+        if len(scheduled_venues) > 2 and has_young_kids:
+            warnings.append({
+                "code": "MULTI_VENUE_FATIGUE",
+                "item_id": None,
+                "message": "Lịch đi cả 3 tổ hợp (Safari + VinWonders + Grand World) trong 1 ngày sẽ khá mệt cho trẻ nhỏ; nên tách thành 2 ngày (Ngày 1 VinWonders, Ngày 2 Safari sáng + Grand World chiều/tối) hoặc thuê xe đẩy.",
+            })
+
+    paid_keys: List[str] = list(rang_buoc.get("diem_ve_le") or [])
+    for it in parsed_items:
+        pk = it["meta"].get("paid_ticket_key")
+        if pk:
+            paid_keys.append(pk)
 
     cost_summary = _compute_cost(
         so_nguoi_lon=gp["adults_for_pricing"],
@@ -993,6 +1259,8 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
         goi_an=gp["goi_an"],
         dich_vu=gp["dich_vu"],
         ngan_sach_vnd=gp["ngan_sach_vnd"],
+        to_hop=active_venues,
+        diem_ve_le=paid_keys,
     )
     if gp["ngan_sach_vnd"] is not None and cost_summary["trong_ngan_sach"] is False:
         violations.append({
@@ -1001,25 +1269,42 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
             "message": "Tổng chi phí %sđ vượt ngân sách %sđ."
             % (f"{cost_summary['tong_chi_phi_vnd']:,}", f"{gp['ngan_sach_vnd']:,}"),
         })
-        relaxations.extend(_build_budget_relaxations(cost_summary, gp["ngan_sach_vnd"], gp))
+        relaxations.extend(
+            _build_budget_relaxations(
+                cost_summary,
+                gp["ngan_sach_vnd"],
+                gp,
+                to_hop=active_venues,
+                diem_ve_le=paid_keys,
+            )
+        )
 
+    active_venue_set = set(active_venues)
+    venue_attractions = [
+        a for a in attractions if a.get("venue_id", "vinwonders") in active_venue_set
+    ]
     indoor_alternatives: List[Dict[str, Any]] = []
     if rain_hit_windows:
         indoor_alternatives = _find_indoor_alternatives(
-            attractions=attractions,
+            attractions=venue_attractions,
             min_child_height_cm=gp["min_child_height_cm"],
             rain_windows=rain_hit_windows,
             scheduled_ids=scheduled_ids,
             limit=5,
         )
-        relaxations.append(
-            "Chuyển các hoạt động ngoài trời trong khung mưa sang điểm trong nhà gợi ý (ưu tiên Cung điện Hải Vương Z6_SEASHELL hoặc khu trong nhà ở Z2_FAIRY / Z1_EURO)."
-        )
+        if active_venue_set == {"vinwonders"}:
+            relaxations.append(
+                "Chuyển các hoạt động ngoài trời trong khung mưa sang điểm trong nhà gợi ý (ưu tiên Cung điện Hải Vương Z6_SEASHELL hoặc khu trong nhà ở Z2_FAIRY / Z1_EURO)."
+            )
+        else:
+            relaxations.append(
+                "Chuyển các hoạt động ngoài trời trong khung mưa sang điểm trong nhà gợi ý (ưu tiên Cung điện Hải Vương Z6_SEASHELL, Xe buýt Safari SF-Z7-01 hoặc Bảo tàng Gấu Teddy GW-Z8-01)."
+            )
 
     if height_violated_zones:
         alt_height = [
             "%s (%s, >=%dcm)" % (a["name"], a["id"], a["min_height_cm"])
-            for a in attractions
+            for a in venue_attractions
             if a["zone_id"] in set(height_violated_zones)
             and a.get("category") not in ("meal", "rest")
             and (gp["min_child_height_cm"] is None or a.get("min_height_cm", 0) <= gp["min_child_height_cm"])
@@ -1033,12 +1318,22 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
             relaxations.append("Hoặc bật tach_nhom=True (vì nhóm có >=2 người lớn) để 1 người lớn chơi trò mạnh trong khi người còn lại trông bé.")
 
     if any(v["code"] == "OUTSIDE_OPENING_HOURS" for v in violations):
-        relaxations.append(
-            "Lưu ý giờ mở cửa lệch nhau: Công viên nước (Z5_TYPHOON) & Cung điện Hải Vương (Z6_SEASHELL) chỉ mở 10:00–18:00; các khu còn lại mở 09:00–19:30."
-        )
+        if active_venue_set == {"vinwonders"}:
+            relaxations.append(
+                "Lưu ý giờ mở cửa lệch nhau: Công viên nước (Z5_TYPHOON) & Cung điện Hải Vương (Z6_SEASHELL) chỉ mở 10:00–18:00; các khu còn lại mở 09:00–19:30."
+            )
+        else:
+            hours_notes: List[str] = []
+            if "safari" in active_venue_set:
+                hours_notes.append("Vinpearl Safari 09:00–16:00 (xe buýt bán hoang dã chuyến cuối 15:20)")
+            if "vinwonders" in active_venue_set:
+                hours_notes.append("VinWonders 09:00–19:30 (Công viên nước & Cung điện Hải Vương 10:00–18:00)")
+            if "grandworld" in active_venue_set:
+                hours_notes.append("Grand World mở cửa tự do, điểm/show tối đến 22:00–22:30")
+            relaxations.append("Lưu ý giờ mở/đóng riêng từng tổ hợp: %s." % ("; ".join(hours_notes)))
     if any(v["code"] == "SHOW_CANCELED" for v in violations):
         relaxations.append(
-            "Khi show ngoài trời bị hủy, ưu tiên thay bằng show trong nhà tại Cung điện Hải Vương (Nàng tiên cá SH-MERMAID-1/2, Cho cá ăn SH-FEED-FISH)."
+            "Khi show ngoài trời bị hủy, ưu tiên thay bằng show trong nhà tại Cung điện Hải Vương (Nàng tiên cá SH-MERMAID-1/2, Cho cá ăn SH-FEED-FISH) hoặc Bảo tàng Gấu Teddy."
         )
 
     return {
@@ -1052,11 +1347,110 @@ def kiem_lich_trinh(lich: List[Dict[str, Any]], rang_buoc: Dict[str, Any]) -> Di
     }
 
 
+def build_booking_deeplink(
+    base_url: str,
+    checkin: Optional[str] = None,
+    checkout: Optional[str] = None,
+    adults: int = 2,
+    children_ages: Tuple[int, ...] = (),
+) -> str:
+    """Gắn sẵn tham số ngày nhận/trả phòng và số khách lên URL đặt phòng bên thứ 3 (không tác động ra ngoài)."""
+    if not base_url:
+        return ""
+    parts = urllib.parse.urlsplit(str(base_url))
+    query = urllib.parse.parse_qs(parts.query, keep_blank_values=True)
+    if checkin:
+        query["checkin"] = [str(checkin)]
+    if checkout:
+        query["checkout"] = [str(checkout)]
+    query["adults"] = [str(max(1, int(adults)))]
+    query["children"] = [str(max(0, len(children_ages)))]
+    encoded = urllib.parse.urlencode(query, doseq=True)
+    return urllib.parse.urlunsplit((parts.scheme, parts.netloc, parts.path, encoded, parts.fragment))
+
+
+@tool
+def tra_khach_san(
+    ngay_den: Optional[str] = None,
+    ngay_ve: Optional[str] = None,
+    so_nguoi: int = 2,
+    ngan_sach_vnd: Optional[int] = None,
+    so_tre_em: int = 0,
+) -> Dict[str, Any]:
+    """Tên: tra_khach_san — Tra cứu danh sách khách sạn tham khảo gần cổng VinWonders / Grand World Phú Quốc (ngoài phạm vi chấm eval/).
+    Input: ngay_den (str | None), ngay_ve (str | None), so_nguoi (int), ngan_sach_vnd (int | None), so_tre_em (int).
+    Output: dict gồm so_luong, hotels (kèm fit_score, lat, lng, distance_to_gate_m, rooms_left mô phỏng, booking_url Deep Link, fetched_at), nguon, is_realtime.
+    Tác động ra ngoài: Không (chỉ đọc data/hotels.json; không tự đặt phòng hay thanh toán)."""
+    hotels_path = os.path.join(DATA_DIR, "hotels.json")
+    fetched_at = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    if not os.path.exists(hotels_path):
+        return {
+            "so_luong": 0,
+            "hotels": [],
+            "nguon": "local_json",
+            "is_realtime": False,
+            "fetched_at": fetched_at,
+            "ghi_chu": "Chưa có data/hotels.json.",
+        }
+
+    raw_hotels = _load_json("hotels.json")
+    rows = raw_hotels.get("hotels", raw_hotels) if isinstance(raw_hotels, dict) else raw_hotels
+    total_guests = max(1, int(so_nguoi or 2))
+    adults_est = max(1, total_guests - max(0, int(so_tre_em or 0)))
+    child_ages = (6,) * max(0, int(so_tre_em or 0))
+
+    scored: List[Dict[str, Any]] = []
+    for h in (rows or []):
+        dist_m = int(h.get("distance_to_gate_m", 1500))
+        max_guests = int(h.get("max_guests", 4))
+        has_family = bool(h.get("has_family_room", False))
+        price_ref = int(h.get("price_ref_vnd", 0))
+
+        fit = 82
+        if dist_m <= 800:
+            fit += 10
+        elif dist_m <= 1500:
+            fit += 5
+        else:
+            fit -= 8
+        if so_tre_em > 0 and has_family:
+            fit += 6
+        if max_guests < total_guests:
+            fit -= 18
+        if ngan_sach_vnd is not None and price_ref > 0 and price_ref > ngan_sach_vnd:
+            fit -= 15
+        fit = max(35, min(99, fit))
+
+        item = dict(h)
+        item["fit_score"] = int(h.get("fit_score", fit))
+        item["rooms_is_synthetic"] = True
+        item["is_realtime"] = False
+        item["fetched_at"] = fetched_at
+        item["booking_url"] = build_booking_deeplink(
+            str(h.get("booking_url", "")),
+            checkin=ngay_den,
+            checkout=ngay_ve,
+            adults=adults_est,
+            children_ages=child_ages,
+        )
+        scored.append(item)
+
+    scored.sort(key=lambda x: (-x["fit_score"], int(x.get("distance_to_gate_m", 9999))))
+    return {
+        "so_luong": len(scored),
+        "hotels": scored,
+        "nguon": "local_json",
+        "is_realtime": False,
+        "fetched_at": fetched_at,
+        "ghi_chu": "Giá tham khảo từ nguồn công khai; số phòng trống (rooms_left) là dữ liệu mô phỏng (seed=42). Đặt phòng mở trang đối tác.",
+    }
+
+
 def search_example(query: str) -> list:
     """Hàm giữ tương thích tạm cho codebase/agent.py ở chế độ mẫu CP1/CP2 (không gắn @tool)."""
     return [
         {
             "code": "VW-COMPAT",
-            "text": "Dữ liệu công viên VinWonders Phú Quốc đã sẵn sàng trong data/; agent.py sẽ nối 6 công cụ @tool chính thức.",
+            "text": "Dữ liệu cụm Phú Quốc United Center đã sẵn sàng trong data/; agent.py nối các công cụ @tool chính thức.",
         }
     ]

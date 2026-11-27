@@ -1,4 +1,4 @@
-# Phoenix_1 — Lập & tái lập lịch trình 1 ngày tại VinWonders Phú Quốc
+# Phoenix_1 — JoyPlan AI: Lập & tái lập lịch trình 1 ngày tại VinWonders Phú Quốc
 
 **Thành viên, lớp, track:** xem [TEAMS.md](TEAMS.md). **Điền TEAMS.md đúng format**: khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người.
 

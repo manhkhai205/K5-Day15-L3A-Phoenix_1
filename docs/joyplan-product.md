@@ -1,12 +1,12 @@
-# VinPlanner — Mô tả sản phẩm
+# JoyPlan AI — Mô tả sản phẩm
 
-> **Một câu:** **VinPlanner** là trợ lý lên & tái lập lịch trình tham quan VinWonders Phú Quốc có kiểm chứng ràng buộc bằng dữ liệu và code, giúp gia đình (nhất là gia đình có trẻ nhỏ) tránh lỡ show, tránh quá sức và kiểm soát chi phí phát sinh.
+> **Một câu:** **JoyPlan AI** là trợ lý lên & tái lập lịch trình tham quan VinWonders Phú Quốc có kiểm chứng ràng buộc bằng dữ liệu và code, giúp gia đình (nhất là gia đình có trẻ nhỏ) tránh lỡ show, tránh quá sức và kiểm soát chi phí phát sinh.
 
 ---
 
 ## 1. Người dùng mục tiêu
 
-- **Người dùng chính (trong phạm vi đánh giá):** Gia đình có trẻ nhỏ (chưa đủ chiều cao `1,0m–1,4m` cho nhiều trò cảm giác mạnh) đi **VinWonders Phú Quốc** trong 1 ngày với ngân sách và khung giờ cố định.
+- **Người dùng chính (trong phạm vi đánh giá):** Gia đình có trẻ nhỏ (chưa đủ chiều cao `1,0m–1,4m` cho nhiều trò cảm giác mạnh) đi **VinWonders Phú Quốc** (mặc định của lát cắt 1 ngày `B01–B14`) hoặc kết hợp cả cụm **Phú Quốc United Center (VinWonders + Vinpearl Safari + Grand World)** trong khung giờ và ngân sách cố định.
 - **Người dùng phụ (mở rộng UX, không nằm trong bộ chấm):** Nhóm bạn trẻ, cặp đôi hoặc người đi một mình muốn gom nhóm trò chơi hợp lý theo khung giờ mở cửa và thời tiết.
 
 ---
@@ -35,7 +35,7 @@ Số liệu nhóm đã thu thập đến CP2 (không thêm số ước lượng 
 
 ## 4. Wireframe & Thiết kế màn hình chia đôi
 
-![Wireframe VinPlanner](images/vinplanner-wireframe.png)
+![Wireframe JoyPlan AI](images/vinplanner-wireframe.png)
 
 ### 4.1. Nửa bên trái — Chat với Agent
 1. **Nhập bằng lời thường:** Người dùng nhắn tự do số người lớn/trẻ em, chiều cao từng bé, ngày đi–về, ngân sách, đi cùng ai. Nếu thiếu thông tin quan trọng (số người, chiều cao bé, khung giờ, ngân sách), agent **hỏi lại 1 lần** liệt kê rõ các trường thiếu; nếu người dùng trả lời bổ sung vẫn còn thiếu, agent nói rõ chưa thể lập lịch và không tự đoán.
@@ -44,12 +44,12 @@ Số liệu nhóm đã thu thập đến CP2 (không thêm số ước lượng 
 
 ### 4.2. Nửa bên phải — Lộ trình trên bản đồ
 1. **Thanh tiêu đề & điều khiển trên cùng:** Tab chuyển **Ngày 1 / Ngày 2 / Ngày 3**, tổng **Chi phí ngày**, **Số mốc**, chỉ số **Hợp bé (`x/y` trò)**, nút **Đặt phòng ↗** *(chỉ mở trang đặt phòng chính thức, không tự thanh toán)* và nút **Lưu lịch**.
-2. **Bản đồ sơ đồ SVG 6 phân khu:** Hiển thị trực quan 6 phân khu của VinWonders Phú Quốc, đánh dấu các mốc theo **4 màu riêng** (nâu: khách sạn · xanh lá: trò chơi · tím: show · cam: ăn uống) và nối tuyến theo thứ tự thời gian trong ngày; kèm nút **Chỉ đường trên Google Maps ↗** (mở link ngoài).
+2. **Bản đồ tương tác MapLibre GL JS (OpenFreeMap Liberty) phủ 8 phân khu cụm Phú Quốc United Center:** Hiển thị bản đồ thật từ khách sạn gần cổng vào 6 phân khu VinWonders + Vinpearl Safari + Grand World, đánh dấu các mốc bằng marker pill **4 màu riêng** (nâu: khách sạn · xanh lá: trò chơi · tím: show · cam: ăn uống) và nối tuyến theo thứ tự thời gian trong ngày (có đệm VinBus `15–20` phút giữa 2 tổ hợp); bấm mốc mở khung chi tiết kính mờ; luôn hiển thị bản đồ tổng quan ngay cả khi đang hỏi bổ sung (G10); phủ sẵn lớp GeoJSON polygon 8 phân khu dự phòng khi mất mạng; kèm nút **Chỉ đường trên Google Maps ↗** (mở link ngoài).
 3. **Dải thẻ mốc dưới bản đồ:** Cuộn ngang danh sách các mốc kèm khung giờ, tên điểm và phân loại để bấm xem chi tiết hoặc theo dõi nhanh thứ tự trong ngày.
 
 ### 4.3. Khung chi tiết mốc & Bảng tự kiểm 5 điều kiện
 - **Khung chi tiết lớn khi bấm vào 1 mốc:**
-  - Hiển thị **video/ảnh chính thức** của điểm chơi/show (nếu chưa có link chính thức thì hiển thị ô *"Chưa có media"* — không bịa hoặc chèn ảnh không rõ nguồn), mô tả ngắn, giờ mở cửa.
+  - Hiển thị **video YouTube embed & ảnh từ link chính thức** (`data/media.json`) của điểm chơi/show — không tải `.mp4` về repo; nếu chưa có link hoặc lỗi tải ảnh (`onError`) thì hiển thị ô *"Chưa có media"* kèm nút mở trang chính thức ↗ (không bịa hoặc chèn ảnh không rõ nguồn), mô tả ngắn, giờ mở cửa.
   - **Nhãn chiều cao từng bé** (ví dụ: `Bé 110cm ✓ · bé 95cm ✗`) tính trực tiếp từ `min_height_cm` trong dữ liệu.
   - **Đổi sang trò khác cùng khung giờ:** Gọi API lấy các trò thay thế cùng khung giờ đã lọc qua chiều cao, giờ mở cửa và thời tiết để đổi nhanh không gây chồng giờ.
   - **Xoá mốc:** Xoá mốc khỏi lịch; hệ thống nhường khoảng thời gian trống cho mốc liền trước để gia đình đi thong thả hơn (nếu mốc liền trước là show có giờ cố định hoặc kịch giờ đóng cửa phân khu thì chuyển khoảng trống đó thành **thời gian nghỉ**), rồi tự kiểm lại bằng `kiem_lich_trinh`.
@@ -66,7 +66,7 @@ Số liệu nhóm đã thu thập đến CP2 (không thêm số ước lượng 
 
 ---
 
-## 6. Những việc VinPlanner KHÔNG làm
+## 6. Những việc JoyPlan AI KHÔNG làm
 
 - Không tự đặt phòng khách sạn, đặt vé vào cổng, vé máy bay hay thực hiện thanh toán.
 - Không thu thập, yêu cầu hoặc xử lý số thẻ ngân hàng, mã CVV, mã OTP hay thông tin cá nhân nhạy cảm.
@@ -81,7 +81,7 @@ Số liệu nhóm đã thu thập đến CP2 (không thêm số ước lượng 
 |---|---|---|
 | Giờ mở cửa 6 phân khu, lịch 6 show cố định 2026, giá vé vào cổng/buffet | **Thật** | Trang chính thức `vinwonders.com` (kiểm & chụp màn hình ngày 27/11/2026, `docs/images/`) |
 | Quy mô & tên điểm chơi nổi bật, ngưỡng chiều cao tiêu biểu | **Thật** *(kết hợp chuẩn hoá)* | Tổng hợp nguồn công khai (`vinwonders.com`, `data/DATA_CARD.md`) |
-| Thời lượng từng trò, ma trận đi bộ 6×6, toạ độ `x, y` trên bản đồ SVG | **`synthetic`** | Nhóm chuẩn hoá theo quy hoạch 6 phân khu để chạy mô phỏng & vẽ tuyến |
+| Thời lượng từng trò, ma trận di chuyển 8×8, toạ độ `lat`, `lng` và đa giác (`polygon`) 8 phân khu trên bản đồ MapLibre | **`synthetic`** *(giờ đóng/mở 3 tổ hợp & giá vé Combo/Safari/Grand World là **thật** theo nguồn công khai)* | Nhóm chuẩn hoá theo cụm Phú Quốc United Center để chạy mô phỏng & vẽ tuyến |
 | Kịch bản thời tiết theo ngày (`data/weather.json`) | **`synthetic` (`seed=42`)** | Sinh có seed theo mùa khô/mưa Phú Quốc để kiểm thử tái lập lịch |
 | Danh sách khách sạn (`data/hotels.json`) | **Giá/tên thật · Phòng trống `synthetic`** | Tên & giá tham khảo có link nguồn công khai; số phòng trống mô phỏng (`seed=42`), UI gắn nhãn *"dữ liệu mô phỏng"* |
-| Media (video/ảnh điểm chơi trong khung chi tiết) | **Thật hoặc trống** | Chỉ dùng link YouTube/ảnh chính thức từ VinWonders; thiếu thì hiện *"Chưa có media"* |
+| Media (video/ảnh điểm chơi trong khung chi tiết) | **Thật hoặc trống** | Chỉ dùng link YouTube embed & link ảnh chính thức từ VinWonders trong `data/media.json` kèm fallback `onError` (không tải `.mp4` hay ảnh bản quyền vào repo); thiếu hoặc lỗi tải thì hiện *"Chưa có media"* + link trang chính thức (Production dùng ảnh có bản quyền/đối tác/Wikimedia trên CDN riêng — xem `docs/data-strategy.md` §7) |

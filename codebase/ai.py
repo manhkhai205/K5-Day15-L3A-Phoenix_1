@@ -109,6 +109,7 @@ def _call_gemini(system: str, user: str, model_name: str) -> dict:
     )
     body = {
         "contents": [{"role": "user", "parts": [{"text": user}]}],
+        "generationConfig": {"temperature": 0.2},
     }
     if system:
         body["systemInstruction"] = {"parts": [{"text": system}]}

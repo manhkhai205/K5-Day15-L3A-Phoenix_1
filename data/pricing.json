@@ -2,7 +2,8 @@
   "currency": "VND",
   "last_verified": "2026-11-27",
   "sources": [
-    "VinWonders / Rooty Trip / VisitPhuQuoc / Trip.com (kiểm 27/11/2026)"
+    "VinWonders / Rooty Trip / VisitPhuQuoc / Trip.com (kiểm 27/11/2026)",
+    "Vinpearl Safari & Grand World Phú Quốc — DatVietTour / NewLifeTravel / SaigonStar / Klook (tham chiếu giá 2025–2026, kiểm 27/11/2026)"
   ],
   "tickets": {
     "adult": {
@@ -20,6 +21,66 @@
     "child_under_100": {
       "label": "Trẻ em (cao dưới 1,0m)",
       "price_vnd": 0
+    }
+  },
+  "venue_tickets": {
+    "vinwonders": {
+      "label": "Vé vào cổng VinWonders Phú Quốc (1 ngày)",
+      "adult": 1050000,
+      "child_100_140": 800000,
+      "senior": 800000,
+      "child_under_100": 0
+    },
+    "safari": {
+      "label": "Vé vào cổng Vinpearl Safari Phú Quốc (kèm xe bus bán hoang dã)",
+      "adult": 750000,
+      "child_100_140": 560000,
+      "senior": 560000,
+      "child_under_100": 0
+    },
+    "combo_vinwonders_safari": {
+      "label": "Vé Combo 1 ngày VinWonders + Vinpearl Safari Phú Quốc",
+      "adult": 1500000,
+      "child_100_140": 1100000,
+      "senior": 1100000,
+      "child_under_100": 0
+    },
+    "grandworld_entry": {
+      "label": "Vào cổng dạo phố & xem show Sắc màu Venice (Grand World)",
+      "adult": 0,
+      "child_100_140": 0,
+      "senior": 0,
+      "child_under_100": 0
+    }
+  },
+  "grandworld_paid_items": {
+    "gw_teddy": {
+      "label": "Vé Bảo tàng Gấu Teddy (Teddy Bear Museum)",
+      "adult": 200000,
+      "child_100_140": 150000,
+      "senior": 150000,
+      "child_under_100": 0
+    },
+    "gw_venice_boat": {
+      "label": "Vé thuyền Gondola sông Venice",
+      "adult": 200000,
+      "child_100_140": 150000,
+      "senior": 150000,
+      "child_under_100": 0
+    },
+    "gw_tinh_hoa": {
+      "label": "Vé Show thực cảnh Tinh hoa Việt Nam",
+      "adult": 300000,
+      "child_100_140": 230000,
+      "senior": 230000,
+      "child_under_100": 0
+    },
+    "gw_combo_tinh_hoa_teddy": {
+      "label": "Combo Tinh hoa Việt Nam + Bảo tàng Gấu Teddy",
+      "adult": 450000,
+      "child_100_140": 340000,
+      "senior": 340000,
+      "child_under_100": 0
     }
   },
   "meals": {

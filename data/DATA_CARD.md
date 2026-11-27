@@ -7,59 +7,59 @@
 
 ---
 
-## Dataset 1 · `data/park_zones.json` (6 phân khu & ma trận đi bộ)
+## Dataset 1 · `data/park_zones.json` (3 tổ hợp Phú Quốc United Center · 8 phân khu & ma trận di chuyển)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show`, `uoc_thoi_gian_di` và `kiem_lich_trinh` (kiểm giờ mở/đóng lệch nhau giữa 6 phân khu và thời gian di chuyển giữa các khu). |
-| Từ đâu | Tổng hợp từ thông tin công khai của VinWonders Phú Quốc (website/app chính thức, VNPAY, Rooty Trip, Vietravel) + ma trận đi bộ ước lượng chuẩn hóa (`synthetic`). |
-| Xử lý những bước gì | Chuẩn hóa mã 6 phân khu (`Z1_EURO`..`Z6_SEASHELL`), tách khung giờ chung (`09:00–19:30`) với 2 khu đóng sớm (`10:00–18:00` cho `Z5_TYPHOON` và `Z6_SEASHELL`), dựng ma trận thời gian đi bộ đối xứng 6×6 (đơn vị: phút). |
-| Số dòng / số đoạn | 1 bản ghi tổng quan công viên, 6 phân khu, ma trận đi bộ 6×6 (36 cặp điểm). |
+| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show`, `uoc_thoi_gian_di`, `kiem_lich_trinh` và bản đồ MapLibre `ParkMap` (kiểm giờ mở/đóng lệch nhau giữa 3 tổ hợp / 8 phân khu và thời gian đi bộ / xe VinBus). |
+| Từ đâu | Thông tin công khai của cụm Phú Quốc United Center: VinWonders (`vinwonders.com`, VNPAY, Rooty Trip), Vinpearl Safari (`newlifetravel.vn`, `vinpearl.com`) và Grand World (`datviettour.com.vn`, `vinpearl.com`), kèm tọa độ WGS84 & ma trận 8×8. |
+| Xử lý những bước gì | Chuẩn hóa 3 tổ hợp (`vinwonders` 09:00–19:30, `safari` 09:00–16:00 / bus cuối 15:20, `grandworld` 08:00–22:30), 8 phân khu (`Z1_EURO`..`Z6_SEASHELL`, `Z7_SAFARI`, `Z8_GRANDWORLD`), thêm `color`, `center` và GeoJSON `polygon` khép kín; dựng ma trận di chuyển đối xứng 8×8 (đi bộ nội khu `3–12` phút; VinBus liên tổ hợp `15–20` phút). |
+| Số dòng / số đoạn | 1 bản ghi `park` gốc (tương thích ngược), 3 bản ghi `venues`, 8 phân khu (kèm GeoJSON polygon), ma trận di chuyển 8×8 (`64` cặp điểm). |
 | Phiên bản / ngày lấy | 27/11/2026 |
-| Nhãn | Hỗn hợp: giờ mở cửa & tên 6 phân khu là **thông tin công khai thật** · ma trận phút đi bộ là **`synthetic` (nhóm ước lượng chuẩn hóa)** |
-| Giới hạn | Thời gian đi bộ thực tế của gia đình có thể tăng thêm 3–5 phút vào giờ cao điểm hoặc khi đi cùng trẻ nhỏ/xe đẩy; chưa phản ánh việc đóng bảo trì phân khu đột xuất. |
+| Nhãn | Hỗn hợp: tên, giờ mở/đóng 3 tổ hợp & 8 phân khu là **thông tin công khai thật** · ma trận phút di chuyển & hình bao `polygon` từng phân khu trên nền tọa độ thật là **`synthetic` (ước lượng chuẩn hóa)** |
+| Giới hạn | Thời gian đi bộ/chờ xe VinBus thực tế có thể tăng thêm 3–5 phút vào giờ cao điểm hoặc khi đi cùng trẻ nhỏ/xe đẩy; chưa phản ánh việc đóng bảo trì đột xuất. |
 
 ---
 
-## Dataset 2 · `data/attractions.json` (Điểm chơi, ăn uống & nghỉ ngơi)
+## Dataset 2 · `data/attractions.json` (44 điểm chơi, tham quan, ăn uống & nghỉ ngơi)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho công cụ `tra_diem_choi` và `kiem_lich_trinh` (lọc trò theo chiều cao bé, trong nhà/ngoài trời, giờ mở cửa và gợi ý điểm trong nhà thay thế khi mưa). |
-| Từ đâu | Tổng hợp từ thông số vận hành công khai của VinWonders Phú Quốc (Vinpearl, Rooty Trip, Mia.vn, PhuQuocGo, Daivietourist) + chuẩn hóa thời lượng chơi (`synthetic`). |
-| Xử lý những bước gì | Gắn mã định danh chuẩn (`VW-Z1-01`..`VW-Z6-04`, `VW-MEAL-01`..`03`, `VW-REST-01`), chuẩn hóa `min_height_cm` (có các bẫy `120–140cm`), `companion_required_below_cm`, cờ `indoor` / `is_water_park`, gắn tag và đối chiếu chéo giờ mở cửa với `park_zones.json`. |
-| Số dòng / số đoạn | 35 mục (31 điểm vui chơi/tham quan trải đều 6 phân khu + 3 điểm ăn uống + 1 mục nghỉ ngơi). |
+| Dùng để làm gì | Nguồn cho công cụ `tra_diem_choi`, `kiem_lich_trinh` và bản đồ `ParkMap` (lọc theo tổ hợp, chiều cao bé, trong nhà/ngoài trời, giờ mở cửa, điểm thu phí riêng Grand World). |
+| Từ đâu | Tổng hợp từ thông số vận hành công khai của VinWonders (35 mục), Vinpearl Safari (4 mục: Xe buýt bán hoang dã, Open Zoo, Kid Zoo/Giraffe, nhà hàng Safari) và Grand World (5 mục: Bảo tàng Gấu Teddy, thuyền Gondola, dạo phố Venice, phố mua sắm mái che, ẩm thực). |
+| Xử lý những bước gì | Gắn `venue_id` (`vinwonders` | `safari` | `grandworld`), tọa độ `lat`/`lng` trong polygon phân khu, `min_height_cm`, `companion_required_below_cm`, `indoor`, `is_water_park`, `paid_ticket_key` (`gw_teddy`, `gw_venice_boat`), giờ phục vụ (như `SF-Z7-01` chuyến cuối `15:20`). |
+| Số dòng / số đoạn | **44 mục** (`35` mục VinWonders trải đều 6 phân khu + `4` mục Vinpearl Safari + `5` mục Grand World). |
 | Phiên bản / ngày lấy | 27/11/2026 |
-| Nhãn | Hỗn hợp: danh sách điểm nổi bật & quy định nhóm chiều cao là **thông tin công khai thật** · thời lượng chơi `duration_min` và một số điểm ăn/nghỉ đại diện là **`synthetic` (nhóm chuẩn hóa)** |
-| Giới hạn | Chưa liệt kê toàn bộ >100 trò nhỏ lẻ; một số trò cảm giác mạnh có thể thay đổi ngưỡng chiều cao 5–10 cm theo đợt kiểm định kỹ thuật hoặc tạm dừng bảo trì theo ngày. |
+| Nhãn | Hỗn hợp: danh sách điểm nổi bật, giờ mở/chuyến bus cuối & ngưỡng chiều cao là **thông tin công khai thật** · thời lượng `duration_min` và vị trí chi tiết `lat`/`lng` trong từng phân khu là **`synthetic` (ước lượng chuẩn hóa)** |
+| Giới hạn | Chưa liệt kê toàn bộ >100 trò nhỏ lẻ; một số trò cảm giác mạnh có thể thay đổi ngưỡng chiều cao 5–10 cm hoặc tạm dừng bảo trì theo ngày. |
 
 ---
 
-## Dataset 3 · `data/shows.json` (Lịch biểu diễn show cố định)
+## Dataset 3 · `data/shows.json` (10 suất show cố định của 3 tổ hợp)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show` và `kiem_lich_trinh` (khớp giờ show cố định ngắn 10–30 phút, nhắc đến sớm 10–15 phút, xử lý show ngoài trời khi mưa/hủy). |
-| Từ đâu | Bảng lịch biểu diễn chính thức 2026 trên website VinWonders (`https://vinwonders.com/vi/wonderpedia/news/lich-trinh-vinwonders-phu-quoc/`, ảnh chụp xác thực tại `docs/images/vinwonders-show-schedule.png`, kiểm ngày 27/11/2026). |
-| Xử lý những bước gì | Chuẩn hóa `start_time`, `end_time` khớp bảng 2026 (Cho cá ăn `11:00–11:10`, Mascot Chim cánh cụt `13:00–13:30`, Nàng tiên cá `14:00–14:20` & `15:30–15:50`, Carnival `17:00–17:30`, Show Once `18:45–19:05`), thời gian đến sớm (`arrive_early_min`), phân loại trong nhà (`indoor: true` tại Cung điện Hải Vương) và ngoài trời (`indoor: false`). |
-| Số dòng / số đoạn | 6 suất show chính trong ngày. |
+| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show` và `kiem_lich_trinh` (khớp giờ show cố định ngắn, nhắc đến sớm `10–15` phút, phân biệt show ngoài trời/trong nhà và miễn phí/có thu vé). |
+| Từ đâu | 6 suất show VinWonders từ bảng lịch biểu diễn chính thức 2026 (`vinwonders.com`, ảnh chụp `docs/images/vinwonders-show-schedule.png`), cộng 2 show Safari (`Zulu Dance`, `Animal Show`) và 2 show Grand World (`Tinh hoa Việt Nam`, `Sắc màu Venice`) tham chiếu từ nguồn công khai 2025–2026. |
+| Xử lý những bước gì | Chuẩn hóa `venue_id`, `start_time`, `end_time`, `arrive_early_min`, `indoor`, `paid_ticket_key` (`gw_tinh_hoa`) và tọa độ `lat`/`lng` đặt marker bản đồ. |
+| Số dòng / số đoạn | **10 suất show** (`6` show VinWonders + `2` show Safari + `2` show Grand World). |
 | Phiên bản / ngày lấy | 27/11/2026 |
-| Nhãn | **Thật** (theo bảng lịch biểu diễn chính thức 2026 trên `vinwonders.com`). |
-| Giới hạn | Lịch diễn thực tế có thể điều chỉnh theo mùa hoặc tạm dừng show ngoài trời (Carnival, Show Once) khi mưa lớn; bản chạy thử chưa nối API lịch diễn thời gian thực. |
+| Nhãn | **Thật** (VinWonders khớp bảng 2026 chính thức; Safari & Grand World tham chiếu giờ diễn công khai 2025–2026) · `lat`/`lng` đặt điểm trong phân khu là **`synthetic`** |
+| Giới hạn | Show động vật Safari và show ngoài trời (`Carnival`, `Show Once`, `Tinh hoa Việt Nam`, `Sắc màu Venice`) có thể điều chỉnh lịch theo ngày hoặc tạm dừng khi mưa lớn. |
 
 ---
 
-## Dataset 4 · `data/pricing.json` (Bảng giá vé, ăn uống & phụ phí)
+## Dataset 4 · `data/pricing.json` (Bảng giá vé lẻ, Combo 2 khu, Grand World, ăn uống & phụ phí)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho công cụ `tinh_chi_phi` và `kiem_lich_trinh` (tính dự toán tổng chi phí gia đình và kiểm ràng buộc không vượt ngân sách). |
-| Từ đâu | Bảng giá niêm yết tham chiếu công khai từ VinWonders, Rooty Trip, VisitPhuQuoc, Trip.com (cộng quy định không mang đồ ăn mặn ngoài vào công viên). |
-| Xử lý những bước gì | Chuẩn hóa đơn vị `VND`, phân 4 hạng vé theo chiều cao/độ tuổi (`adult`, `child_100_140`, `senior`, `child_under_100`), 4 mức ăn (`buffet`, `a_la_carte`, `fastfood`, `none`) và 6 phụ phí phát sinh (`stroller` có tách riêng tiền cọc hoàn lại 500.000đ, `locker`, `buggy`, `fastpass`, `raincoat`, `drinks_snacks`). |
-| Số dòng / số đoạn | 4 hạng vé, 4 gói ăn uống, 6 phụ phí dịch vụ, 2 quy tắc chính sách. |
+| Dùng để làm gì | Nguồn cho công cụ `tinh_chi_phi` và `kiem_lich_trinh` (tính dự toán tổng chi phí gia đình, tự áp vé **Combo VinWonders + Safari** và **Combo Tinh hoa + Gấu Teddy** khi đi kèm). |
+| Từ đâu | Bảng giá niêm yết & tham chiếu công khai 2025–2026 từ VinWonders, Rooty Trip, VisitPhuQuoc, Trip.com, DatVietTour, SaigonStar, Klook (kiểm 27/11/2026). |
+| Xử lý những bước gì | Giữ nguyên khóa `tickets`, `meals`, `extras` của VinWonders; bổ sung `venue_tickets` (`vinwonders`, `safari`, `combo_vinwonders_safari` `1.500k/1.100k`, `grandworld_entry` `0đ`) và `grandworld_paid_items` (`gw_teddy`, `gw_venice_boat`, `gw_tinh_hoa`, `gw_combo_tinh_hoa_teddy`). |
+| Số dòng / số đoạn | 4 hạng vé chuẩn, 4 gói vé tổ hợp, 4 gói điểm trả phí Grand World, 4 gói ăn, 6 phụ phí dịch vụ. |
 | Phiên bản / ngày lấy | 27/11/2026 |
-| Nhãn | **Thật (tham chiếu niêm yết công khai)** cho vé/buffet/xe đẩy/buggy · **`synthetic` (ước lượng tham chiếu)** cho mức món lẻ trung bình, nước uống & Fastpass. |
-| Giới hạn | Giá vé thực tế có thể giảm khi đặt qua OTA (Klook/Traveloka) hoặc mua combo Safari; chưa tự động tính giá combo khuyến mãi theo từng ngày. |
+| Nhãn | **Thật (tham chiếu niêm yết công khai)** cho vé tổ hợp, Combo, điểm Grand World, buffet, xe đẩy, buggy · **`synthetic` (ước lượng tham chiếu)** cho món lẻ trung bình, nước uống & Fastpass. |
+| Giới hạn | Giá vé thực tế có thể giảm thêm theo khuyến mãi OTA/VinWonders theo mùa; bản chạy thử ưu tiên lấy một mức tham chiếu chuẩn hóa cho minh bạch tính toán. |
 
 ---
 
@@ -77,4 +77,4 @@
 
 ---
 
-**Kiểm chứng dữ liệu `synthetic`:** Toàn bộ 5 file JSON trong `data/` đã được **Vũ Đức Anh** (`seed=42` cho kịch bản thời tiết, ước lượng chuẩn hóa cho thời lượng/ma trận đi bộ/phụ phí tham chiếu) kiểm tay 100% số bản ghi ngày 27/11/2026 để đảm bảo có đủ các ca bẫy (khu đóng cửa 18:00, trò yêu cầu 120–140cm, show 10 phút, mưa đóng khu ngoài trời) khớp `spec.md` §0–§2 và `docs/cp2-plan.md`.
+**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được kiểm chéo (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World ngày 27/11/2026; tọa độ WGS84 và kịch bản thời tiết `seed=42` kiểm tự động nằm gọn trong polygon phân khu) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.

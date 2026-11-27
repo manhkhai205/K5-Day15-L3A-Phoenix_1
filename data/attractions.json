@@ -12,8 +12,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "ngoai_troi", "chup_anh", "nhe_nhang"],
-    "notes": "Khu vực cổng vào thuận tiện chụp ảnh đầu ngày hoặc cuối ngày."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "chup_anh",
+      "nhe_nhang"
+    ],
+    "notes": "Khu vực cổng vào thuận tiện chụp ảnh đầu ngày hoặc cuối ngày.",
+    "venue_id": "vinwonders",
+    "lat": 10.31408,
+    "lng": 103.8522
   },
   {
     "id": "VW-Z1-02",
@@ -28,8 +37,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "medium",
-    "tags": ["gia_dinh", "trong_nha", "tranh_nang", "tranh_mua", "kham_pha"],
-    "notes": "Trò chơi tương tác trong nhà gần khu trung tâm Đại lộ Châu Âu."
+    "tags": [
+      "gia_dinh",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "kham_pha"
+    ],
+    "notes": "Trò chơi tương tác trong nhà gần khu trung tâm Đại lộ Châu Âu.",
+    "venue_id": "vinwonders",
+    "lat": 10.31408,
+    "lng": 103.85318
   },
   {
     "id": "VW-Z1-03",
@@ -44,8 +62,18 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua", "nhe_nhang"],
-    "notes": "Phù hợp trú mưa hoặc nghỉ chân trước giờ Once Show."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "nhe_nhang"
+    ],
+    "notes": "Phù hợp trú mưa hoặc nghỉ chân trước giờ Once Show.",
+    "venue_id": "vinwonders",
+    "lat": 10.31408,
+    "lng": 103.85416
   },
   {
     "id": "VW-Z1-04",
@@ -60,8 +88,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua"],
-    "notes": "Trải nghiệm ngồi rạp trong nhà có điều hòa, phù hợp trẻ từ 90cm."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua"
+    ],
+    "notes": "Trải nghiệm ngồi rạp trong nhà có điều hòa, phù hợp trẻ từ 90cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31475,
+    "lng": 103.8522
   },
   {
     "id": "VW-Z2-01",
@@ -76,8 +113,16 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "ngoai_troi", "nhe_nhang"],
-    "notes": "Đu quay cổ tích nhẹ nhàng, trẻ dưới 100cm cần có người lớn ngồi cùng."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "nhe_nhang"
+    ],
+    "notes": "Đu quay cổ tích nhẹ nhàng, trẻ dưới 100cm cần có người lớn ngồi cùng.",
+    "venue_id": "vinwonders",
+    "lat": 10.31652,
+    "lng": 103.852
   },
   {
     "id": "VW-Z2-02",
@@ -92,8 +137,16 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "ngoai_troi", "nhe_nhang"],
-    "notes": "Trò bay nhẹ ngoài trời dành cho trẻ nhỏ và gia đình."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "nhe_nhang"
+    ],
+    "notes": "Trò bay nhẹ ngoài trời dành cho trẻ nhỏ và gia đình.",
+    "venue_id": "vinwonders",
+    "lat": 10.31652,
+    "lng": 103.8527
   },
   {
     "id": "VW-Z2-03",
@@ -108,8 +161,18 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua", "chup_anh"],
-    "notes": "Không giới hạn chiều cao, không gian trong nhà tránh nắng/mưa tốt."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "chup_anh"
+    ],
+    "notes": "Không giới hạn chiều cao, không gian trong nhà tránh nắng/mưa tốt.",
+    "venue_id": "vinwonders",
+    "lat": 10.31652,
+    "lng": 103.8534
   },
   {
     "id": "VW-Z2-04",
@@ -124,8 +187,16 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "medium",
-    "tags": ["gia_dinh", "tre_nho", "ngoai_troi", "kham_pha"],
-    "notes": "Xe trượt tốc độ vừa, trẻ 100–120cm cần có người lớn đi kèm."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "kham_pha"
+    ],
+    "notes": "Xe trượt tốc độ vừa, trẻ 100–120cm cần có người lớn đi kèm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31725,
+    "lng": 103.852
   },
   {
     "id": "VW-Z2-05",
@@ -140,8 +211,18 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua", "nhe_nhang"],
-    "notes": "Điểm thay thế lý tưởng khi trời mưa hoặc nắng gắt buổi trưa cho trẻ dưới 1,2m."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "nhe_nhang"
+    ],
+    "notes": "Điểm thay thế lý tưởng khi trời mưa hoặc nắng gắt buổi trưa cho trẻ dưới 1,2m.",
+    "venue_id": "vinwonders",
+    "lat": 10.31725,
+    "lng": 103.8527
   },
   {
     "id": "VW-Z2-06",
@@ -156,8 +237,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua"],
-    "notes": "Trò chơi gia đình trong nhà mát mẻ, phù hợp cả người lớn và trẻ nhỏ."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua"
+    ],
+    "notes": "Trò chơi gia đình trong nhà mát mẻ, phù hợp cả người lớn và trẻ nhỏ.",
+    "venue_id": "vinwonders",
+    "lat": 10.31725,
+    "lng": 103.8534
   },
   {
     "id": "VW-Z2-07",
@@ -172,8 +262,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "ngoai_troi", "chup_anh", "nhe_nhang"],
-    "notes": "Hoạt động nhẹ nhàng đầu giờ sáng ở khu Thế giới diệu kỳ."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "chup_anh",
+      "nhe_nhang"
+    ],
+    "notes": "Hoạt động nhẹ nhàng đầu giờ sáng ở khu Thế giới diệu kỳ.",
+    "venue_id": "vinwonders",
+    "lat": 10.31798,
+    "lng": 103.852
   },
   {
     "id": "VW-Z3-01",
@@ -188,8 +287,14 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "ngoai_troi"],
-    "notes": "Tàu lượn siêu tốc ngoài trời cường độ cao; không phù hợp trẻ dưới 130cm."
+    "tags": [
+      "cam_giac_manh",
+      "ngoai_troi"
+    ],
+    "notes": "Tàu lượn siêu tốc ngoài trời cường độ cao; không phù hợp trẻ dưới 130cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31808,
+    "lng": 103.85444
   },
   {
     "id": "VW-Z3-02",
@@ -204,8 +309,14 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "ngoai_troi"],
-    "notes": "Cảm giác mạnh ngoài trời; yêu cầu chiều cao từ 130cm trở lên."
+    "tags": [
+      "cam_giac_manh",
+      "ngoai_troi"
+    ],
+    "notes": "Cảm giác mạnh ngoài trời; yêu cầu chiều cao từ 130cm trở lên.",
+    "venue_id": "vinwonders",
+    "lat": 10.31808,
+    "lng": 103.85506
   },
   {
     "id": "VW-Z3-03",
@@ -220,8 +331,14 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "ngoai_troi"],
-    "notes": "Trò cảm giác mạnh nặng đô, chỉ dành cho khách cao từ 140cm trở lên."
+    "tags": [
+      "cam_giac_manh",
+      "ngoai_troi"
+    ],
+    "notes": "Trò cảm giác mạnh nặng đô, chỉ dành cho khách cao từ 140cm trở lên.",
+    "venue_id": "vinwonders",
+    "lat": 10.31808,
+    "lng": 103.85567
   },
   {
     "id": "VW-Z3-04",
@@ -236,8 +353,16 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "medium",
-    "tags": ["trong_nha", "tranh_mua", "tranh_nang", "cam_giac_manh"],
-    "notes": "Tàu lượn trong nhà có mái che, phù hợp trẻ từ 120cm trở lên."
+    "tags": [
+      "trong_nha",
+      "tranh_mua",
+      "tranh_nang",
+      "cam_giac_manh"
+    ],
+    "notes": "Tàu lượn trong nhà có mái che, phù hợp trẻ từ 120cm trở lên.",
+    "venue_id": "vinwonders",
+    "lat": 10.31875,
+    "lng": 103.85444
   },
   {
     "id": "VW-Z3-05",
@@ -252,8 +377,14 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "ngoai_troi"],
-    "notes": "Yêu cầu tối thiểu 140cm và sức khỏe ổn định."
+    "tags": [
+      "cam_giac_manh",
+      "ngoai_troi"
+    ],
+    "notes": "Yêu cầu tối thiểu 140cm và sức khỏe ổn định.",
+    "venue_id": "vinwonders",
+    "lat": 10.31875,
+    "lng": 103.85506
   },
   {
     "id": "VW-Z3-06",
@@ -268,8 +399,18 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua", "nhe_nhang"],
-    "notes": "Điểm trú mưa/tránh nắng cho bé nhỏ tại khu Thế giới phiêu lưu khi bố mẹ tách nhóm chơi trò lớn."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "nhe_nhang"
+    ],
+    "notes": "Điểm trú mưa/tránh nắng cho bé nhỏ tại khu Thế giới phiêu lưu khi bố mẹ tách nhóm chơi trò lớn.",
+    "venue_id": "vinwonders",
+    "lat": 10.31875,
+    "lng": 103.85567
   },
   {
     "id": "VW-Z4-01",
@@ -284,8 +425,15 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "medium",
-    "tags": ["gia_dinh", "ngoai_troi", "kham_pha"],
-    "notes": "Trò thuyền gia đình ngoài trời; trẻ 100–120cm phải có người lớn ngồi kèm."
+    "tags": [
+      "gia_dinh",
+      "ngoai_troi",
+      "kham_pha"
+    ],
+    "notes": "Trò thuyền gia đình ngoài trời; trẻ 100–120cm phải có người lớn ngồi kèm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31752,
+    "lng": 103.8566
   },
   {
     "id": "VW-Z4-02",
@@ -300,8 +448,15 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "medium",
-    "tags": ["gia_dinh", "ngoai_troi", "kham_pha"],
-    "notes": "Tổ hợp vận động cầu dây cấp độ cơ bản cho trẻ từ 110cm."
+    "tags": [
+      "gia_dinh",
+      "ngoai_troi",
+      "kham_pha"
+    ],
+    "notes": "Tổ hợp vận động cầu dây cấp độ cơ bản cho trẻ từ 110cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31752,
+    "lng": 103.85716
   },
   {
     "id": "VW-Z4-03",
@@ -316,8 +471,14 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "ngoai_troi"],
-    "notes": "Tuyến vận động trên cao & Zipline yêu cầu từ 140cm."
+    "tags": [
+      "cam_giac_manh",
+      "ngoai_troi"
+    ],
+    "notes": "Tuyến vận động trên cao & Zipline yêu cầu từ 140cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31752,
+    "lng": 103.85772
   },
   {
     "id": "VW-Z4-04",
@@ -332,8 +493,17 @@
     "open_time": "09:00",
     "close_time": "19:30",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "tranh_nang", "tranh_mua"],
-    "notes": "Không gian có mái che tại khu Viking phù hợp nghỉ chân hoặc tránh mưa."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua"
+    ],
+    "notes": "Không gian có mái che tại khu Viking phù hợp nghỉ chân hoặc tránh mưa.",
+    "venue_id": "vinwonders",
+    "lat": 10.31825,
+    "lng": 103.8566
   },
   {
     "id": "VW-Z5-01",
@@ -348,8 +518,17 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "cong_vien_nuoc", "ngoai_troi", "nhe_nhang"],
-    "notes": "Trẻ dưới 120cm bắt buộc mặc áo phao và có người lớn đi cùng."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "cong_vien_nuoc",
+      "ngoai_troi",
+      "nhe_nhang"
+    ],
+    "notes": "Trẻ dưới 120cm bắt buộc mặc áo phao và có người lớn đi cùng.",
+    "venue_id": "vinwonders",
+    "lat": 10.3146,
+    "lng": 103.85628
   },
   {
     "id": "VW-Z5-02",
@@ -364,8 +543,16 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "cong_vien_nuoc", "ngoai_troi"],
-    "notes": "Bể tạo sóng ngoài trời trong Công viên nước (đóng cửa 18:00); trẻ nhỏ cần áo phao và giám sát sát sao."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "cong_vien_nuoc",
+      "ngoai_troi"
+    ],
+    "notes": "Bể tạo sóng ngoài trời trong Công viên nước (đóng cửa 18:00); trẻ nhỏ cần áo phao và giám sát sát sao.",
+    "venue_id": "vinwonders",
+    "lat": 10.3146,
+    "lng": 103.85695
   },
   {
     "id": "VW-Z5-03",
@@ -380,8 +567,17 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "cong_vien_nuoc", "ngoai_troi", "nhe_nhang"],
-    "notes": "Khu nước thiết kế riêng cho trẻ nhỏ; khu Công viên nước mở 10:00–18:00."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "cong_vien_nuoc",
+      "ngoai_troi",
+      "nhe_nhang"
+    ],
+    "notes": "Khu nước thiết kế riêng cho trẻ nhỏ; khu Công viên nước mở 10:00–18:00.",
+    "venue_id": "vinwonders",
+    "lat": 10.3146,
+    "lng": 103.85762
   },
   {
     "id": "VW-Z5-04",
@@ -396,8 +592,15 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "medium",
-    "tags": ["gia_dinh", "cong_vien_nuoc", "ngoai_troi"],
-    "notes": "Ngồi phao chung nhiều người; trẻ 100–120cm cần ngồi cùng người lớn."
+    "tags": [
+      "gia_dinh",
+      "cong_vien_nuoc",
+      "ngoai_troi"
+    ],
+    "notes": "Ngồi phao chung nhiều người; trẻ 100–120cm cần ngồi cùng người lớn.",
+    "venue_id": "vinwonders",
+    "lat": 10.31544,
+    "lng": 103.85628
   },
   {
     "id": "VW-Z5-05",
@@ -412,8 +615,15 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "cong_vien_nuoc", "ngoai_troi"],
-    "notes": "Đường trượt nước tốc độ cao, tối thiểu 120cm."
+    "tags": [
+      "cam_giac_manh",
+      "cong_vien_nuoc",
+      "ngoai_troi"
+    ],
+    "notes": "Đường trượt nước tốc độ cao, tối thiểu 120cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31544,
+    "lng": 103.85695
   },
   {
     "id": "VW-Z5-06",
@@ -428,8 +638,15 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "high",
-    "tags": ["cam_giac_manh", "cong_vien_nuoc", "ngoai_troi"],
-    "notes": "Đường trượt lớn nhất Công viên nước, yêu cầu chiều cao từ 130cm."
+    "tags": [
+      "cam_giac_manh",
+      "cong_vien_nuoc",
+      "ngoai_troi"
+    ],
+    "notes": "Đường trượt lớn nhất Công viên nước, yêu cầu chiều cao từ 130cm.",
+    "venue_id": "vinwonders",
+    "lat": 10.31544,
+    "lng": 103.85762
   },
   {
     "id": "VW-Z6-01",
@@ -444,8 +661,19 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "thuy_cung", "tranh_nang", "tranh_mua", "kham_pha"],
-    "notes": "Thủy cung trong nhà có điều hòa, đi xe đẩy thuận tiện, mở 10:00–18:00."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "thuy_cung",
+      "tranh_nang",
+      "tranh_mua",
+      "kham_pha"
+    ],
+    "notes": "Thủy cung trong nhà có điều hòa, đi xe đẩy thuận tiện, mở 10:00–18:00.",
+    "venue_id": "vinwonders",
+    "lat": 10.31566,
+    "lng": 103.85456
   },
   {
     "id": "VW-Z6-02",
@@ -460,8 +688,18 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "thuy_cung", "tranh_nang", "tranh_mua"],
-    "notes": "Phân khu lạnh trong thủy cung, trẻ nhỏ rất thích."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "thuy_cung",
+      "tranh_nang",
+      "tranh_mua"
+    ],
+    "notes": "Phân khu lạnh trong thủy cung, trẻ nhỏ rất thích.",
+    "venue_id": "vinwonders",
+    "lat": 10.31566,
+    "lng": 103.85506
   },
   {
     "id": "VW-Z6-03",
@@ -476,8 +714,19 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "thuy_cung", "tranh_nang", "tranh_mua", "chup_anh"],
-    "notes": "Khu trưng bày sứa trong nhà ánh sáng dịu, hợp nghỉ mắt giờ trưa."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "thuy_cung",
+      "tranh_nang",
+      "tranh_mua",
+      "chup_anh"
+    ],
+    "notes": "Khu trưng bày sứa trong nhà ánh sáng dịu, hợp nghỉ mắt giờ trưa.",
+    "venue_id": "vinwonders",
+    "lat": 10.31566,
+    "lng": 103.85557
   },
   {
     "id": "VW-Z6-04",
@@ -492,8 +741,18 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["gia_dinh", "tre_nho", "trong_nha", "thuy_cung", "tranh_nang", "tranh_mua"],
-    "notes": "Khu tương tác cho trẻ em bên trong Cung điện Hải Vương."
+    "tags": [
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "thuy_cung",
+      "tranh_nang",
+      "tranh_mua"
+    ],
+    "notes": "Khu tương tác cho trẻ em bên trong Cung điện Hải Vương.",
+    "venue_id": "vinwonders",
+    "lat": 10.3163,
+    "lng": 103.85456
   },
   {
     "id": "VW-MEAL-01",
@@ -508,8 +767,17 @@
     "open_time": "11:00",
     "close_time": "15:00",
     "thrill_level": "low",
-    "tags": ["an_uong", "trong_nha", "tranh_nang", "tranh_mua", "gia_dinh"],
-    "notes": "Nhà hàng buffet có điều hòa, phục vụ khung trưa 11:00–15:00."
+    "tags": [
+      "an_uong",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "gia_dinh"
+    ],
+    "notes": "Nhà hàng buffet có điều hòa, phục vụ khung trưa 11:00–15:00.",
+    "venue_id": "vinwonders",
+    "lat": 10.31628,
+    "lng": 103.85628
   },
   {
     "id": "VW-MEAL-02",
@@ -524,8 +792,18 @@
     "open_time": "11:00",
     "close_time": "15:00",
     "thrill_level": "low",
-    "tags": ["an_uong", "trong_nha", "thuy_cung", "tranh_nang", "tranh_mua", "gia_dinh"],
-    "notes": "Ăn uống trong nhà hàng thủy cung mát mẻ, thuận tiện ghép trước/sau show Nàng tiên cá."
+    "tags": [
+      "an_uong",
+      "trong_nha",
+      "thuy_cung",
+      "tranh_nang",
+      "tranh_mua",
+      "gia_dinh"
+    ],
+    "notes": "Ăn uống trong nhà hàng thủy cung mát mẻ, thuận tiện ghép trước/sau show Nàng tiên cá.",
+    "venue_id": "vinwonders",
+    "lat": 10.3163,
+    "lng": 103.85506
   },
   {
     "id": "VW-MEAL-03",
@@ -540,8 +818,17 @@
     "open_time": "10:00",
     "close_time": "18:30",
     "thrill_level": "low",
-    "tags": ["an_uong", "trong_nha", "tranh_nang", "tranh_mua", "tiet_kiem"],
-    "notes": "Lựa chọn món lẻ/fastfood trong nhà tiết kiệm hơn buffet (~150k–220k/người lớn)."
+    "tags": [
+      "an_uong",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "tiet_kiem"
+    ],
+    "notes": "Lựa chọn món lẻ/fastfood trong nhà tiết kiệm hơn buffet (~150k–220k/người lớn).",
+    "venue_id": "vinwonders",
+    "lat": 10.31475,
+    "lng": 103.85318
   },
   {
     "id": "VW-REST-01",
@@ -556,7 +843,252 @@
     "open_time": "10:00",
     "close_time": "18:00",
     "thrill_level": "low",
-    "tags": ["nghi_ngoi", "trong_nha", "tranh_nang", "tranh_mua", "tre_nho"],
-    "notes": "Khoảng nghỉ cho trẻ nhỏ nạp năng lượng giữa ngày."
+    "tags": [
+      "nghi_ngoi",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "tre_nho"
+    ],
+    "notes": "Khoảng nghỉ cho trẻ nhỏ nạp năng lượng giữa ngày.",
+    "venue_id": "vinwonders",
+    "lat": 10.3163,
+    "lng": 103.85557
+  },
+  {
+    "id": "SF-Z7-01",
+    "venue_id": "safari",
+    "name": "Xe buýt chuyên dụng khu thú bán hoang dã (Safari Tour)",
+    "zone_id": "Z7_SAFARI",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "ride",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 45,
+    "open_time": "09:00",
+    "close_time": "15:20",
+    "thrill_level": "low",
+    "lat": 10.3352,
+    "lng": 103.8758,
+    "tags": [
+      "safari",
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "kham_pha"
+    ],
+    "notes": "Xe buýt kín điều hòa đã bao gồm trong vé Safari; chuyến cuối xuất phát lúc 15:20."
+  },
+  {
+    "id": "SF-Z7-02",
+    "venue_id": "safari",
+    "name": "Vườn thú mở Open Zoo (hồng hạc, vượn, hổ, gấu)",
+    "zone_id": "Z7_SAFARI",
+    "indoor": false,
+    "is_water_park": false,
+    "category": "sightseeing",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 50,
+    "open_time": "09:00",
+    "close_time": "16:00",
+    "thrill_level": "low",
+    "lat": 10.3338,
+    "lng": 103.8736,
+    "tags": [
+      "safari",
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "kham_pha"
+    ],
+    "notes": "Khu đi bộ ngắm thú mở ngoài trời; mở đến 16:00."
+  },
+  {
+    "id": "SF-Z7-03",
+    "venue_id": "safari",
+    "name": "Khu Kid Zoo & cho hươu cao cổ ăn (Nhà hàng Giraffe)",
+    "zone_id": "Z7_SAFARI",
+    "indoor": false,
+    "is_water_park": false,
+    "category": "sightseeing",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 35,
+    "open_time": "09:00",
+    "close_time": "16:00",
+    "thrill_level": "low",
+    "lat": 10.3328,
+    "lng": 103.8748,
+    "tags": [
+      "safari",
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "chup_anh"
+    ],
+    "notes": "Trẻ nhỏ rất thích trải nghiệm cho hươu cao cổ ăn (~30.000đ/phần thức ăn tại quầy)."
+  },
+  {
+    "id": "SF-MEAL-01",
+    "venue_id": "safari",
+    "name": "Ăn trưa Nhà hàng Giraffe / Flamingo (Vinpearl Safari)",
+    "zone_id": "Z7_SAFARI",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "meal",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 50,
+    "open_time": "11:00",
+    "close_time": "15:00",
+    "thrill_level": "low",
+    "lat": 10.3332,
+    "lng": 103.8745,
+    "tags": [
+      "an_uong",
+      "safari",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "gia_dinh"
+    ],
+    "notes": "Nhà hàng có mái che trong khuôn viên Safari, thuận tiện ăn trưa và cho hươu ăn."
+  },
+  {
+    "id": "GW-Z8-01",
+    "venue_id": "grandworld",
+    "name": "Bảo tàng Gấu Teddy (Teddy Bear Museum)",
+    "zone_id": "Z8_GRANDWORLD",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "sightseeing",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 45,
+    "open_time": "09:00",
+    "close_time": "21:00",
+    "thrill_level": "low",
+    "paid_ticket_key": "gw_teddy",
+    "lat": 10.3243,
+    "lng": 103.8522,
+    "tags": [
+      "grandworld",
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "chup_anh"
+    ],
+    "notes": "Bảo tàng trong nhà có điều hòa; vé lẻ tham khảo ~200.000đ/người lớn, ~150.000đ/trẻ 1m–1m4."
+  },
+  {
+    "id": "GW-Z8-02",
+    "venue_id": "grandworld",
+    "name": "Đi thuyền Gondola trên sông Venice",
+    "zone_id": "Z8_GRANDWORLD",
+    "indoor": false,
+    "is_water_park": false,
+    "category": "ride",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 120,
+    "duration_min": 30,
+    "open_time": "09:00",
+    "close_time": "21:00",
+    "thrill_level": "low",
+    "paid_ticket_key": "gw_venice_boat",
+    "lat": 10.3235,
+    "lng": 103.8531,
+    "tags": [
+      "grandworld",
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "chup_anh"
+    ],
+    "notes": "Vé thuyền Gondola tham khảo ~200.000đ/người lớn, ~150.000đ/trẻ 1m–1m4; trẻ dưới 120cm ngồi cùng người lớn."
+  },
+  {
+    "id": "GW-Z8-03",
+    "venue_id": "grandworld",
+    "name": "Dạo phố kiến trúc Venice, Công trình Tre & Công viên Nghệ thuật (miễn phí)",
+    "zone_id": "Z8_GRANDWORLD",
+    "indoor": false,
+    "is_water_park": false,
+    "category": "sightseeing",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 40,
+    "open_time": "08:00",
+    "close_time": "22:30",
+    "thrill_level": "low",
+    "lat": 10.3228,
+    "lng": 103.8526,
+    "tags": [
+      "grandworld",
+      "gia_dinh",
+      "tre_nho",
+      "ngoai_troi",
+      "mien_phi",
+      "chup_anh"
+    ],
+    "notes": "Dạo bộ quảng trường và các tiểu cảnh Grand World hoàn toàn miễn phí vé vào cổng."
+  },
+  {
+    "id": "GW-Z8-04",
+    "venue_id": "grandworld",
+    "name": "Khu phố mua sắm & không gian có mái che Grand World",
+    "zone_id": "Z8_GRANDWORLD",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "sightseeing",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 35,
+    "open_time": "09:00",
+    "close_time": "22:30",
+    "thrill_level": "low",
+    "lat": 10.3231,
+    "lng": 103.8538,
+    "tags": [
+      "grandworld",
+      "gia_dinh",
+      "tre_nho",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "mien_phi"
+    ],
+    "notes": "Không gian có mái che dọc dãy shophouse Grand World để trú mưa hoặc nghỉ chân buổi tối."
+  },
+  {
+    "id": "GW-MEAL-01",
+    "venue_id": "grandworld",
+    "name": "Ăn tối / ăn trưa phố ẩm thực Grand World",
+    "zone_id": "Z8_GRANDWORLD",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "meal",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "duration_min": 50,
+    "open_time": "10:00",
+    "close_time": "22:00",
+    "thrill_level": "low",
+    "lat": 10.3224,
+    "lng": 103.8534,
+    "tags": [
+      "an_uong",
+      "grandworld",
+      "trong_nha",
+      "tranh_nang",
+      "tranh_mua",
+      "gia_dinh"
+    ],
+    "notes": "Nhiều lựa chọn ăn tối cho gia đình ngay gần hồ Venice trước giờ xem show tối."
   }
 ]
