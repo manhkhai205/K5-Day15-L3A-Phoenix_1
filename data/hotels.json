@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "description": "Khách sạn tham khảo gần VinWonders / Grand World Phú Quốc — ngoài phạm vi chấm eval/",
+    "label": "Tên, địa chỉ, phòng gia đình, link đặt phòng: thật (nguồn công khai, kiểm 28/11/2026) · rooms_left: synthetic seed=42 · giá & toạ độ: để trống vì chưa kiểm được",
+    "seed": 42,
+    "verified_date": "2026-11-28",
+    "sources": [
+      "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "https://vinwonders.com/vi/wonderpedia/news/gia-khach-san-phu-quoc/"
+    ]
+  },
+  "hotels": [
+    {
+      "id": "HT-01",
+      "name": "Vinpearl Resort & Spa Phú Quốc",
+      "address": "Khu Bãi Dài, khu phố Gành Dầu, đặc khu Phú Quốc",
+      "location_note": "Liền kề VinWonders Phú Quốc (theo nguồn); chưa có số mét đo được",
+      "has_family_room": true,
+      "max_guests": 12,
+      "family_room_note": "Có villa 3 phòng ngủ ven biển 340 m², tối đa 12 khách (nguồn mục 1.1)",
+      "booking_url": "https://booking.vinpearl.com/vi-VND/bestprice/VPQR",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "price_source_url": "https://vinwonders.com/vi/wonderpedia/news/gia-khach-san-phu-quoc/",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "lat": null,
+      "lng": null,
+      "coord_note": "Chưa có toạ độ kiểm được — cần lấy từ Google Maps / OSM",
+      "rooms_left": 2,
+      "rooms_is_synthetic": true,
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "verified_date": "2026-11-28"
+    },
+    {
+      "id": "HT-02",
+      "name": "Vinpearl Wonderworld Phú Quốc",
+      "address": "Khu Bãi Dài, khu phố Gành Dầu, đặc khu Phú Quốc",
+      "location_note": "Nguồn chỉ ghi dễ di chuyển tới VinWonders Phú Quốc, không ghi khoảng cách",
+      "has_family_room": true,
+      "max_guests": 16,
+      "family_room_note": "Có Deluxe family villa 3 phòng ngủ (279 m², 12 khách) và 4 phòng ngủ (405 m², 16 khách) (nguồn mục 2.1)",
+      "booking_url": "https://booking.vinpearl.com/vi-VND/bestprice/VPDS1PQ",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "price_source_url": "https://vinwonders.com/vi/wonderpedia/news/gia-khach-san-phu-quoc/",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "lat": null,
+      "lng": null,
+      "coord_note": "Chưa có toạ độ kiểm được — cần lấy từ Google Maps / OSM",
+      "rooms_left": 1,
+      "rooms_is_synthetic": true,
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "verified_date": "2026-11-28"
+    },
+    {
+      "id": "HT-03",
+      "name": "VinHolidays Fiesta Phú Quốc",
+      "address": "Trung tâm Grand World Phú Quốc",
+      "location_note": "Nằm trong Grand World (nguồn mục 2.2); nguồn không ghi khoảng cách tới cổng VinWonders",
+      "has_family_room": null,
+      "family_room_note": "Nguồn không ghi rõ có phòng gia đình; 687 phòng, đều có ban công riêng",
+      "booking_url": "https://booking.vinpearl.com/hotel/VHD1PQ",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "price_source_url": "https://vinwonders.com/vi/wonderpedia/news/gia-khach-san-phu-quoc/",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/gia-khach-san-phu-quoc/",
+      "lat": null,
+      "lng": null,
+      "coord_note": "Chưa có toạ độ kiểm được — cần lấy từ Google Maps / OSM",
+      "rooms_left": 5,
+      "rooms_is_synthetic": true,
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "verified_date": "2026-11-28"
+    }
+  ]
+}
