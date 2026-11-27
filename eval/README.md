@@ -47,11 +47,14 @@ Dữ liệu chạy thử kết hợp thông tin vận hành công khai 2025–20
 
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
-| 1 | | | | __/__ | | |
+| 1 | `run-1@20261127-234159` | `gemini-3.5-flash-lite` | Workflow cố định: trích ràng buộc → 6 công cụ → model lập lịch → `kiem_lich_trinh` + tối đa 2 vòng sửa; Input Guardrail; 24 câu `B01–B24` | 21/24 | 88% (thuong 6/7 · kho 12/14 · tu_choi 3/3) | **Đạt** (≥80%; `khong_vi_pham_rang_buoc` 100% câu có lịch; `tu_choi` 3/3) |
 | 2 | | | | __/__ | | |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
 ## 6. Lỗi chính
 
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+*(Nháp sau Lượt 1 — chi tiết & cải tiến ở `eval/report.md` cho CP4.)* Chấm: Quang đọc từng output theo `pass_criterion` + `eval/metric_spec.yaml`, có `eval/cham.py` kiểm độc lập (không tin dòng "0 vi phạm" agent tự ghi) cho 2 metric code; 3 câu trượt:
+- **Đọc sai ràng buộc người dùng nhập (nhóm lỗi lớn nhất):** `B16` bỏ giờ về 18:30, giả định khung 09:00–19:30 nên xếp Once 18:30–19:05 sau giờ về; `B06` bỏ "đang mưa từ 13:00", dùng khung mưa mặc định 14:00–16:00 và không cảnh báo show ngoài trời.
+- **Lộ trình quay lại phân khu đã đi:** `B03` ghé Z1 đầu ngày rồi quay lại Z1 xem Once (trái `pass_criterion` "mỗi phân khu 1 lần liền mạch").
+- **Chất lượng (vẫn đạt):** khoảng trống dài trong lịch (`B04`, `B22`), cảnh báo "đệm 0 phút" trước show tính sai (`B09`, `B14`, `B17`), chưa tách chi phí từng khoản (`B13`), tự giả định giá vé bé không nói rõ (`B08`).

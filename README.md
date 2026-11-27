@@ -81,7 +81,7 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Giả ở CP2 · Thật từ CP3** | `codebase/ai.py` mặc định chế độ `fake` khi chưa có `.env`; nối API thật qua `.env` cho CP3 (`openai` / `gemini` / `anthropic` / `ollama`) |
+| Lời gọi AI ở quyết định trung tâm | **Thật** (từ CP3) | Model: Google Gemini `gemini-3.5-flash-lite` qua `.env` (`MODEL_PROVIDER=gemini`, không commit key). Lượt 1 `run-1@20261127-234159`: 21/24 (88%). Máy chưa có `.env` thì `ai.py` chạy chế độ `fake` |
 | 6 công cụ tra cứu, tính chi phí & kiểm ràng buộc (`codebase/tools.py`) | **Thật** | Chạy bằng code Python trên dữ liệu trong `data/` |
 | Dữ liệu vận hành công viên (`data/`) | **Hỗn hợp (Thật + synthetic)** | Giờ mở cửa, lịch show 2026 & giá vé từ nguồn công khai `vinwonders.com` (27/11/2026); kịch bản thời tiết (`seed=42`), thời lượng & ma trận đi bộ là `synthetic` (`data/DATA_CARD.md`) |
 | Bằng chứng pain (`evidence/`) | **Thật** | 60 review công khai Tripadvisor/Google Maps (`24/60 = 40%`), khảo sát & phỏng vấn người thật ngoài nhóm |

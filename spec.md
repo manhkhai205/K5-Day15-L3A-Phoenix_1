@@ -93,6 +93,7 @@ flowchart TD
   | `uoc_thoi_gian_di` | `khu_a`, `khu_b` | Thời gian đi bộ ước lượng (phút) từ ma trận 6×6 trong `data/park_zones.json` | Không (chỉ đọc) |
   | `tinh_chi_phi` | `so_nguoi_lon`, `so_tre_em_1m_1m4`, `so_tre_duoi_1m`, `dich_vu`, `so_nguoi_cao_tuoi`, `da_co_ve`, `goi_an`, `ngan_sach_vnd` | Chi tiết vé, ăn uống, phụ phí, tiền cọc hoàn lại, `tong_chi_phi_vnd`, `trong_ngan_sach`, `chenh_lech_ngan_sach_vnd` | Không (chỉ đọc & tính toán) |
   | `kiem_lich_trinh` | `lich` (danh sách id + khung giờ), `rang_buoc` | `hop_le` (bool), `so_vi_pham`, danh sách `vi_pham` (5 lỗi cứng), `canh_bao`, `goi_y_trong_nha`, `goi_y_noi_rang_buoc` | Không (chỉ kiểm tra bằng code) |
+  | `tra_khach_san` *(ngoài phạm vi chấm `eval/`, phục vụ web)* | `ngay_den`, `ngay_ve`, `so_nguoi`, `ngan_sach_vnd`, `so_tre_em` | Danh sách khách sạn tham khảo gần cổng (`fit_score`, `distance_to_gate_m`, `rooms_left` mô phỏng, `booking_url` Deep Link) | Không (chỉ đọc; người dùng tự đặt qua trang chính thức) |
 
 - **Mức tự động:** `[x]` AI gợi ý, người quyết · `[ ]` AI tự làm khi chắc, chuyển người khi không · `[ ]` AI tự làm — **Lý do:** Sai ở đây không tạo giao dịch tài chính tự động, nhưng nếu xếp nhầm giờ đóng cửa, vượt chiều cao bé hoặc lố ngân sách thì làm hỏng cả ngày đi chơi tốn \~3,5–5 triệu/gia đình; vì vậy AI chỉ gợi ý phương án đã qua kiểm cứng 0 vi phạm để gia đình duyệt/chỉnh lại.
 
@@ -111,7 +112,8 @@ flowchart TD
 
 - **Phần nào còn giả (ghi rõ, không giả làm thật):**
 
-  - Ở CP2, `codebase/ai.py` chạy **chế độ** `fake` (chưa điền `.env` key thật; phần gọi API thật sẽ nối và thử tối 27/11 trước CP3).
+  - Từ CP3, `codebase/ai.py` gọi **model thật** Google Gemini `gemini-3.5-flash-lite` qua `.env` (không commit key); Lượt 1 `run-1@20261127-234159` có token thật ở mọi câu gọi model. Chế độ `fake` chỉ còn dùng khi máy chưa có `.env`.
+  - `tra_khach_san` (`codebase/tools.py`) và giao diện web là phần mở rộng **ngoài phạm vi chấm** `eval/`: chỉ đọc `data/hotels.json`, `rooms_left` mô phỏng (`seed=42`), không đặt phòng hay thanh toán.
   - Trong `data/`, kịch bản thời tiết (`data/weather.json`, `seed=42`), thời lượng chơi, ma trận đi bộ 6×6 và một số phụ phí ước lượng là `synthetic` (mô tả đầy đủ trong `data/DATA_CARD.md`).
 
 ## §5. Chỗ khó — 4 lớp + 8 kịch bản + 2 tấn công *(guide 2.3)*
@@ -142,9 +144,9 @@ flowchart TD
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — `14` câu (`thuong 4 · kho 8 · tu_choi 2`) · metric: `eval/metric_spec.yaml` (`3` metric)
+- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — `24` câu (`thuong 7 · kho 14 · tu_choi 3`; `11/24` nguồn thật; `B01–B14` chốt ở CP2, `B15–B24` thêm ở CP3) · metric: `eval/metric_spec.yaml` (`3` metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): `"Đạt khi ≥ 80% câu qua, và khong_vi_pham_rang_buoc đạt 100% trên mọi câu có tạo lịch, và 100% câu tu_choi bị từ chối đúng"`
-- Kết quả: lượt 1 `__/__ (__%)` · lượt 2 `__/__ (__%)` — run ID: `__` / `__` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Kết quả: lượt 1 `21/24 (88%)` — **đạt chuẩn** (`khong_vi_pham_rang_buoc` 100% câu có lịch, `tu_choi` 3/3; trượt `B03`, `B06`, `B16`) · lượt 2 `__/__ (__%)` — run ID: `run-1@20261127-234159` (model `gemini-3.5-flash-lite`) / `__` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 
@@ -175,6 +177,8 @@ flowchart TD
 | 27/11 22:30 | Mở rộng lõi `data/`, `codebase/tools.py`, `codebase/agent.py` sang cụm **Phú Quốc United Center** (mặc định VinWonders giữ tương thích 100% `B01–B14`; thêm Vinpearl Safari `09:00–16:00`, Grand World `08:00–22:30`, đệm VinBus `15–20 phút`, tự áp vé Combo VinWonders+Safari, tọa độ `lat, lng` & GeoJSON polygon 8 phân khu). Giữ nguyên chuẩn "đạt" §7 và 3 metric `eval/metric_spec.yaml`. | Đáp ứng hành trình thực tế gia đình đi cụm 3 khu trong 1–3 ngày mà không làm vỡ bộ câu thử CP2 `B01–B14` — `data/park_zones.json`, `data/attractions.json`, `data/shows.json`, `data/pricing.json`, `codebase/tools.py`, `codebase/agent.py` |
 | 27/11 22:45 | Bổ sung 10 câu thử `B15–B24` vào `eval/benchmark.csv` (tổng `24` câu: `thuong 7 · kho 14 · tu_choi 3`; `11/24` nguồn thật; giữ nguyên `B01–B14`) và cập nhật mục 1–2 `eval/README.md`. Giữ nguyên chuẩn "đạt" §7 và `eval/metric_spec.yaml`. | Đáp ứng ngưỡng CP3 (`20–30` câu, `python run.py check` đạt 0 cảnh báo) trước khi chạy Lượt 1 `eval/run-1.csv` — `eval/benchmark.csv`, `eval/README.md` |
 | 27/11 23:08 | Đổi tên sản phẩm từ **VinPlanner** sang **JoyPlan AI** (`JOYPLAN / AI`), đổi tên `docs/vinplanner-product.md` → `docs/joyplan-product.md` và `docs/vinplanner-architecture.md` → `docs/joyplan-architecture.md`; chốt **Chiến lược Media Hybrid** (video 100% link YouTube embed; ảnh CP3–CP4 lưu link chính thức trong `data/media.json` kèm `onError` fallback; Production lưu ảnh có bản quyền/đối tác/Wikimedia lên CDN riêng + ghi nguồn). Giữ nguyên tên repo, `TEAMS.md`, lát cắt được chấm, §7 và `eval/`. | Tách thương hiệu độc lập khỏi `Vin*` cho định hướng mở rộng đa tổ hợp/điểm đến gia đình và chốt xử lý media nhẹ repo, đúng bản quyền — `docs/joyplan-product.md`, `docs/joyplan-architecture.md`, `docs/data-strategy.md`, `docs/cp3-plan.md`, `README.md` |
+| 27/11 23:45 | Nối model thật Google Gemini `gemini-3.5-flash-lite` (gói miễn phí, `--wait 4`) thay chế độ `fake`; chạy **Lượt 1** `eval/run-1.csv` (24 câu, 0 lỗi kỹ thuật) → chấm tay theo `pass_criterion` + `metric_spec.yaml`, có `eval/cham.py` kiểm độc lập 2 metric code → **21/24 (88%), đạt chuẩn §7**. Không sửa chuẩn "đạt", `metric_spec.yaml`, câu thử. | Hạng mục CP3 "AI thật + Lượt 1 + score"; câu trượt `B03`, `B06`, `B16` để làm cải tiến trước Lượt 2 (CP4) — `eval/run-1.csv`, `traces/run-1.jsonl`, `eval/README.md` mục 5–6 |
+| 27/11 23:55 | Cập nhật §4 (bỏ mô tả AI giả; thêm `tra_khach_san` ghi rõ ngoài phạm vi chấm), §7 (24 câu, kết quả Lượt 1), `README.md` (tên model thật). Quang làm thay phần T11/T13 của Khải theo `docs/cp3-plan.md`. | Đồng bộ tài liệu với bản chạy thật trước CP3 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
