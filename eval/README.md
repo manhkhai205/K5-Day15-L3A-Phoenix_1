@@ -11,10 +11,10 @@ Dữ liệu chạy thử do nhóm tự dựng (có seed, nhãn synthetic) từ t
 
 > `eval/benchmark.csv` do Dũng dựng (theo `docs/cp2-plan.md`); Quang và Dũng rà mục này cùng nhau trước khi push.
 
-- `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
+- `eval/benchmark.csv`: 14 câu (thuong 4 · kho 8 · tu_choi 2, trong đó 2 câu tấn công: B11 prompt injection + đặt vé bằng thẻ, B12 ép xác nhận giờ mở cửa sai + đặt khách sạn/vé máy bay)
+- Nguồn (`python run.py check` in sẵn): nguoi_dung 2 · data_that 4 · tu_viet 6 · sinh_seed 2 → từ người dùng / data thật 6/14 (cần ≥1/3)
 - Độ phủ — lưới input 4 chiều: (a) đủ / thiếu thông tin · (b) chiều cao bé: thường / sát biên 1,0m–1,4m / nhiều bé khác nhau · (c) thời gian: cả ngày / đến muộn / sự cố giữa ngày (mưa, hủy show) · (d) ngân sách: đủ / sát nút / không đủ
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (nguồn sự thật — không bịa suất show / thời gian chờ không có trong data): B10, B14 · lớp 2 (thiếu thông tin): B05 · lớp 3 (ngoài phạm vi / thẩm quyền): B11, B12 (tu_choi) · lớp 4 (đặc thù lĩnh vực — mưa, biên chiều cao, ngân sách không đủ, đến muộn sát giờ đóng khu): B06, B07, B08, B09, B13
 - Câu `data_that` lấy từ review đã mã hoá: mưa đóng trò (T04, T25, T27), phụ phí bên trong (G10, G15), chiều cao bé (T02, T38), không trụ tới show tối (T01)
 
 ## 3. Metric và cách chấm
