@@ -11,7 +11,14 @@ Track: \[ \] A · \[ \] B · \[x\] C · \[ \] D · \[ \] E — bài toán: C1 ·
     2. Tới cổng (09:00): lấy bản đồ giấy hoặc mở app VinWonders, thuê xe đẩy nếu đi cùng trẻ nhỏ (\~50.000–100.000đ).
     3. Tự ghép lộ trình đi bộ qua 6 phân khu (\~50 ha, &gt;100 trò/trải nghiệm) có giờ mở cửa lệch nhau (toàn công viên 09:00–19:30; Cung điện Hải Vương & Công viên nước 10:00–18:00), tự canh giờ show (Nàng tiên cá 11:00–11:10 và 14:00–14:10, cho cá ăn 15:00–15:15, Once Show 18:45–19:05 hoặc 19:00–19:20) và tự lọc giới hạn chiều cao trẻ em (1,0m–1,4m+).
     4. Tự tính ăn uống và chi phí phát sinh bên trong (quy định không mang đồ ăn mặn ngoài vào; buffet \~350.000đ/người lớn, món lẻ 150.000–350.000đ, tủ gửi đồ 20.000–40.000đ, xe buggy/Fastpass).
-    5. Khi nắng gắt (11:00–15:00), mưa lớn làm tạm dừng trò ngoài trời hoặc xếp hàng lâu, khách phải tự xoay lịch thủ công. _(Ảnh chụp app/bảng giờ công khai sẽ bổ sung trước CP2, đã che thông tin cá nhân)._
+    5. Khi nắng gắt (11:00–15:00), mưa lớn làm tạm dừng trò ngoài trời hoặc xếp hàng lâu, khách phải tự xoay lịch thủ công.
+- Ảnh chụp màn hình nguồn công khai minh hoạ hiện trạng (chụp ngày `27/11/2026`, không chứa thông tin cá nhân):
+  - **Lịch biểu diễn show & giờ mở cửa 2026** (cho cá ăn `11:00–11:10`, Nàng tiên cá `14:00–14:20` & `15:30–15:50`, Show Once `18:45–19:05`, Show nhạc nước `11:30 / 14:00 / 17:30`) — nguồn: `https://vinwonders.com/vi/wonderpedia/news/lich-trinh-vinwonders-phu-quoc/`:
+    ![Lịch biểu diễn show VinWonders Phú Quốc 2026](docs/images/vinwonders-show-schedule.png)
+  - **Ứng dụng chính thức *VinWonders: Theme Parks* trên Google Play** (`4.8★`, `100K+` lượt tải; có Đặt vé, Smart assistant, Digital maps, Show schedule) — nguồn: `https://play.google.com/store/apps/details?id=com.vinwonders.app`:
+    ![Ứng dụng VinWonders trên Google Play](docs/images/vinwonders-app-google-play.png)
+  - **Bảng giá vé VinWonders Phú Quốc mới nhất 2026** (Người lớn ≥140cm `1.050.000đ`, Trẻ em 100–139cm & Trên 60 tuổi `800.000đ`, kèm gói Buggy/Fastpass ở cột sản phẩm nổi bật) — nguồn: `https://vinwonders.com/vi/wonderpedia/news/gia-ve-vinwonders-phu-quoc-combo-voucher-hot/`:
+    ![Bảng giá vé VinWonders Phú Quốc 2026](docs/images/vinwonders-ticket-prices.png)
 - Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm": App chính thức _VinWonders: Vé & Trải nghiệm_ (Google Play / App Store, kiểm 27/11/2026) có bản đồ số, lịch show, trạng thái trò mở/bảo trì và gợi ý hành trình cơ bản, nhưng chưa tối ưu đồng thời theo ngân sách tổng + chiều cao từng thành viên và chưa tự tái lập lịch khi mưa/hủy show/còn ít giờ; ngoài ra khách thường dùng blog du lịch (dễ cũ giờ show) hoặc ChatGPT phổ thông (dễ bịa giờ mở cửa/giá vé, không kiểm ràng buộc bằng công cụ).
 
 ## §1. Người dùng & bằng chứng _(guide 1.1, 1.2)_
