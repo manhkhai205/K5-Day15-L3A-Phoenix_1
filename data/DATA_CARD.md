@@ -39,13 +39,13 @@
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show` và `kiem_lich_trinh` (khớp giờ show cố định ngắn 10–20 phút, nhắc đến sớm 10–15 phút, xử lý show ngoài trời khi mưa/hủy). |
-| Từ đâu | Thông tin lịch diễn công khai trên VinWonders / Vietravel / Vinago / VNPAY. |
-| Xử lý những bước gì | Chuẩn hóa `start_time`, `end_time`, thời gian cần có mặt sớm (`arrive_early_min`), phân loại trong nhà (`indoor: true` tại Cung điện Hải Vương) và ngoài trời (`indoor: false` như Once Show, Vũ điệu Viking). |
+| Dùng để làm gì | Nguồn cho công cụ `tra_lich_show` và `kiem_lich_trinh` (khớp giờ show cố định ngắn 10–30 phút, nhắc đến sớm 10–15 phút, xử lý show ngoài trời khi mưa/hủy). |
+| Từ đâu | Bảng lịch biểu diễn chính thức 2026 trên website VinWonders (`https://vinwonders.com/vi/wonderpedia/news/lich-trinh-vinwonders-phu-quoc/`, ảnh chụp xác thực tại `docs/images/vinwonders-show-schedule.png`, kiểm ngày 27/11/2026). |
+| Xử lý những bước gì | Chuẩn hóa `start_time`, `end_time` khớp bảng 2026 (Cho cá ăn `11:00–11:10`, Mascot Chim cánh cụt `13:00–13:30`, Nàng tiên cá `14:00–14:20` & `15:30–15:50`, Carnival `17:00–17:30`, Show Once `18:45–19:05`), thời gian đến sớm (`arrive_early_min`), phân loại trong nhà (`indoor: true` tại Cung điện Hải Vương) và ngoài trời (`indoor: false`). |
 | Số dòng / số đoạn | 6 suất show chính trong ngày. |
 | Phiên bản / ngày lấy | 27/11/2026 |
-| Nhãn | **Thật** (theo lịch biểu diễn công khai tại thời điểm kiểm tra). |
-| Giới hạn | Suất diễn Nàng tiên cá / Cho cá ăn / Once Show (18:45 vs 19:00) có thể đổi theo mùa cao/thấp điểm hoặc hủy do thời tiết xấu; bản chạy thử chưa nối API lịch diễn thời gian thực. |
+| Nhãn | **Thật** (theo bảng lịch biểu diễn chính thức 2026 trên `vinwonders.com`). |
+| Giới hạn | Lịch diễn thực tế có thể điều chỉnh theo mùa hoặc tạm dừng show ngoài trời (Carnival, Show Once) khi mưa lớn; bản chạy thử chưa nối API lịch diễn thời gian thực. |
 
 ---
 

@@ -1,22 +1,7 @@
 [
   {
-    "id": "SH-VIKING-1",
-    "name": "Vũ điệu chiến binh Viking (suất sáng)",
-    "zone_id": "Z4_VIKING",
-    "indoor": false,
-    "is_water_park": false,
-    "category": "show",
-    "min_height_cm": 0,
-    "companion_required_below_cm": 0,
-    "start_time": "10:30",
-    "end_time": "10:45",
-    "arrive_early_min": 10,
-    "tags": ["show", "ngoai_troi", "gia_dinh"],
-    "notes": "Show hoạt náo ngoài trời khu Ngôi làng bí mật; có thể tạm hoãn khi mưa lớn."
-  },
-  {
-    "id": "SH-MERMAID-1",
-    "name": "Show Nàng tiên cá (suất sáng)",
+    "id": "SH-FEED-FISH",
+    "name": "Biểu diễn cho cá ăn tại Cung điện Hải Vương",
     "zone_id": "Z6_SEASHELL",
     "indoor": true,
     "is_water_park": false,
@@ -27,11 +12,26 @@
     "end_time": "11:10",
     "arrive_early_min": 10,
     "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
-    "notes": "Diễn ra tại bể chính Cung điện Hải Vương (trong nhà); nên đến sớm 10–15 phút để có chỗ ngồi gần kính."
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn tại bể chính trong nhà Cung điện Hải Vương, chỉ 10 phút nên cần có mặt sớm."
   },
   {
-    "id": "SH-MERMAID-2",
-    "name": "Show Nàng tiên cá (suất chiều)",
+    "id": "SH-PENGUIN",
+    "name": "Chụp ảnh giao lưu cùng Mascot Chim cánh cụt",
+    "zone_id": "Z6_SEASHELL",
+    "indoor": true,
+    "is_water_park": false,
+    "category": "show",
+    "min_height_cm": 0,
+    "companion_required_below_cm": 0,
+    "start_time": "13:00",
+    "end_time": "13:30",
+    "arrive_early_min": 10,
+    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn ra tại Cung điện Hải Vương (trong nhà có điều hòa)."
+  },
+  {
+    "id": "SH-MERMAID-1",
+    "name": "Biểu diễn Nàng tiên cá (suất 1)",
     "zone_id": "Z6_SEASHELL",
     "indoor": true,
     "is_water_park": false,
@@ -39,44 +39,44 @@
     "min_height_cm": 0,
     "companion_required_below_cm": 0,
     "start_time": "14:00",
-    "end_time": "14:10",
+    "end_time": "14:20",
     "arrive_early_min": 10,
     "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
-    "notes": "Suất chiều rất hợp tránh nắng 14:00 trong Cung điện Hải Vương; chỉ diễn 10 phút nên cần có mặt sớm."
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn trong nhà tại Cung điện Hải Vương, rất hợp tránh nắng chiều."
   },
   {
-    "id": "SH-PENGUIN",
-    "name": "Giao lưu với chim cánh cụt Gentoo",
+    "id": "SH-MERMAID-2",
+    "name": "Biểu diễn Nàng tiên cá (suất 2)",
     "zone_id": "Z6_SEASHELL",
     "indoor": true,
     "is_water_park": false,
     "category": "show",
     "min_height_cm": 0,
     "companion_required_below_cm": 0,
-    "start_time": "14:30",
-    "end_time": "14:50",
+    "start_time": "15:30",
+    "end_time": "15:50",
     "arrive_early_min": 10,
     "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
-    "notes": "Diễn ra tại khu chim cánh cụt trong Cung điện Hải Vương."
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); suất chiều muộn thay thế nếu lỡ hoặc hủy suất 14:00."
   },
   {
-    "id": "SH-FEED-FISH",
-    "name": "Biểu diễn cho cá ăn tại bể đại dương",
-    "zone_id": "Z6_SEASHELL",
-    "indoor": true,
+    "id": "SH-CARNIVAL",
+    "name": "Carnival Đại lộ châu Âu",
+    "zone_id": "Z1_EURO",
+    "indoor": false,
     "is_water_park": false,
     "category": "show",
     "min_height_cm": 0,
     "companion_required_below_cm": 0,
-    "start_time": "15:00",
-    "end_time": "15:15",
+    "start_time": "17:00",
+    "end_time": "17:30",
     "arrive_early_min": 10,
-    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
-    "notes": "Thợ lặn cho cá ăn tại bể chính trong nhà Cung điện Hải Vương."
+    "tags": ["show", "ngoai_troi", "gia_dinh", "tre_nho"],
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); hoạt náo đường phố ngoài trời tại Đại lộ Châu Âu."
   },
   {
     "id": "SH-ONCE",
-    "name": "Once Show (Phượng hoàng lửa)",
+    "name": "Show Once (Phượng hoàng lửa)",
     "zone_id": "Z1_EURO",
     "indoor": false,
     "is_water_park": false,
@@ -87,6 +87,6 @@
     "end_time": "19:05",
     "arrive_early_min": 15,
     "tags": ["show", "ngoai_troi", "show_chinh", "gia_dinh"],
-    "notes": "Show thực cảnh nhạc nước & pháo hoa buổi tối tại Quảng trường Phượng Hoàng Lửa (có thể dời sang 19:00–19:20 theo mùa hoặc tạm dừng nếu mưa lớn)."
+    "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); show thực cảnh nhạc nước & pháo hoa tại Quảng trường Phượng Hoàng Lửa (có thể tạm dừng nếu mưa lớn)."
   }
 ]

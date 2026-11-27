@@ -7,13 +7,13 @@
 
 | Nguồn | Đạt ngưỡng? | File |
 |---|---|---|
-| Đào data (x/N, %, cách đếm chạy lại được, ≥5 ví dụ) | ☐ | `evidence/data-mining.md` |
-| Phỏng vấn (≥3 người ngoài nhóm, đúng người dùng) | ☐ | `evidence/interviews/P1.md`… |
+| Đào data (x/N, %, cách đếm chạy lại được, ≥5 ví dụ) | ☑ Đạt ngưỡng (24/60 = 40%, 6 ví dụ có link, bảng mã hoá `review-coding.csv`) | `evidence/data-mining.md` |
+| Phỏng vấn (≥3 người ngoài nhóm, đúng người dùng) | ☐ *(đã tạo sẵn `P1.md`–`P3.md`, lịch hẹn S03/S05/S09 — hoàn thành trước CP3)* | `evidence/interviews/P1.md`… |
 | Khảo sát (≥20 người ngoài nhóm, đúng người dùng) | ☐ chưa — mới 6 người đúng đối tượng / 9 phiếu (27/11 17:36), cần ≥20 trước CP3 | `evidence/survey/results.csv` · cách đếm: `python evidence/survey/count.py` |
 
 ## 2. Số chính
 
-- Đào data: __/__ (__%) …
+- Đào data (`evidence/data-mining.md`): **24/60 (40%)** review 1–3 sao (40 Tripadvisor + 20 Google Maps, lấy 27/11/2026) nhắc ≥1/5 lỗi sắp lịch (Tripadvisor 15/40 = 38%; Google Maps 9/20 = 45%). Cụ thể: **L5 chi phí phát sinh 9/60 (15%)**, **L3 chiều cao bé 7/60 (12%)**, **L4 nắng/mưa 6/60 (10%)**, **L2 lỡ/khó xem show 5/60 (8%)**, **L1 quá rộng 2/60 (3%)**; **36/60 (60%)** phàn nàn chuyện khác (thái độ nhân viên, trò đóng/bảo trì).
 - Phỏng vấn: __/3 người gặp *(n nhỏ không ghi %)* · số lần / tháng: P1 __, P2 __, P3 __ · mỗi lần mất __–__ phút
 - Khảo sát *(bản CP2, n nhỏ nên chỉ ghi x/n)*: 9 phiếu · 6/9 đúng đối tượng (đã đi công viên chủ đề cùng trẻ dưới 12 tuổi trong 12 tháng) · 4/6 lần gần nhất là VinWonders Phú Quốc.
   - **Chi tiêu vượt dự tính: 6/6** · trong đó vượt trên 20%: 3/6 — tín hiệu mạnh nhất.
@@ -35,16 +35,16 @@ Phỏng vấn nhiều vai thì đếm theo từng vai, không cộng chung.
 1. "xếp hàng lâu để chơi trò chơi" — phiếu khảo sát S05 (VinWonders Phú Quốc)
 2. "Giá quá đắt" — phiếu khảo sát S09 (VinWonders Phú Quốc)
 3. "mất thời gian vì không thời gian chuẩn bị kế hoạch" — phiếu khảo sát S04 (VinWonders Phú Quốc, phiếu có cảnh báo mâu thuẫn ở câu 6)
-4.
-5.
+4. "I suggest not to go there early in the morning especially with young kids as they won’t last till 645pm for the show , it was also very hot, so rmb to sunscreen" — T01 (Tripadvisor, 3 sao, 11/2026)
+5. "My 5 year old daughter could only get on a few rides. Nothing much for toddlers." — T02 (Tripadvisor, 3 sao, 06/2026)
 
 ## 4. Các nguồn có khớp nhau không
 
-Data nói __ *(chờ số đào review của Quang)*; người dùng (khảo sát, n=6) nói **vỡ ngân sách là chuyện gặp nhiều nhất (6/6)**, còn lỡ show / đi vòng / vướng chiều cao chỉ rõ ở các phiếu có mâu thuẫn. Hai câu trả lời tự do nhắc **xếp hàng lâu** và **giá đắt** — đúng hướng "cách giải thích khác" trong `evidence/hypothesis.md`. Cần kiểm lại bằng phỏng vấn và thêm phiếu.
+Hai nguồn hiện có **khớp rõ ở điểm đau số 1 là chi phí phát sinh / vượt dự tính**: review công khai có L5 đứng đầu trong 5 nhóm lỗi (`9/60 = 15%`), còn khảo sát bước đầu (`n=6`) ghi nhận **6/6 phiếu chi tiêu vượt dự tính** (`3/3` phiếu không mâu thuẫn). Review cũng xác nhận hai ràng buộc đặc thù là **chiều cao trẻ em (`7/60`)** và **mưa/nắng (`6/60`)**, trong khi tỷ lệ nhắc trực tiếp "quá rộng" chỉ `2/60`. Đồng thời, cả hai nguồn đều chỉ ra nguyên nhân ngoài sắp lịch (thái độ nhân viên, trò đóng cửa, xếp hàng lâu, giá đắt) — khớp với "cách giải thích khác" trong `evidence/hypothesis.md`.
 
 ## 5. Kết luận
 
-Giả thuyết ở `evidence/hypothesis.md`: **đúng / sai / phải đổi** — vì __. Điều vẫn chưa biết: __
+*(Chốt tạm tại CP2; hoàn tất sau khi đủ khảo sát ≥20 và phỏng vấn P1–P3 trước CP3)* Giả thuyết ở `evidence/hypothesis.md` bước đầu **đạt đúng ngưỡng 40% (`24/60`) trên tập review**, nhưng **phần lớn pain thực tế nghiêng mạnh về chi phí phát sinh (L5) và giới hạn chiều cao trẻ em (L3)** hơn là "quá rộng" (L1). Điều vẫn chưa biết: trải nghiệm cụ thể của gia đình có trẻ dưới 1,4m ngoài nhóm về mức độ hữu ích của việc dự toán phụ phí và xoay lịch khi mưa/hủy show (cần phỏng vấn sâu S03, S05, S09 và gom đủ ≥20 phiếu khảo sát).
 
 ## Lịch hẹn (dùng cho CP2 — chỉ ghi vai và giờ, không tên)
 
