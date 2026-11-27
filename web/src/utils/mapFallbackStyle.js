@@ -195,6 +195,8 @@ export function toYoutubeEmbedUrl(rawUrl) {
         videoId = u.pathname.split("/embed/")[1].split("/")[0];
       } else if (u.pathname.startsWith("/shorts/")) {
         videoId = u.pathname.split("/shorts/")[1].split("/")[0];
+      } else if (u.pathname.startsWith("/live/")) {
+        videoId = u.pathname.split("/live/")[1].split("/")[0];
       } else {
         videoId = u.searchParams.get("v") || "";
       }

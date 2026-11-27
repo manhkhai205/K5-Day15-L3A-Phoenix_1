@@ -1409,6 +1409,10 @@ a {
   gap: 14px;
 }
 
+.modal-glass > * {
+  flex-shrink: 0;
+}
+
 .modal-head {
   display: flex;
   justify-content: space-between;
@@ -1444,10 +1448,23 @@ a {
 }
 
 .media-box {
+  flex-shrink: 0;
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--line-soft);
   background: var(--bg-soft);
+}
+
+.media-caption {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--line-soft);
+  background: #ffffff;
 }
 
 .media-frame {

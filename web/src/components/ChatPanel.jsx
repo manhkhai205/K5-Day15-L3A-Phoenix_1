@@ -482,6 +482,15 @@ export default function ChatPanel({
                 </div>
                 {hotels.map((h) => {
                   const isSelected = h.id === selectedHotelId;
+                  const priceLabel =
+                    h.price_ref_vnd != null && Number(h.price_ref_vnd) > 0
+                      ? `${formatVnd(h.price_ref_vnd)}/đêm`
+                      : "Xem giá tại trang đặt phòng";
+                  const locationLabel =
+                    typeof h.distance_to_gate_m === "number"
+                      ? `Cách cổng ${h.distance_to_gate_m}m`
+                      : h.address || h.location_note || "";
+                  const extraNote = h.family_room_note || h.price_note || "";
                   return (
                     <div key={h.id} className={`hotel-card ${isSelected ? "hotel-card--selected" : ""}`}>
                       <div className="hotel-top">
@@ -489,14 +498,17 @@ export default function ChatPanel({
                         {h.fit_score != null && <span className="hotel-fit">Phù hợp {h.fit_score}%</span>}
                       </div>
                       <div className="hotel-meta">
-                        <span>{formatVnd(h.price_ref_vnd)}/đêm</span>
-                        <span>• Cách cổng {h.distance_to_gate_m}m</span>
+                        <span>{priceLabel}</span>
+                        {locationLabel && <span>• {locationLabel}</span>}
                         {h.rooms_left != null && (
                           <span>
                             • Còn {h.rooms_left} phòng <em>(mô phỏng)</em>
                           </span>
                         )}
                       </div>
+                      {extraNote && (
+                        <div style={{ fontSize: 12, color: "var(--subtle)", lineHeight: 1.4 }}>{extraNote}</div>
+                      )}
                       <div className="hotel-actions">
                         <button
                           type="button"
