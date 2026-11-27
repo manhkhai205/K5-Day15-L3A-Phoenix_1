@@ -12,9 +12,15 @@
     "start_time": "11:00",
     "end_time": "11:10",
     "arrive_early_min": 10,
-    "lat": 10.31675,
-    "lng": 103.85465,
-    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
+    "lat": 10.33825,
+    "lng": 103.8532,
+    "tags": [
+      "show",
+      "trong_nha",
+      "thuy_cung",
+      "tre_nho",
+      "gia_dinh"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn tại bể chính trong nhà Cung điện Hải Vương, chỉ 10 phút nên cần có mặt sớm."
   },
   {
@@ -30,9 +36,15 @@
     "start_time": "13:00",
     "end_time": "13:30",
     "arrive_early_min": 10,
-    "lat": 10.31675,
-    "lng": 103.85555,
-    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
+    "lat": 10.33825,
+    "lng": 103.85395,
+    "tags": [
+      "show",
+      "trong_nha",
+      "thuy_cung",
+      "tre_nho",
+      "gia_dinh"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn ra tại Cung điện Hải Vương (trong nhà có điều hòa)."
   },
   {
@@ -48,9 +60,15 @@
     "start_time": "14:00",
     "end_time": "14:20",
     "arrive_early_min": 10,
-    "lat": 10.31715,
-    "lng": 103.85475,
-    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
+    "lat": 10.33865,
+    "lng": 103.8532,
+    "tags": [
+      "show",
+      "trong_nha",
+      "thuy_cung",
+      "tre_nho",
+      "gia_dinh"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); diễn trong nhà tại Cung điện Hải Vương, rất hợp tránh nắng chiều."
   },
   {
@@ -66,9 +84,15 @@
     "start_time": "15:30",
     "end_time": "15:50",
     "arrive_early_min": 10,
-    "lat": 10.31715,
-    "lng": 103.85545,
-    "tags": ["show", "trong_nha", "thuy_cung", "tre_nho", "gia_dinh"],
+    "lat": 10.33865,
+    "lng": 103.85395,
+    "tags": [
+      "show",
+      "trong_nha",
+      "thuy_cung",
+      "tre_nho",
+      "gia_dinh"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); suất chiều muộn thay thế nếu lỡ hoặc hủy suất 14:00."
   },
   {
@@ -84,9 +108,14 @@
     "start_time": "17:00",
     "end_time": "17:30",
     "arrive_early_min": 10,
-    "lat": 10.31545,
-    "lng": 103.85265,
-    "tags": ["show", "ngoai_troi", "gia_dinh", "tre_nho"],
+    "lat": 10.3369,
+    "lng": 103.85455,
+    "tags": [
+      "show",
+      "ngoai_troi",
+      "gia_dinh",
+      "tre_nho"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); hoạt náo đường phố ngoài trời tại Đại lộ Châu Âu."
   },
   {
@@ -102,9 +131,14 @@
     "start_time": "18:45",
     "end_time": "19:05",
     "arrive_early_min": 15,
-    "lat": 10.31545,
-    "lng": 103.85415,
-    "tags": ["show", "ngoai_troi", "show_chinh", "gia_dinh"],
+    "lat": 10.3369,
+    "lng": 103.85535,
+    "tags": [
+      "show",
+      "ngoai_troi",
+      "show_chinh",
+      "gia_dinh"
+    ],
     "notes": "Theo bảng lịch diễn 2026 chính thức (vinwonders.com, kiểm 27/11/2026); show thực cảnh nhạc nước & pháo hoa tại Quảng trường Phượng Hoàng Lửa (có thể tạm dừng nếu mưa lớn)."
   },
   {
@@ -120,9 +154,15 @@
     "start_time": "09:20",
     "end_time": "09:50",
     "arrive_early_min": 10,
-    "lat": 10.3336,
-    "lng": 103.8732,
-    "tags": ["show", "safari", "ngoai_troi", "gia_dinh", "tre_nho"],
+    "lat": 10.3346,
+    "lng": 103.8868,
+    "tags": [
+      "show",
+      "safari",
+      "ngoai_troi",
+      "gia_dinh",
+      "tre_nho"
+    ],
     "notes": "Lịch tham chiếu Vinpearl Safari Phú Quốc (kiểm 27/11/2026); múa chào mừng gần cổng khu Safari buổi sáng."
   },
   {
@@ -138,9 +178,15 @@
     "start_time": "10:00",
     "end_time": "10:30",
     "arrive_early_min": 10,
-    "lat": 10.3345,
-    "lng": 103.8744,
-    "tags": ["show", "safari", "ngoai_troi", "gia_dinh", "tre_nho"],
+    "lat": 10.3389,
+    "lng": 103.8925,
+    "tags": [
+      "show",
+      "safari",
+      "ngoai_troi",
+      "gia_dinh",
+      "tre_nho"
+    ],
     "notes": "Lịch tham chiếu Vinpearl Safari Phú Quốc (kiểm 27/11/2026); diễn tại sân khấu trung tâm Safari, có thể điều chỉnh theo thời tiết."
   },
   {
@@ -157,9 +203,15 @@
     "end_time": "21:00",
     "arrive_early_min": 15,
     "paid_ticket_key": "gw_tinh_hoa",
-    "lat": 10.3248,
-    "lng": 103.8542,
-    "tags": ["show", "grandworld", "ngoai_troi", "gia_dinh", "buoi_toi"],
+    "lat": 10.32765,
+    "lng": 103.8621,
+    "tags": [
+      "show",
+      "grandworld",
+      "ngoai_troi",
+      "gia_dinh",
+      "buoi_toi"
+    ],
     "notes": "Lịch tham chiếu Grand World Phú Quốc (kiểm 27/11/2026); show có thu vé riêng (~300k người lớn / ~230k trẻ em 1m–1m4)."
   },
   {
@@ -175,9 +227,16 @@
     "start_time": "21:30",
     "end_time": "22:00",
     "arrive_early_min": 15,
-    "lat": 10.3237,
-    "lng": 103.8529,
-    "tags": ["show", "grandworld", "ngoai_troi", "mien_phi", "gia_dinh", "buoi_toi"],
+    "lat": 10.32585,
+    "lng": 103.85915,
+    "tags": [
+      "show",
+      "grandworld",
+      "ngoai_troi",
+      "mien_phi",
+      "gia_dinh",
+      "buoi_toi"
+    ],
     "notes": "Lịch tham chiếu Grand World Phú Quốc (kiểm 27/11/2026); trình diễn miễn phí trên mặt hồ trung tâm Venice."
   }
 ]
