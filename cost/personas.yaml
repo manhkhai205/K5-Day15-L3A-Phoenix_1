@@ -3,50 +3,49 @@
 # Mọi số phải có nguồn (data / phỏng vấn / khảo sát / quy mô khoá có nguồn) hoặc ghi rõ "(tự ước tính)".
 # Chạy: python run.py simulate --try   (10 phiên, kiểm khung — làm trước CP3)
 #       python run.py simulate         (đủ số phiên dưới đây — bản nộp CP4)
-# Thay mọi dòng "(ví dụ)" bằng số và nguồn của nhóm; simulate nhắc nếu còn sót.
+# Đã thay toàn bộ số mẫu bằng số và nguồn của nhóm Phoenix_1 (28/11/2026).
 
 sessions: 50        # số phiên mô phỏng — bản nộp ≥50
 seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phiên
 
-users:              # số người dùng thật nếu đưa vào dùng — 3 kịch bản, ở quy mô thật của sản phẩm
-                    # track A: khoá học · track B–F: người dùng của sản phẩm / nhóm nhắm tới, nguồn công khai có link
-  low: 300
-  base: 700
-  high: 1000
-  source: "(ví dụ) track A — thay bằng số của nhóm. Cơ sở: lớp L3 hơn 700 học viên (README hackathon); thấp, cao: (tự ước tính)"
+users:              # số gia đình dùng JoyPlan AI mỗi tháng — 3 kịch bản
+                    # thị trường đích ~14.250 gia đình có trẻ nhỏ đi VinWonders PQ lần đầu / tháng (spec.md §2)
+  low: 1425         # 10% thị trường đích
+  base: 4275        # 30% thị trường đích
+  high: 14250       # 100% thị trường đích (trần)
+  source: "Thị trường đích 14.250 gia đình/tháng = ~950.000 lượt khách Phú Quốc/tháng (VietnamPlus: >8,57 triệu lượt 9 tháng đầu 2026, kiểm 27/11/2026) × ~20% ghé VinWonders × ~30% gia đình có trẻ nhỏ đi lần đầu ÷ ~4 người/gia đình — xem spec.md §2. Tỉ lệ dùng 10% / 30% / 100% là (tự ước tính)"
 
-personas:           # ≥3 kiểu người dùng; share cộng lại = 1
-  - name: dung_it
-    share: 0.5              # tỉ lệ người dùng kiểu này
-    uses_per_month: 4       # số phiên / người / tháng
-    turns_per_session: 1    # số lượt hỏi trong một phiên
-    source: "(ví dụ) phỏng vấn P1, P3 — thay bằng nguồn của nhóm"
-  - name: dung_vua
+personas:           # ≥3 kiểu người dùng; share cộng lại = 1 · đơn vị: phiên / gia đình / tháng có chuyến đi
+  - name: lap_lich_1_lan          # lập lịch 1 lần trước chuyến đi
+    share: 0.5
+    uses_per_month: 1
+    turns_per_session: 2
+    types: [thuong]
+    source: "spec.md §2 (1 phiên/chuyến). Khảo sát evidence/survey/results.csv câu 5: 2/6 chuẩn bị dưới 15 phút, 1/6 không chuẩn bị. Share 50% và 2 lượt/phiên là (tự ước tính)"
+  - name: can_nhac_nhieu_phuong_an  # so nhiều phương án trước ngày đi
     share: 0.3
-    uses_per_month: 10
+    uses_per_month: 3
     turns_per_session: 3
-    source: "(ví dụ) khảo sát n = 24, câu 3"
-  - name: dung_nhieu
+    types: [thuong, kho]
+    source: "spec.md §2 (2–3 phiên/chuyến, lấy mức trên). Khảo sát câu 5: 2/6 chuẩn bị trên 60 phút; phỏng vấn P2 mất ~1 giờ tìm hiểu vẫn chưa biết đi khu nào trước. Share 30% và 3 lượt/phiên là (tự ước tính)"
+  - name: tai_lap_giua_ngay       # gặp mưa / hủy show / vướng chiều cao, xếp lại nhiều vòng
     share: 0.2
-    uses_per_month: 20
-    turns_per_session: 5
-    source: "(ví dụ) data/preclass: đếm số lượt / người — cách đếm ở evidence/data-mining.md"
-# Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
-# Persona hỏi kiểu riêng: thêm vào persona đó
-#     types: [thuong, kho, tu_choi]
-# hoặc
-#     inputs: ["câu hỏi kiểu 1", "câu hỏi kiểu 2"]
+    uses_per_month: 5
+    turns_per_session: 4
+    types: [thuong, kho, tu_choi]
+    source: "spec.md §2 (3–5 phiên/chuyến, lấy mức trên). Khảo sát câu 6–7: 3/6 gặp mưa/nắng phải đổi lịch, 5/6 có kế hoạch bị vỡ phải quyết lại; phỏng vấn P2 đổi kế hoạch tại chỗ vì bé không đủ chiều cao, P3 đổi sang khu trong nhà khi mưa. Share 20% và 4 lượt/phiên là (tự ước tính)"
+# Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv theo `types` của persona.
 
-prices:             # USD / 1 triệu token — chép từ further-reading/model-prices.md của repo đề. ≥2 mức model
-  - model: gemini-3.1-flash-lite
-    input: 0.25
-    output: 1.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
-  - model: gemini-4-hydrogen
-    input: 1.50
-    output: 7.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+prices:             # USD / 1 triệu token, gói trả phí Standard
+  - model: gemini-3.5-flash-lite      # model nhóm đang dùng (spec.md, run-1)
+    input: 0.30
+    output: 2.50
+    source: "https://aistudio.google.com/docs/pricing (chuyển hướng từ ai.google.dev/gemini-api/docs/pricing) · Gemini 3.5 Flash-Lite, Paid Tier Standard · xem 28/11/2026"
+  - model: gemini-3.8-flash           # mức trên kế tiếp để so sánh
+    input: 0.75
+    output: 3.75
+    source: "https://aistudio.google.com/docs/pricing · Gemini 3.8 Flash, Paid Tier Standard, giá áp dụng đến 31/12/2026 (từ 01/01/2027: 1.50 / 7.50) · xem 28/11/2026"
 
-usd_to_vnd:         # tuỳ chọn: điền thì bản tóm tắt in thêm tiền Việt
+usd_to_vnd:         # để trống: chưa có tỉ giá kèm nguồn
   rate:
   source:
