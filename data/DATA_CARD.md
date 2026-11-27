@@ -3,7 +3,7 @@
 > Điền ở guide bước 2.4 (bản đầu ở CP2, đủ ở CP3). Ôn lại: ngày 6 · lab ngày 6. Chấm ở rubric R4.
 > Một trang. Mỗi dataset một mục. Dữ liệu chạy thử (bài mẫu, thông báo mẫu, đoạn transcript…) để trong thư mục `data/` này.
 > Không commit nguyên tài liệu khoá, dữ liệu cá nhân thật hay nguyên file data BTC cấp — chỉ đoạn trích ngắn, bản viết lại, hoặc số đã tổng hợp.
-> **Lưu ý quan trọng:** Toàn bộ dữ liệu vận hành & mô phỏng dưới đây chỉ dùng cho bản chạy thử và 6 công cụ trong `codebase/tools.py`, **không phải bằng chứng pain** (bằng chứng pain nằm ở `evidence/`).
+> **Lưu ý quan trọng:** Toàn bộ dữ liệu vận hành & mô phỏng dưới đây chỉ dùng cho bản chạy thử và 7 công cụ trong `codebase/tools.py` (`6` công cụ trong phạm vi đánh giá + `tra_khach_san` ngoài phạm vi đánh giá), **không phải bằng chứng pain** (bằng chứng pain nằm ở `evidence/`).
 
 ---
 
@@ -77,4 +77,4 @@
 
 ---
 
-**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được kiểm chéo (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World ngày 27/11/2026; tọa độ WGS84 và kịch bản thời tiết `seed=42` kiểm tự động nằm gọn trong polygon phân khu) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.
+**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được **Vũ Đức Anh** kiểm chéo và chạy script tự động ngày 27/11/2026 (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng và tách rời không trùng marker; kịch bản thời tiết `seed=42`; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.
