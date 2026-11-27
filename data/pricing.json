@@ -1,0 +1,98 @@
+{
+  "currency": "VND",
+  "last_verified": "2026-11-27",
+  "sources": [
+    "VinWonders / Rooty Trip / VisitPhuQuoc / Trip.com (kiểm 27/11/2026)"
+  ],
+  "tickets": {
+    "adult": {
+      "label": "Người lớn (cao từ 1,4m trở lên)",
+      "price_vnd": 1050000
+    },
+    "child_100_140": {
+      "label": "Trẻ em (cao từ 1,0m đến dưới 1,4m)",
+      "price_vnd": 800000
+    },
+    "senior": {
+      "label": "Người cao tuổi (từ đủ 60 tuổi)",
+      "price_vnd": 800000
+    },
+    "child_under_100": {
+      "label": "Trẻ em (cao dưới 1,0m)",
+      "price_vnd": 0
+    }
+  },
+  "meals": {
+    "buffet": {
+      "label": "Buffet trưa nhà hàng nội khu",
+      "adult_vnd": 350000,
+      "child_100_140_vnd": 250000,
+      "senior_vnd": 350000,
+      "child_under_100_vnd": 0
+    },
+    "a_la_carte": {
+      "label": "Ăn món lẻ nhà hàng nội khu (trung bình)",
+      "adult_vnd": 220000,
+      "child_100_140_vnd": 130000,
+      "senior_vnd": 220000,
+      "child_under_100_vnd": 0
+    },
+    "fastfood": {
+      "label": "Đồ ăn nhanh / combo tiết kiệm",
+      "adult_vnd": 150000,
+      "child_100_140_vnd": 90000,
+      "senior_vnd": 150000,
+      "child_under_100_vnd": 0
+    },
+    "none": {
+      "label": "Không tính chi phí ăn uống trong gói",
+      "adult_vnd": 0,
+      "child_100_140_vnd": 0,
+      "senior_vnd": 0,
+      "child_under_100_vnd": 0
+    }
+  },
+  "extras": {
+    "stroller": {
+      "label": "Thuê xe đẩy trẻ em",
+      "price_vnd": 100000,
+      "unit": "per_item",
+      "deposit_refundable_vnd": 500000,
+      "notes": "Tiền cọc 500.000đ/xe sẽ hoàn lại khi trả xe nguyên vẹn, không tính vào chi phí tiêu thụ."
+    },
+    "locker": {
+      "label": "Thuê tủ gửi đồ / locker tiêu chuẩn",
+      "price_vnd": 30000,
+      "unit": "per_item",
+      "notes": "Tham chiếu 20.000–40.000đ/tủ tiêu chuẩn; một số quầy giữ đồ cơ bản hỗ trợ miễn phí."
+    },
+    "buggy": {
+      "label": "Xe điện di chuyển nội khu (Buggy)",
+      "price_vnd": 100000,
+      "unit": "per_paying_person",
+      "notes": "Áp dụng cho người lớn, trẻ em từ 1,0m trở lên và người cao tuổi; trẻ dưới 1,0m ngồi cùng người lớn."
+    },
+    "fastpass": {
+      "label": "Lối đi ưu tiên (Fastpass — ước tính tham chiếu)",
+      "price_vnd": 350000,
+      "unit": "per_paying_person",
+      "notes": "Giá tham chiếu ước tính theo từng khách cần vé."
+    },
+    "raincoat": {
+      "label": "Áo mưa dùng một lần",
+      "price_vnd": 30000,
+      "unit": "per_person",
+      "notes": "Phát sinh khi gặp mưa bất chợt trong công viên."
+    },
+    "drinks_snacks": {
+      "label": "Nước uống & đồ ăn vặt trong ngày",
+      "price_vnd": 60000,
+      "unit": "per_person",
+      "notes": "Ước tính nước suối, kem hoặc đồ uống giải khát bên trong công viên."
+    }
+  },
+  "policies": {
+    "outside_food": "Quy định công viên không cho phép mang đồ ăn mặn và thức uống từ bên ngoài vào (trừ đồ ăn dặm/sữa cho trẻ nhỏ).",
+    "ticket_height_rule": "Giá vé vào cổng tính theo chiều cao thực tế đo tại cổng, không tính theo tuổi."
+  }
+}

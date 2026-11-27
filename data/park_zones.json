@@ -1,0 +1,120 @@
+{
+  "park": {
+    "name": "VinWonders Phú Quốc",
+    "open_time": "09:00",
+    "close_time": "19:30",
+    "area_ha": 50,
+    "last_verified": "2026-11-27",
+    "sources": [
+      "VinWonders chính thức (App & Website, kiểm 27/11/2026)",
+      "VNPAY / Rooty Trip / Vietravel (tổng hợp giờ mở cửa & quy hoạch 6 phân khu, kiểm 27/11/2026)"
+    ],
+    "notes": "Giờ mở cửa toàn công viên 09:00–19:30, riêng Cung điện Hải Vương và Công viên nước mở 10:00–18:00. Ma trận đi bộ là ước lượng chuẩn hóa cho gia đình có trẻ nhỏ đi bộ/xe đẩy."
+  },
+  "zones": [
+    {
+      "id": "Z1_EURO",
+      "name": "Đại lộ Châu Âu",
+      "english_name": "European Avenue",
+      "open_time": "09:00",
+      "close_time": "19:30",
+      "indoor_ratio": "mixed",
+      "description": "Phân khu cổng chính mang kiến trúc châu Âu trung cổ, tập trung cửa hàng, nhà hàng, điểm check-in và Quảng trường Phượng Hoàng Lửa (nơi diễn Once Show)."
+    },
+    {
+      "id": "Z2_FAIRY",
+      "name": "Thế giới diệu kỳ",
+      "english_name": "Fairy World",
+      "open_time": "09:00",
+      "close_time": "19:30",
+      "indoor_ratio": "mixed",
+      "description": "Phân khu cổ tích gồm 5 miền kỳ ảo với nhiều trò nhẹ nhàng và khu tương tác trong nhà phù hợp trẻ nhỏ và gia đình."
+    },
+    {
+      "id": "Z3_ADVENTURE",
+      "name": "Thế giới phiêu lưu",
+      "english_name": "Adventure World",
+      "open_time": "09:00",
+      "close_time": "19:30",
+      "indoor_ratio": "mostly_outdoor",
+      "description": "Phân khu cảm giác mạnh lấy cảm hứng từ văn minh Maya/Hy Lạp; đa số trò yêu cầu chiều cao 120–140cm trở lên, có bổ sung trò trong nhà."
+    },
+    {
+      "id": "Z4_VIKING",
+      "name": "Ngôi làng bí mật",
+      "english_name": "Secret Village",
+      "open_time": "09:00",
+      "close_time": "19:30",
+      "indoor_ratio": "mostly_outdoor",
+      "description": "Phân khu chủ đề chiến binh Viking Bắc Âu với thuyền vượt sông và chuỗi thử thách vận động trên cao ngoài trời."
+    },
+    {
+      "id": "Z5_TYPHOON",
+      "name": "Thế giới lốc xoáy",
+      "english_name": "Typhoon World",
+      "open_time": "10:00",
+      "close_time": "18:00",
+      "indoor_ratio": "outdoor",
+      "description": "Công viên nước ngoài trời với bể trẻ em, sông lười, bể tạo sóng và các đường trượt cảm giác mạnh; đóng cửa sớm lúc 18:00."
+    },
+    {
+      "id": "Z6_SEASHELL",
+      "name": "Cung điện Hải Vương",
+      "english_name": "The Sea Shell",
+      "open_time": "10:00",
+      "close_time": "18:00",
+      "indoor_ratio": "indoor",
+      "description": "Thủy cung hình rùa biển khổng lồ hoàn toàn trong nhà có điều hòa; nơi diễn ra show Nàng tiên cá, cho cá ăn và ngắm chim cánh cụt, mở 10:00–18:00."
+    }
+  ],
+  "walking_matrix_min": {
+    "Z1_EURO": {
+      "Z1_EURO": 3,
+      "Z2_FAIRY": 6,
+      "Z3_ADVENTURE": 10,
+      "Z4_VIKING": 12,
+      "Z5_TYPHOON": 12,
+      "Z6_SEASHELL": 8
+    },
+    "Z2_FAIRY": {
+      "Z1_EURO": 6,
+      "Z2_FAIRY": 3,
+      "Z3_ADVENTURE": 6,
+      "Z4_VIKING": 8,
+      "Z5_TYPHOON": 12,
+      "Z6_SEASHELL": 10
+    },
+    "Z3_ADVENTURE": {
+      "Z1_EURO": 10,
+      "Z2_FAIRY": 6,
+      "Z3_ADVENTURE": 3,
+      "Z4_VIKING": 6,
+      "Z5_TYPHOON": 10,
+      "Z6_SEASHELL": 12
+    },
+    "Z4_VIKING": {
+      "Z1_EURO": 12,
+      "Z2_FAIRY": 8,
+      "Z3_ADVENTURE": 6,
+      "Z4_VIKING": 3,
+      "Z5_TYPHOON": 6,
+      "Z6_SEASHELL": 10
+    },
+    "Z5_TYPHOON": {
+      "Z1_EURO": 12,
+      "Z2_FAIRY": 12,
+      "Z3_ADVENTURE": 10,
+      "Z4_VIKING": 6,
+      "Z5_TYPHOON": 3,
+      "Z6_SEASHELL": 7
+    },
+    "Z6_SEASHELL": {
+      "Z1_EURO": 8,
+      "Z2_FAIRY": 10,
+      "Z3_ADVENTURE": 12,
+      "Z4_VIKING": 10,
+      "Z5_TYPHOON": 7,
+      "Z6_SEASHELL": 3
+    }
+  }
+}
