@@ -164,7 +164,7 @@ flowchart TD
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 | --------- | ------ | ---------------------------------------------- |
-|           |        |                                                |
+| 27/11 20:45 | Thêm giao diện web VinPlanner (React + FastAPI): bản đồ SVG, Ngày 1–3 chạy lại luồng 1 ngày, thẻ khách sạn tham khảo chỉ đọc (không đặt phòng). Lát cắt được chấm, metric và chuẩn "đạt" giữ nguyên. | Trình bày lịch dễ dùng cho gia đình; Ngày 2/3 và thẻ khách sạn ghi rõ ngoài phạm vi đánh giá — `docs/vinplanner-product.md`, `docs/vinplanner-architecture.md` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
