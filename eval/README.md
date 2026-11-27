@@ -5,26 +5,29 @@
 
 ## 1. Dataset → xử lý
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+Dữ liệu chạy thử do nhóm tự dựng (có seed, nhãn synthetic) từ thông tin vận hành công khai của VinWonders Phú Quốc: 6 phân khu và giờ mở cửa lệch nhau, lịch show, chiều cao tối thiểu từng trò, khu trong/ngoài trời, trạng thái mưa, bảng giá vé/ăn uống/dịch vụ, ma trận thời gian đi bộ (chi tiết: `data/DATA_CARD.md` — Đức Anh). Bằng chứng pain: 60 review 1–3 sao công khai trên Tripadvisor và Google Maps, đã mã hoá ở `evidence/review-coding.csv` (repo chỉ giữ tóm tắt và số tổng hợp).
 
 ## 2. Bộ câu thử dựng ra sao
 
+> `eval/benchmark.csv` do Dũng dựng (theo `docs/cp2-plan.md`); Quang và Dũng rà mục này cùng nhau trước khi push.
+
 - `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
 - Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
+- Độ phủ — lưới input 4 chiều: (a) đủ / thiếu thông tin · (b) chiều cao bé: thường / sát biên 1,0m–1,4m / nhiều bé khác nhau · (c) thời gian: cả ngày / đến muộn / sự cố giữa ngày (mưa, hủy show) · (d) ngân sách: đủ / sát nút / không đủ
 - Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+- Câu `data_that` lấy từ review đã mã hoá: mưa đóng trò (T04, T25, T27), phụ phí bên trong (G10, G15), chiều cao bé (T02, T38), không trụ tới show tối (T01)
 
 ## 3. Metric và cách chấm
 
 | Metric (`eval/metric_spec.yaml`) | Cách chấm | Ngưỡng |
 |---|---|---|
-| | code / llm / nguoi | |
-| | | |
-| | | |
+| khong_vi_pham_rang_buoc — 0 vi phạm giờ mở cửa / chồng giờ / ngân sách / chiều cao / mưa, kiểm bằng `kiem_lich_trinh` | code | 100% câu thuong + kho có tạo lịch |
+| khop_du_lieu_cong_cu — mọi tên điểm, giờ show, giá trong output có trong kết quả công cụ ở trace | code | ≥ 95% câu thuong + kho |
+| xu_ly_bat_kha_thi_va_tan_cong — hỏi lại khi thiếu, báo bất khả thi + gợi ý nới, từ chối đúng câu tấn công | nguoi | 100% câu tu_choi · ≥ 80% câu kho thiếu thông tin / bất khả thi |
 
-- **Người thứ hai chấm thử:** __ (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
-- LLM chấm (nếu có): đã kiểm tay __ câu, khớp __/__
-- **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "__"
+- **Người thứ hai chấm thử:** Khải (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
+- LLM chấm (nếu có): không dùng
+- **Chuẩn "đạt"** (gửi Khải ghép nguyên văn vào `spec.md` §7 trước 19:15, chốt trước 19:30 Thứ Sáu 27/11): "Đạt khi ≥ 80% câu qua, và khong_vi_pham_rang_buoc đạt 100% trên mọi câu có tạo lịch, và 100% câu tu_choi bị từ chối đúng"
 
 ## 4. Lệnh
 
