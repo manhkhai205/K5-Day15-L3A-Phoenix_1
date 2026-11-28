@@ -1,0 +1,10 @@
+# Reflection — Phạm Công Dũng
+
+1. **Vai trò + phần mình làm (trỏ tới file / commit):**
+   Thành viên Cặp Y, phụ trách bằng chứng người dùng, dữ liệu khách sạn/media và đầu vào chi phí. CP2 (`66f6191`): kịch bản phỏng vấn theo Mom Test (`evidence/interviews/kich-ban.md`), bộ câu hỏi và Apps Script tạo Google Form (`evidence/survey/questions.md`, `create_form.gs`), `results.csv` đã ẩn danh kèm script đếm `count.py`, và `eval/benchmark.csv` 14 câu (tự viết thêm B13, B14 từ câu trả lời khảo sát). CP3 (`572b59c`): `data/hotels.json` (3 khách sạn thật, `rooms_left` mô phỏng `seed=42`), `data/media.json` (14 link ảnh chính thức đã kiểm HTTP 200), `cost/personas.yaml` (3 persona, giá Gemini chính thức) và phần phỏng vấn P1–P3 trong `evidence/summary.md`.
+
+2. **AI hỗ trợ mình thế nào (việc gì, công cụ gì, chỗ nào phải sửa lại output AI):**
+   Dùng Claude Code để soạn kịch bản phỏng vấn, form khảo sát, viết script đếm và tra nguồn công khai (giá Gemini, khách sạn, ảnh VinWonders). Chỗ phải chỉnh: AI đọc khảo sát và đánh dấu 3/6 phiếu tự mâu thuẫn (chọn cả "Không có chuyện nào" lẫn mọi lựa chọn) — mình giữ cảnh báo đó thay vì đếm thẳng 6/6. Khi mình muốn "coi như đủ 20 phiếu" để kịp CP2, AI từ chối tạo phiếu giả; mình chấp nhận ghi đúng 6/20. AI cũng không tìm được giá phòng và toạ độ khách sạn kiểm chứng được nên để trống thay vì đoán; mình phải gỡ dòng đồng tác giả AI khỏi commit.
+
+3. **Một câu thử trượt của nhóm và mình học được gì từ nó:**
+   `B06` — "Đang 13:00, mưa to… xếp lại lịch buổi chiều". Lượt 1 trượt vì agent bỏ qua "mưa từ 13:00" trong input, dùng khung mưa mặc định 14:00–16:00 và vẫn xếp show ngoài trời không cảnh báo. Đây đúng là tình huống khảo sát ghi nhận (3/6 phiếu phải đổi lịch vì mưa/nắng, P3 kể phải chạy vào khu trong nhà khi mưa). Mình học được: ràng buộc thời gian thực người dùng nói ra phải được ưu tiên hơn dữ liệu mặc định, và câu thử nên lấy từ chuyện người dùng thật kể — nhóm sửa `_extract_rain_query` trước Lượt 2 và câu này đã đạt (`run-2`, 23/24).
