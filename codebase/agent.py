@@ -37,6 +37,7 @@ Quy tắc bắt buộc:
    - VinWonders: 09:00–19:30 (riêng Z5_TYPHOON & Z6_SEASHELL chỉ mở 10:00–18:00).
    - Vinpearl Safari (Z7_SAFARI): 09:00–16:00 (xe buýt bán hoang dã `SF-Z7-01` kết thúc <= 15:20).
    - Grand World (Z8_GRANDWORLD): 08:00–22:30; chuyển giữa 2 tổ hợp cần >= 15–20 phút VinBus.
+   - Tuyệt đối không xếp bất kỳ mục nào kết thúc sau giờ về trong `rang_buoc.gio`; nếu khách đến từ 09:00 và muốn đi Z5_TYPHOON/Z6_SEASHELL (10:00 mới mở), hãy xếp 1 điểm ở Z1_EURO hoặc Z2_FAIRY trong khung 09:00–09:50 trước khi vào Z5/Z6 lúc 10:00.
 4. Có thể giữ nguyên hoặc tinh chỉnh từ `lich_goi_y_tu_cong_cu` (đã đạt 0 vi phạm), nhưng vẫn phải đảm bảo 0 chồng giờ, đủ thời gian di chuyển, đúng chiều cao từng bé và không dùng điểm ngoài trời trong giờ mưa.
 5. Không bao giờ đặt vé, nhận số thẻ/OTP, đặt khách sạn/vé máy bay hay xác nhận thông tin trái dữ liệu chính thức.
 6. Chỉ trả về đúng 1 khối JSON theo mẫu:
@@ -277,6 +278,15 @@ def _extract_budget_vnd(raw_text: str) -> Optional[int]:
     return None
 
 
+def _valid_hhmm(h_str: str, m_str: Optional[str]) -> Optional[str]:
+    """Chuẩn hoá giờ:phút sang 'HH:MM' nếu nằm trong 00:00–23:59."""
+    hh = int(h_str)
+    mm = int(m_str or 0)
+    if 0 <= hh <= 23 and 0 <= mm <= 59:
+        return "%02d:%02d" % (hh, mm)
+    return None
+
+
 def _extract_time_window(raw_text: str, venues: Optional[List[str]] = None) -> Tuple[str, str, bool]:
     """Trích khung giờ dự kiến (gio_bat_dau, gio_ket_thuc, thieu_gio_ro) theo tổ hợp mục tiêu."""
     low = _norm(raw_text)
@@ -288,35 +298,69 @@ def _extract_time_window(raw_text: str, venues: Optional[List[str]] = None) -> T
 
     m_range = re.search(r"(\d{1,2})[:h](\d{2})?\s*[-–~]\s*(\d{1,2})[:h](\d{2})?", low)
     if m_range:
-        s = "%02d:%02d" % (int(m_range.group(1)), int(m_range.group(2) or 0))
-        e = "%02d:%02d" % (int(m_range.group(3)), int(m_range.group(4) or 0))
-        return s, e, False
+        s = _valid_hhmm(m_range.group(1), m_range.group(2))
+        e = _valid_hhmm(m_range.group(3), m_range.group(4))
+        if s and e:
+            return s, e, False
 
     m_from_to = re.search(
-        r"(?:tu|den|dang|luc)\s*(\d{1,2})[:h](\d{2})?.*?(?:ve|den|toi)\s*(\d{1,2})[:h](\d{2})?",
+        r"(?:tu|den|dang|luc|bat\s*dau)"
+        r"(?:\s+(?:vinwonders?(?:\s+phu\s+quoc)?|vinpearl\s+safari|safari|grand\s+world|cong\s+vien|cung|o|tai|luc|vao|dung|khoang|tam|tu)){0,4}"
+        r"\s*(\d{1,2})[:h](\d{2})?.*?"
+        r"(?:ra\s*ve(?:\s*luc)?|ve(?:\s*luc)?|ket\s*thuc(?:\s*luc)?|o\s*den|con\s*o\s*den|den|toi)"
+        r"(?:\s+(?:luc|dung|khoang|tam))?\s*(\d{1,2})[:h](\d{2})?",
         low,
     )
     if m_from_to:
-        s = "%02d:%02d" % (int(m_from_to.group(1)), int(m_from_to.group(2) or 0))
-        e = "%02d:%02d" % (int(m_from_to.group(3)), int(m_from_to.group(4) or 0))
-        return s, e, False
+        s = _valid_hhmm(m_from_to.group(1), m_from_to.group(2))
+        e = _valid_hhmm(m_from_to.group(3), m_from_to.group(4))
+        if s and e and _to_min(s) < _to_min(e):
+            return s, e, False
 
-    m_arrive = re.search(r"(?:den\s*luc|den\s*vao|dang\s*o|dang)\s*(\d{1,2})[:h](\d{2})?", low)
+    m_arrive = re.search(
+        r"(?:den(?:\s+(?:vinwonders?(?:\s+phu\s+quoc)?|safari|grand\s+world|cong\s+vien))?\s*(?:luc|vao|dung)|dang(?:\s+o)?(?:\s+luc)?)\s*(\d{1,2})[:h](\d{2})?",
+        low,
+    )
     if m_arrive:
-        s = "%02d:%02d" % (int(m_arrive.group(1)), int(m_arrive.group(2) or 0))
-        return s, default_end, False
+        s = _valid_hhmm(m_arrive.group(1), m_arrive.group(2))
+        if s:
+            return s, default_end, False
 
-    m_leave = re.search(r"(?:ve\s*luc|den|toi)\s*(\d{1,2})[:h](\d{2})?", low)
+    m_leave = re.search(
+        r"(?:ra\s*ve(?:\s*luc)?|ve(?:\s*luc)?|ket\s*thuc(?:\s*luc)?|o\s*den|den|toi)\s*(?:luc|dung)?\s*(\d{1,2})[:h](\d{2})?",
+        low,
+    )
     if m_leave:
-        e = "%02d:%02d" % (int(m_leave.group(1)), int(m_leave.group(2) or 0))
-        if "con lai" in low or "xep hang" in low:
-            return "14:00", e, True
-        if _to_min(e) > _to_min("09:00"):
-            return "09:00", e, False
+        e = _valid_hhmm(m_leave.group(1), m_leave.group(2))
+        if e:
+            if "con lai" in low or "xep hang" in low:
+                return "14:00", e, True
+            if _to_min(e) > _to_min("09:00"):
+                return "09:00", e, False
 
     if "xep hang" in low and "con lai" in low:
         return "14:00", default_end, True
     return "09:00", default_end, True
+
+
+def _extract_rain_query(raw_text: str) -> str:
+    """Trích từ khoá mưa theo mốc giờ thực tế trong input (vd 'Đang 13:00, mưa to' -> 'mua to 13:00')."""
+    low = _norm(raw_text)
+    m_rain_at = re.search(
+        r"(?:dang\s*(\d{1,2})[:h](\d{2})?[^.?!]{0,30}\bmua\b|\bmua(?:\s+to|\s+lon|\s+rao)?\s*(?:tu|luc|vao)\s*(\d{1,2})[:h](\d{2})?)",
+        low,
+    )
+    if m_rain_at:
+        hh = int(m_rain_at.group(1) or m_rain_at.group(3))
+        mm = int(m_rain_at.group(2) or m_rain_at.group(4) or 0)
+        if 0 <= hh <= 23 and 0 <= mm <= 59:
+            prefix = "mua to" if re.search(r"\bmua\s*(?:to|lon)\b", low) else "mua"
+            return "%s %02d:%02d" % (prefix, hh, mm)
+    if "chieu" in low:
+        return "mua chieu"
+    if "toi" in low and not re.search(r"\bto\b", low):
+        return "mua toi"
+    return "mua"
 
 
 def _parse_constraints(raw_text: str) -> Dict[str, Any]:
@@ -606,7 +650,16 @@ def _build_schedule_from_tools(
                         continue
                     if not _can_place(s_try, e_try, item["zone_id"], item.get("indoor", False), item):
                         continue
-                    water_pref = 0 if (constraints["prefer_water_park"] and item.get("is_water_park") and cursor < _to_min("12:00")) else 1
+                    water_pref = (
+                        0
+                        if (
+                            constraints["prefer_water_park"]
+                            and item.get("is_water_park")
+                            and cursor < _to_min("12:00")
+                            and (s_try - cursor) <= 35
+                        )
+                        else 1
+                    )
                     thrill_pref = 0 if (constraints["prefer_thrill"] and item.get("thrill_level") in ("medium", "high")) else 1
                     same_zone = 0 if item["zone_id"] == prev_zone else 1
                     next_zone = 0 if (anchor.get("id") and item["zone_id"] == anchor["zone_id"]) else 1
@@ -898,6 +951,7 @@ def _format_output(
     model_used: str,
     ghi_chu_rieng: Optional[List[str]] = None,
     diem_bo_qua: Optional[List[str]] = None,
+    attractions_data: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Định dạng phản hồi tiếng Việt đầy đủ căn cứ từ công cụ cho gia đình."""
     lines: List[str] = []
@@ -918,10 +972,47 @@ def _format_output(
         lines.append("*Giả định mặc định (G10):* %s." % "; ".join(assumptions))
 
     if weather_data.get("co_mua"):
+        rain_win = weather_data.get("khung_gio_mua") or []
+        rain_str = "–".join(rain_win) if len(rain_win) == 2 else ", ".join(rain_win)
         lines.append(
             "*Thời tiết:* %s (khung mưa %s) — đã loại toàn bộ trò ngoài trời & Công viên nước trong giờ mưa."
-            % (weather_data["trang_thai"], ", ".join(weather_data.get("khung_gio_mua") or []))
+            % (weather_data["trang_thai"], rain_str)
         )
+        if attractions_data:
+            scheduled_ids = {str(s.get("id", "")).strip() for s in schedule}
+            outdoor_skipped = [
+                a["name"]
+                for a in (attractions_data.get("diem_choi") or [])
+                if not a.get("indoor", False)
+                and a.get("category") not in ("meal", "rest")
+                and a.get("id") not in scheduled_ids
+            ]
+            if outdoor_skipped:
+                lines.append(
+                    "*Trò ngoài trời tạm bỏ trong giờ mưa:* %s."
+                    % ", ".join(outdoor_skipped[:4])
+                )
+        t_s_min = _to_min(constraints["gio_bat_dau"])
+        t_e_min = _to_min(constraints["gio_ket_thuc"])
+        all_shows_pool = list(shows_data.get("show_kha_dung") or []) + list(
+            shows_data.get("show_anh_huong_thoi_tiet") or []
+        )
+        seen_show_ids = set()
+        outdoor_shows_txt: List[str] = []
+        for sh in all_shows_pool:
+            sid = sh.get("id")
+            if not sid or sid in seen_show_ids or sh.get("indoor", False):
+                continue
+            seen_show_ids.add(sid)
+            sh_s = _to_min(sh["start_time"])
+            sh_e = _to_min(sh["end_time"])
+            if sh_e > t_s_min and sh_s < t_e_min:
+                outdoor_shows_txt.append("%s (%s–%s)" % (sh["name"], sh["start_time"], sh["end_time"]))
+        if outdoor_shows_txt:
+            lines.append(
+                "*Lưu ý show ngoài trời phụ thuộc thời tiết:* %s diễn ra ngoài trời nên phụ thuộc thời tiết thực tế, có thể tạm dừng hoặc đổi lịch nếu mưa kéo dài."
+                % "; ".join(outdoor_shows_txt)
+            )
 
     if constraints["show_bi_huy"]:
         alt_shows = [s["name"] + " (" + s["start_time"] + "–" + s["end_time"] + ")" for s in shows_data["show_kha_dung"] if s.get("indoor")]
@@ -1088,13 +1179,7 @@ def plan_day(
         if "mua" in _norm(weather_override):
             constraints["thoi_tiet"] = "mua"
     elif constraints["thoi_tiet"] == "mua":
-        low_norm = _norm(text)
-        if "chieu" in low_norm:
-            weather_query = "mua chieu"
-        elif "toi" in low_norm and "to" not in low_norm:
-            weather_query = "mua toi"
-        else:
-            weather_query = "mua"
+        weather_query = _extract_rain_query(text)
     elif date_str and constraints["thoi_tiet"] == "nang":
         weather_query = date_str
     else:
@@ -1375,6 +1460,7 @@ def plan_day(
         model_used=model_used,
         ghi_chu_rieng=ghi_chu_rieng,
         diem_bo_qua=diem_bo_qua,
+        attractions_data=attractions_data,
     )
 
     ui_items = list(enriched_schedule)

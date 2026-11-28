@@ -150,21 +150,32 @@ flowchart TD
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (\_\_ phiên)
-- Chi phí / task thành công: \_\_ (model \_\_) · \_\_ (model \_\_)
-- Chi phí / tháng ở quy mô thật: thấp \_\_ · cơ sở \_\_ · cao \_\_ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
+- Persona + giá: `cost/personas.yaml` (`3` persona, bình quân `2,4` phiên/gia đình/tháng) · lượt mô phỏng: `cost/simulate-1.csv` (`50` phiên, `seed 42` — `[chờ chạy trên máy có .env]`)
+- Chi phí / task thành công: `[chờ simulate]` (`gemini-3.5-flash-lite` `$0.30/$2.50` trên 1M token) · `[chờ simulate]` (`gemini-3.8-flash` `$0.75/$3.75` trên 1M token, giá tới 31/12/2026)
+- Chi phí / tháng ở quy mô thật: thấp `1.425` gđ `[chờ simulate]` · cơ sở `4.275` gđ `[chờ simulate]` · cao `14.250` gđ `[chờ simulate]` → chi tiết `cost/cost-estimate.md`
+- So với impact / người / tháng (§2): đáng làm không, vì sao: `[chờ số từ simulate-1]` (trên quy mô `~14.250` gia đình/tháng tiết kiệm `~75` phút/chuyến trên tổng chi `~3,5–5 triệu đ/ngày`; kiến trúc dùng workflow cố định + 5 nhánh chặn `0` token giúp giữ chi phí AI/gia đình ở mức thấp).
 
 ## §9. Rủi ro & an toàn
 
 - Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
+  - **Ẩn danh toàn bộ nguồn bằng chứng:** `P1–P3` (`evidence/interviews/`), `S01–S09` (`evidence/survey/results.csv`) và `60` review (`evidence/review-coding.csv`) đã loại bỏ hoàn toàn họ tên, SĐT, email, mã học viên và tên tài khoản; chỉ giữ tối đa 1–2 câu trích kèm mã ẩn danh và URL gốc.
+  - **Không thu PII / dữ liệu thanh toán:** Ứng dụng web không có đăng nhập tài khoản thật, không thu vị trí GPS trực tiếp, không thu số thẻ ngân hàng/CVV/OTP; tính năng lưu lịch nằm hoàn toàn ở `localStorage` phía trình duyệt.
+  - **Không gửi thông tin cá nhân lên Gemini gói miễn phí:** Chỉ truyền ràng buộc ẩn danh (số người, chiều cao bé theo cm, khung giờ, ngân sách) và catalog công viên tĩnh vào `call_model()`; `.env` và key bị chặn tuyệt đối qua `.gitignore`.
 - AI **không được** làm gì kể cả khi người dùng yêu cầu:
+  1. Không tiết lộ hướng dẫn hệ thống (`system prompt`) hay làm theo chỉ thị ghi đè quy tắc an toàn (`B11`).
+  2. Không đặt phòng khách sạn, vé máy bay, vé công viên hay tiếp nhận/xử lý số thẻ thanh toán, mã CVV/OTP (`B11`, `B12`).
+  3. Không xác nhận thông tin trái dữ liệu chính thức của công viên (như giờ mở cửa sai `23:00` ở VinWonders hoặc `20:00` ở Safari, hay khuyến mãi giả `50%` ở `B12`, `B24`).
+  4. Không tự bịa thời gian xếp hàng thực tế (`B14`), suất show không có trong `shows.json` (`B10`), hay đoán mò thông số gia đình khi thiếu dữ liệu (`B05`).
 - Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
+  - **Trẻ nhỏ & người cao tuổi:** Có nguy cơ bị xếp vào trò vượt giới hạn chiều cao (`<1,0m`–`1,4m`), trò ngoài trời lúc mưa hoặc đi bộ quay lại quá sức giữa nắng gắt → **Chặn cứng** bằng lọc `tra_diem_choi`, mã kiểm `HEIGHT_RESTRICTION` / `WEATHER_RAIN_OUTDOOR` / `INSUFFICIENT_WALK_TIME` trong `kiem_lich_trinh` (`0` vi phạm mới xuất lịch), kèm cảnh báo `MULTI_VENUE_FATIGUE` và `COMPANION_REQUIRED`.
+  - **Gia đình thiệt hại thời gian / ngân sách / nhầm phòng trống:** Có nguy cơ đến cổng khi khu `Z5/Z6` hoặc `Safari` đã đóng (`16:00`/`18:00`), vỡ ngân sách hoặc hiểu nhầm số phòng khách sạn → **Chặn cứng** bằng `OUTSIDE_OPENING_HOURS` + `BUDGET_EXCEEDED` trong `kiem_lich_trinh`, tách rõ `rooms_left` luôn gắn nhãn *"dữ liệu mô phỏng (`seed=42`)"* và dẫn link trang chính thức để người dùng tự kiểm tra & quyết định.
 
 ## §10. Phân công & changelog
 
-- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): \_\_
-- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`):
+- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"):
+  - **Chặng CP1–CP2 (Cặp X + Cặp Y):** **Nguyễn Viết Mạnh Khải (`2A202603664`, Đội trưởng · Cặp X)** điều phối, `canvas.md`, `spec.md` §3–§7, `codebase/agent.py`, `codebase/ai.py`; **Vũ Đức Anh (`2A202603573` · Cặp X)** dữ liệu `data/` + `data/DATA_CARD.md` + 6 `@tool` `codebase/tools.py`; **Nguyễn Đình Quang (`2A202603620` · Cặp Y)** đào 60 review (`evidence/data-mining.md`), `eval/metric_spec.yaml`, `eval/README.md` mục 1–4, chấm chéo CP2 cùng Khải (`4/5`); **Phạm Công Dũng (`2A202603428` · Cặp Y)** khảo sát (`evidence/survey/`), phỏng vấn (`evidence/interviews/`), `eval/benchmark.csv` (`B01–B14`).
+  - **Chặng CP3–CP4:** **Khải** thiết kế kiến trúc JoyPlan AI đa tổ hợp, viết `codebase/api.py` (9 endpoint), mở rộng `agent.py`/`tools.py` và điều phối cải tiến CP4; **Đức Anh** kiểm toạ độ WGS84/GeoJSON 8 phân khu & xây toàn bộ Web UI `web/` (React + MapLibre + offline fallback); **Quang** mở rộng `eval/benchmark.csv` (`B15–B24`), viết `eval/cham.py`, chấm Lượt 1 `eval/run-1.csv` (`21/24 = 88%`), hoàn thiện `eval/report.md` & `eval/README.md`; **Dũng** hoàn tất phỏng vấn `P1–P3` + `evidence/summary.md`, tạo `data/hotels.json` + `data/media.json`, điền `cost/personas.yaml`, `cost/cost-estimate.md` & dàn slide CP4 (`slides/`, `demo-slides.pdf`).
+- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`): Nhóm dùng coding agent & Claude/LLM để gợi ý khung code `codebase/` + giao diện React `web/`, đề xuất nhãn 60 review, soạn nháp câu thử mở rộng `B15–B24`, rà cấu trúc tài liệu và tạo khung HTML trình chiếu; dùng model thật Gemini `gemini-3.5-flash-lite` cho lõi lập lịch của bản chạy thử. Toàn bộ lựa chọn lát cắt, quy tắc lấy mẫu/đối soát nhãn review, phỏng vấn/khảo sát người thật ngoài nhóm, chấm tay `24/24` câu Lượt 1 (cùng chấm chéo CP2 `4/5`) và kiểm chứng mã nguồn đều do 4 thành viên tự thực hiện và chịu trách nhiệm (`docs/ai-usage.md`).
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
 **CP2 → CP4** (vd thu hẹp lát cắt, hỏi thêm người dùng, lần cải tiến trước lượt 2)
@@ -180,6 +191,8 @@ flowchart TD
 | 27/11 23:45 | Nối model thật Google Gemini `gemini-3.5-flash-lite` (gói miễn phí, `--wait 4`) thay chế độ `fake`; chạy **Lượt 1** `eval/run-1.csv` (24 câu, 0 lỗi kỹ thuật) → chấm tay theo `pass_criterion` + `metric_spec.yaml`, có `eval/cham.py` kiểm độc lập 2 metric code → **21/24 (88%), đạt chuẩn §7**. Không sửa chuẩn "đạt", `metric_spec.yaml`, câu thử. | Hạng mục CP3 "AI thật + Lượt 1 + score"; câu trượt `B03`, `B06`, `B16` để làm cải tiến trước Lượt 2 (CP4) — `eval/run-1.csv`, `traces/run-1.jsonl`, `eval/README.md` mục 5–6 |
 | 27/11 23:55 | Cập nhật §4 (bỏ mô tả AI giả; thêm `tra_khach_san` ghi rõ ngoài phạm vi chấm), §7 (24 câu, kết quả Lượt 1), `README.md` (tên model thật). Quang làm thay phần T11/T13 của Khải theo `docs/cp3-plan.md`. | Đồng bộ tài liệu với bản chạy thật trước CP3 |
 | 28/11 09:25 | Cập nhật §1 (bằng chứng nguồn 2 từ phỏng vấn P1–P3 + khảo sát 9 phiếu, ghi rõ mới đạt một phần: 1/3 đúng vai) và §2 (hiệu chuẩn bước đầu \~75 phút bằng thời gian tìm hiểu 20–60 phút của P1–P3); điền `docs/ai-usage.md`. Không sửa chuẩn "đạt", câu thử, kết quả Lượt 1. | Đồng bộ `spec.md` với `evidence/summary.md` (Dũng, nhánh `cp3-dung`) trước khi nộp CP3 |
+| 28/11 12:05 | **Cải tiến CP4 (Nhóm lỗi 1 — `B06, B16`):** mở rộng `_extract_time_window` bắt giờ đến/về (`09:00–18:30`), giữ khoảng `09:00–10:00` ở `Z1/Z2`, bổ sung `_extract_rain_query` + khung mưa to 180 phút trong `tools.py` (`13:00–16:00`) + danh sách trò ngoài trời bỏ qua & cảnh báo show ngoài trời phụ thuộc thời tiết trong `_format_output`. Không sửa §7, `metric_spec.yaml`, `benchmark.csv`, `run-1.csv`. | Xử lý 2/3 câu trượt ở Lượt 1 (`B16`, `B06`) trong `eval/report.md` mục 2–3; giữ nguyên hành vi `B03` để ghi trung thực ở mục 4 |
+| 28/11 12:10 | Bổ sung toạ độ WGS84 từ OpenStreetMap cho 3 khách sạn trong `data/hotels.json`, cập nhật `DATA_CARD.md` (Dataset 6–7) & sửa đọc trường null-safe trong `tra_khach_san`; hoàn thiện `spec.md` §8–§10, `eval/report.md`, `cost/cost-estimate.md`, `slides/` & `demo-slides.pdf`. | Hoàn thiện hồ sơ CP4 và đảm bảo `ParkMap` hiển thị pin 3 khách sạn ngoài phạm vi đánh giá; hỗ trợ `--sync-docs` tự cập nhật số `run-2`/`simulate-1` khi chạy trên máy có `.env` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

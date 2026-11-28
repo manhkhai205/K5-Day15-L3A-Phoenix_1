@@ -327,7 +327,8 @@ def _get_weather(ngay: Optional[str] = None, khung_gio: Optional[Any] = None) ->
                 m_time = re.search(r"(\d{1,2}):(\d{2})", norm)
                 if m_time:
                     t_start = _parse_time_to_min("%02d:%02d" % (int(m_time.group(1)), int(m_time.group(2))))
-                    t_end = min(t_start + 120, _parse_time_to_min("19:30"))
+                    dur = 180 if re.search(r"\b(?:to|lon)\b", norm) else 120
+                    t_end = min(t_start + dur, _parse_time_to_min("19:30"))
                     override_rain_window = [_min_to_time(t_start), _min_to_time(t_end)]
                     cond_key = "mua_chieu"
                 elif "toi" in norm or "once" in norm:
@@ -1401,10 +1402,10 @@ def tra_khach_san(
 
     scored: List[Dict[str, Any]] = []
     for h in (rows or []):
-        dist_m = int(h.get("distance_to_gate_m", 1500))
-        max_guests = int(h.get("max_guests", 4))
+        dist_m = int(h.get("distance_to_gate_m") or 1500)
+        max_guests = int(h.get("max_guests") or 4)
         has_family = bool(h.get("has_family_room", False))
-        price_ref = int(h.get("price_ref_vnd", 0))
+        price_ref = int(h.get("price_ref_vnd") or 0)
 
         fit = 82
         if dist_m <= 800:
@@ -1435,7 +1436,7 @@ def tra_khach_san(
         )
         scored.append(item)
 
-    scored.sort(key=lambda x: (-x["fit_score"], int(x.get("distance_to_gate_m", 9999))))
+    scored.sort(key=lambda x: (-x["fit_score"], int(x.get("distance_to_gate_m") or 9999)))
     return {
         "so_luong": len(scored),
         "hotels": scored,

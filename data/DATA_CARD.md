@@ -77,4 +77,32 @@
 
 ---
 
-**Kiểm chứng dữ liệu:** Toàn bộ 5 file JSON trong `data/` đã được **Vũ Đức Anh** đối chiếu bản đồ OpenStreetMap Nominatim (28/11/2026) và chạy script kiểm tự động (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín bám ranh giới đất liền thật, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng và tách rời không trùng marker; kịch bản thời tiết `seed=42`; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` đồng thời kiểm cứng đủ các bẫy đa tổ hợp.
+## Dataset 6 · `data/hotels.json` (3 khách sạn tham khảo gần cổng — ngoài phạm vi `eval/`)
+
+| | |
+|---|---|
+| Dùng để làm gì | Nguồn cho công cụ `tra_khach_san`, endpoint `/api/hotels` và thẻ chọn điểm xuất phát trên bản đồ `ParkMap` (hoàn toàn ngoài phạm vi đánh giá `eval/`). |
+| Từ đâu | Thông tin công khai từ `vinwonders.com` (`khach-san-bac-dao-phu-quoc`, `gia-khach-san-phu-quoc`, link `booking.vinpearl.com`) và toạ độ WGS84 tham chiếu OpenStreetMap khu Bãi Dài / Grand World. |
+| Xử lý những bước gì | Chuẩn hoá 3 khách sạn (`HT-01` Vinpearl Resort & Spa, `HT-02` Vinpearl Wonderworld, `HT-03` VinHolidays Fiesta), gắn link đặt phòng chính thức truyền Deep Link tham số ngày/khách, giữ nguyên `price_note` trung thực khi chưa có giá từng đêm và gán `rooms_left` mô phỏng (`seed=42`). |
+| Số dòng / số đoạn | **3 khách sạn** (`HT-01`..`HT-03`). |
+| Phiên bản / ngày lấy | 28/11/2026 (`rooms_left` `seed=42`) |
+| Nhãn | Hỗn hợp: tên, địa chỉ, mô tả phòng gia đình, URL đặt phòng & toạ độ OSM là **thông tin công khai thật** · số phòng trống `rooms_left` là **`synthetic` (`seed=42`, bắt buộc gắn nhãn "dữ liệu mô phỏng")** và `distance_to_gate_m` là ước lượng tham khảo |
+| Giới hạn | Giá phòng cụ thể biến động theo ngày nên hệ thống không cố định giá trong file mà dẫn link sang trang đặt phòng chính thức để người dùng tự kiểm tra và đặt. |
+
+---
+
+## Dataset 7 · `data/media.json` (14 liên kết ảnh chính thức theo `item_id` — ngoài phạm vi `eval/`)
+
+| | |
+|---|---|
+| Dùng để làm gì | Nguồn cho endpoint `/api/attractions/{id}` và `ItemDetailModal` trên Web UI (hiển thị ảnh minh hoạ kèm liên kết nguồn chính thức). |
+| Từ đâu | Các liên kết ảnh chính thức trên `static.vinwonders.com` (đều đã kiểm tra phản hồi `HTTP 200` ngày `28/11/2026`). |
+| Xử lý những bước gì | Ánh xạ theo `item_id` (`14` điểm/show tiêu biểu của 3 tổ hợp), ghi rõ `source_url`, `caption`, `verified_date`, `license_note`; để trống `youtube_url` khi chưa xác minh video ID chính thức và áp dụng cơ chế `onError` fallback trên UI (tuyệt đối không tải `.mp4`/ảnh vào repo). |
+| Số dòng / số đoạn | **14 mục media** gắn với `item_id` trong `attractions.json` / `shows.json`. |
+| Phiên bản / ngày lấy | 28/11/2026 |
+| Nhãn | **Thật** (liên kết công khai chính thức `static.vinwonders.com` & `vinwonders.com`) |
+| Giới hạn | Mới phủ `14` điểm/show tiêu biểu; nếu liên kết hotlink bị chặn hoặc điểm chưa có media thì modal tự fallback sang `"Chưa có media / Xem trang chính thức ↗"`. |
+
+---
+
+**Kiểm chứng dữ liệu:** Toàn bộ 7 file JSON trong `data/` đã được **Vũ Đức Anh** và **Phạm Công Dũng** đối chiếu bản đồ OpenStreetMap Nominatim (28/11/2026) và kiểm chứng tự động (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín bám ranh giới đất liền thật, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng; 3 khách sạn có tọa độ OSM và nhãn `rooms_left` `synthetic seed=42`; 14 link ảnh `static.vinwonders.com` kiểm HTTP 200; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` và CP3 `B15–B24`.

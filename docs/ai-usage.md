@@ -13,6 +13,6 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Viết câu thử (benchmark) | Claude (nháp B01–B12), coding agent (B15–B24) | Soạn nháp câu thử theo lưới phủ | Mỗi câu thử có `source`; câu `data_that` trỏ mã review thật; Dũng/Khải duyệt | Dũng, Quang, Khải |
 | Sinh data `synthetic` (nếu có) | Coding agent | Thời tiết, thời lượng, ma trận đi bộ, `rooms_left` khách sạn | Seed 42 · Đức Anh kiểm 44/44 điểm + 10/10 show có tọa độ trong polygon (`data/DATA_CARD.md`) | Đức Anh, Dũng |
 | Chấm cột `pass` bằng LLM (nếu có) | **Không dùng LLM chấm.** Claude viết `eval/cham.py` (kiểm bằng code 2 metric) và đề xuất pass/lý do | Gợi ý chấm, người quyết | Quang đọc đủ 24/24 output và quyết định cột `pass` (21/24); chấm thử chéo CP2 với Khải khớp 4/5 | Quang |
-| Slide, văn bản | Claude | Soạn `metric_spec.yaml`, `eval/README.md`, cập nhật `spec.md` §1/§4/§7/§10, wireframe giao diện | Quang đọc lại, đối chiếu số liệu với `run-1.csv`, `summary.md` | Quang |
+| Slide, văn bản | Claude & Coding agent | Soạn `metric_spec.yaml`, `eval/README.md`, cập nhật `spec.md` §1/§4/§7–§10, `eval/report.md`, `cost/cost-estimate.md`, wireframe & khung `slides/slides.html` + `slides/build_slides.py` | Quang & Dũng đọc lại, đối chiếu từng con số với `run-1.csv`, `summary.md`, `personas.yaml` và `data/DATA_CARD.md`; không tự bịa số `run-2` / `simulate-1` | Quang, Dũng |
 
 **Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).

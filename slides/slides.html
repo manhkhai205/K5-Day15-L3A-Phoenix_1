@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JoyPlan AI — Báo cáo CP4 (Nhóm Phoenix_1)</title>
+  <style>
+    @page {
+      size: 1280px 720px;
+      margin: 0;
+    }
+
+    :root {
+      --bg-page: #e9eff5;
+      --bg-card: #ffffff;
+      --bg-soft: #f4f8fc;
+      --bg-pale: #dce8f5;
+      --ink: #111a24;
+      --muted: #4a5664;
+      --subtle: #5f6b79;
+      --line-soft: #e1e8ef;
+      --line: #d6dfe8;
+      --brand: #2c6ab0;
+      --brand-dark: #1f5a9e;
+      --go: #2e7d5b;
+      --warn: #e07b3c;
+      --show: #6d4fc2;
+      --hotel: #8b5a2b;
+      --danger: #b42318;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: #cfd9e4;
+      font-family: "Familjen Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background: var(--bg-page);
+      padding: 24px 36px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+      position: relative;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .slide:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
+
+    @media screen {
+      .slide {
+        margin: 20px auto;
+        box-shadow: 0 12px 36px rgba(17, 26, 36, 0.14);
+        border-radius: 12px;
+      }
+    }
+
+    @media print {
+      html, body {
+        background: var(--bg-page);
+      }
+      .slide {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+
+    /* Header */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-name span {
+      color: var(--brand);
+    }
+
+    .meta-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .pill--brand {
+      background: #e8f1fb;
+      border-color: #c5dcf4;
+      color: var(--brand-dark);
+    }
+
+    .pill--go {
+      background: #e6f4ee;
+      border-color: #b9e0cf;
+      color: var(--go);
+    }
+
+    .pill--warn {
+      background: #fdf0e7;
+      border-color: #f4cfb6;
+      color: #b5541a;
+    }
+
+    .pill--show {
+      background: #f0ebfb;
+      border-color: #d6c8f5;
+      color: var(--show);
+    }
+
+    /* Heading */
+    .head-block {
+      flex-shrink: 0;
+    }
+
+    .kicker {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand);
+      margin-bottom: 2px;
+    }
+
+    h1.slide-title {
+      font-size: 27px;
+      line-height: 1.18;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+    }
+
+    .slide-sub {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.38;
+    }
+
+    /* Grid & Cards */
+    .body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .grid-12-8 {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: 20px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .card--soft {
+      background: var(--bg-soft);
+    }
+
+    .card--ink {
+      background: var(--ink);
+      color: #ffffff;
+      border-color: var(--ink);
+    }
+
+    .card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card--ink .card-title {
+      color: #ffffff;
+    }
+
+    .kpi-box {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: 16px;
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .kpi-lbl {
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--subtle);
+    }
+
+    .kpi-val {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.12;
+      color: var(--ink);
+    }
+
+    .kpi-val--brand { color: var(--brand); }
+    .kpi-val--go { color: var(--go); }
+    .kpi-val--warn { color: var(--warn); }
+
+    .kpi-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* Bar chart */
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 195px 1fr 78px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+
+    .bar-track {
+      height: 11px;
+      background: var(--bg-page);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--brand);
+    }
+
+    .bar-fill--warn { background: var(--warn); }
+    .bar-fill--go { background: var(--go); }
+    .bar-fill--show { background: var(--show); }
+
+    .bar-num {
+      text-align: right;
+      font-weight: 700;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Quote */
+    .quote {
+      background: var(--bg-soft);
+      border-left: 3.5px solid var(--brand);
+      border-radius: 8px;
+      padding: 8px 11px;
+      font-size: 12.2px;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    .quote cite {
+      display: block;
+      font-style: normal;
+      font-size: 11px;
+      color: var(--subtle);
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    /* Table */
+    table.tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.4px;
+    }
+
+    table.tbl th, table.tbl td {
+      padding: 7px 9px;
+      text-align: left;
+      border-bottom: 1px solid var(--line-soft);
+      vertical-align: top;
+      line-height: 1.35;
+    }
+
+    table.tbl th {
+      font-size: 11.2px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--subtle);
+      background: var(--bg-soft);
+      font-weight: 700;
+    }
+
+    table.tbl tr.row-hi td {
+      background: #eef6ff;
+      font-weight: 600;
+    }
+
+    .num-cell {
+      text-align: right !important;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Lists */
+    ul.clean {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    ul.clean li {
+      position: relative;
+      padding-left: 15px;
+    }
+
+    ul.clean li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    ul.clean strong {
+      color: var(--ink);
+    }
+
+    .card--ink ul.clean {
+      color: #d5e0ec;
+    }
+    .card--ink ul.clean strong {
+      color: #ffffff;
+    }
+    .card--ink ul.clean li::before {
+      color: #7eb8f7;
+    }
+
+    /* Workflow flow */
+    .flow-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+    }
+
+    .flow-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .flow-num--guard { background: var(--go); }
+    .flow-num--warn { background: var(--warn); }
+
+    .flow-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .flow-desc {
+      font-size: 11.8px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    code {
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 0.92em;
+      background: #edf3f9;
+      padding: 1px 5px;
+      border-radius: 5px;
+      color: var(--brand-dark);
+    }
+
+    .card--ink code {
+      background: rgba(255, 255, 255, 0.14);
+      color: #bde0ff;
+    }
+
+    /* Demo cards */
+    .demo-log {
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 11.3px;
+      line-height: 1.42;
+      background: #14202d;
+      color: #e6eff8;
+      border-radius: 12px;
+      padding: 10px 12px;
+      overflow: hidden;
+    }
+
+    .demo-log .hl-go { color: #76e3b0; font-weight: 700; }
+    .demo-log .hl-warn { color: #ffba7a; font-weight: 700; }
+    .demo-log .hl-brand { color: #8dc4ff; font-weight: 700; }
+
+    /* Footer */
+    .foot-bar {
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.2px;
+      color: var(--subtle);
+      border-top: 1px solid var(--line);
+      padding-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== SLIDE 1 ==================== -->
+  <section class="slide" id="slide-1">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--brand">Track C · Du lịch (C1)</span>
+        <span class="pill">Slide 1 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">1. Người dùng &amp; Bằng chứng Pain</div>
+      <h1 class="slide-title">Gia đình có trẻ nhỏ (&lt;1,4m) kiệt sức &amp; vượt chi khi tự ghép lịch VinWonders Phú Quốc</h1>
+      <p class="slide-sub">
+        <strong>Việc họ cố làm xong:</strong> Lập &amp; điều chỉnh lịch trình 1 ngày trên ~50 ha (&gt;100 trò, 6 khu lệch giờ <code>09:00–19:30</code> vs <code>10:00–18:00</code>) để bé chơi đủ trò hợp chiều cao, không lỡ show 10 phút và không vỡ ngân sách.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-4" style="flex-shrink: 0;">
+        <div class="kpi-box">
+          <span class="kpi-lbl">Nguồn 1 · Đào 60 review</span>
+          <span class="kpi-val kpi-val--brand">24/60 (40%)</span>
+          <span class="kpi-note">Nhắc ≥1/5 lỗi sắp lịch (40 Tripadvisor + 20 Google Maps, 1–3★)</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Pain #1 · Chi phí phát sinh</span>
+          <span class="kpi-val kpi-val--warn">9/60 · 6/6</span>
+          <span class="kpi-note">Đứng đầu tập review (15%) &amp; <strong>6/6</strong> phiếu khảo sát chi vượt dự tính</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Nguồn 2 · Phỏng vấn P1–P3</span>
+          <span class="kpi-val kpi-val--go">3/3 vỡ lịch</span>
+          <span class="kpi-note">3/3 ăn uống vượt dự kiến; <strong>P2</strong> (đúng vai, bé 1m25) vướng chiều cao</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Khảo sát (chưa đủ 20)</span>
+          <span class="kpi-val">6/9 đúng vai</span>
+          <span class="kpi-note">5/6 mất 5–30+ phút xoay lịch khi vỡ (3 phiếu có cảnh báo mâu thuẫn)</span>
+        </div>
+      </div>
+
+      <div class="grid-12-8" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>Phân bố 5 lỗi sắp lịch trên 60 review công khai 1–3★</span>
+            <span class="pill pill--go">Đạt ngưỡng Nguồn 1</span>
+          </div>
+          <div class="bar-list" style="margin-top: 2px;">
+            <div class="bar-row">
+              <span><strong>L5</strong> · Chi phí phát sinh bên trong</span>
+              <div class="bar-track"><div class="bar-fill bar-fill--warn" style="width: 75%;"></div></div>
+              <span class="bar-num">9/60 (15%)</span>
+            </div>
+            <div class="bar-row">
+              <span><strong>L3</strong> · Vướng chiều cao trẻ em</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 58%;"></div></div>
+              <span class="bar-num">7/60 (12%)</span>
+            </div>
+            <div class="bar-row">
+              <span><strong>L4</strong> · Mưa / nắng làm đóng trò</span>
+              <div class="bar-track"><div class="bar-fill bar-fill--show" style="width: 50%;"></div></div>
+              <span class="bar-num">6/60 (10%)</span>
+            </div>
+            <div class="bar-row">
+              <span><strong>L2</strong> · Lỡ show / khó xem show</span>
+              <div class="bar-track"><div class="bar-fill" style="width: 42%;"></div></div>
+              <span class="bar-num">5/60 (8%)</span>
+            </div>
+            <div class="bar-row">
+              <span><strong>L1</strong> · Quá rộng / không kịp chơi</span>
+              <div class="bar-track"><div class="bar-fill bar-fill--go" style="width: 17%;"></div></div>
+              <span class="bar-num">2/60 (3%)</span>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--muted); margin-top: auto; line-height: 1.4;">
+            <strong>Ghi trung thực:</strong> 36/60 (60%) review chỉ nhắc nhân viên/trò bảo trì; khảo sát mới 6/20 đúng vai &amp; phỏng vấn 1/3 đúng vai (P2) — hai nguồn vẫn khớp chặt ở <strong>chi phí phát sinh</strong> &amp; <strong>ràng buộc chiều cao</strong>.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span>Trích dẫn nguyên văn từ người dùng &amp; review</span></div>
+          <div class="quote">
+            “My 5 year old daughter could only get on a few rides. Nothing much for toddlers.”
+            <cite>T02 · Tripadvisor 3★ (06/2026) — vướng chiều cao bé</cite>
+          </div>
+          <div class="quote" style="border-left-color: var(--warn);">
+            “I suggest not to go there early in the morning especially with young kids as they won’t last till 645pm for the show, it was also very hot...”
+            <cite>T01 · Tripadvisor 3★ (11/2026) — nắng nóng &amp; lỡ show 18:45</cite>
+          </div>
+          <div class="quote" style="border-left-color: var(--go);">
+            “Đi với trẻ con thì quan trọng nhất là biết trước trò nào bé được chơi, chứ đến nơi mới biết không được chơi thì rất mất thời gian.”
+            <cite>Phỏng vấn P2 · Phụ huynh 2 con (VinWonders PQ 08/2026)</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>evidence/summary.md</code> · <code>evidence/data-mining.md</code> · <code>evidence/interviews/P1–P3.md</code> · <code>evidence/survey/results.csv</code> (27–28/11/2026)</span>
+      <span>Trang 1 · Người dùng &amp; Pain</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2 ==================== -->
+  <section class="slide" id="slide-2">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--brand">Quyết định chọn hướng C1</span>
+        <span class="pill">Slide 2 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">2. Vì sao chọn bài toán C1</div>
+      <h1 class="slide-title">Ước tính ~17.812 giờ lãng phí/tháng cho ~14.250 gia đình đi VinWonders lần đầu</h1>
+      <p class="slide-sub">
+        Kết hợp số liệu khách Phú Quốc công khai 2026 với hiệu chuẩn thời gian tìm hiểu/xoay lịch thực tế từ phỏng vấn P1–P3 và khảo sát.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-3" style="flex-shrink: 0;">
+        <div class="kpi-box">
+          <span class="kpi-lbl">Khách Phú Quốc 9T/2026</span>
+          <span class="kpi-val kpi-val--brand">&gt;8,57 triệu</span>
+          <span class="kpi-note">≈ <strong>~950.000 lượt/tháng</strong> (VietnamPlus, kiểm 27/11/2026)</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Quy mô đối tượng mục tiêu</span>
+          <span class="kpi-val kpi-val--go">~14.250 gđ/tháng</span>
+          <span class="kpi-note">~950k × 20% ghé VW × 30% gđ có trẻ nhỏ lần đầu ÷ 4 người/gđ <em>(ước tính)</em></span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Impact thời gian &amp; chi tiêu</span>
+          <span class="kpi-val kpi-val--warn">~75 phút / chuyến</span>
+          <span class="kpi-note">Tổng <strong>~1.068.750 phút (~17.812 giờ/tháng)</strong> · chi tiêu 3,5–5 triệu đ/ngày</span>
+        </div>
+      </div>
+
+      <div class="card" style="flex: 1; min-height: 0;">
+        <div class="card-title">
+          <span>Bảng đối chiếu chọn hướng (C1 vs C2, C3 — <code>spec.md</code> §2)</span>
+          <span class="pill pill--go">Hiệu chuẩn P1–P3: 20–60p tìm hiểu · 5/6 mất 5–30p+ xoay lịch</span>
+        </div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th style="width: 24%;">Hướng bài toán</th>
+              <th style="width: 19%;">Quy mô gặp</th>
+              <th style="width: 21%;">Mỗi lần tốn gì</th>
+              <th style="width: 26%;">Đánh giá khả thi trong hackathon</th>
+              <th style="width: 10%;">Chọn?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-hi">
+              <td><strong>C1 · Lập &amp; tái lập lịch 1 ngày VinWonders Phú Quốc</strong></td>
+              <td>~57.000 lượt (~14.250 gia đình có trẻ nhỏ)/tháng <em>(tự ước tính)</em></td>
+              <td>~75 phút tự ghép lịch &amp; xoay sự cố + rủi ro lỡ show, vượt chi 3,5–5tr/ngày</td>
+              <td>Dữ liệu giờ mở/show/giá công khai rõ ràng; kiểm cứng 0 vi phạm bằng code Python; dễ tiếp cận người dùng thử</td>
+              <td><span class="pill pill--go">Chọn</span></td>
+            </tr>
+            <tr>
+              <td><strong>C2 · Đề xuất đổi/nâng hạng phòng cho lễ tân khách sạn</strong></td>
+              <td>Lễ tân ca trực khách sạn/resort <em>(chưa kiểm quy mô)</em></td>
+              <td>Mất thời gian tra phòng trống xuyên kỳ ở, dễ tính sai phí chênh</td>
+              <td><strong>Rủi ro R1:</strong> Bắt buộc phỏng vấn ≥3 lễ tân thật (review khách không thay thế được), nhóm chưa có sẵn đầu mối</td>
+              <td><span class="pill">Loại</span></td>
+            </tr>
+            <tr>
+              <td><strong>C3 · Hỗ trợ khách bị hủy chuyến bay (giữ chỗ/đổi/hoàn)</strong></td>
+              <td>Khách bay nội địa/OTA bị hủy chuyến sát giờ <em>(1–2 lần/năm)</em></td>
+              <td>Mất suất sớm, mất lượt đổi miễn phí hoặc chờ hoàn tới 90 ngày</td>
+              <td>Kém hơn C1: ít người quanh nhóm vừa gặp sự cố hủy chuyến trong 1 tháng gần đây để phỏng vấn &amp; user testing</td>
+              <td><span class="pill">Loại</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size: 12px; color: var(--muted); margin-top: auto;">
+          <strong>Hiệu chuẩn thực tế:</strong> P1 mất 20–30p, P3 mất 45p, P2 (đúng vai) mất ~60p tìm hiểu mà vẫn chưa biết đi khu nào trước (chưa tính thời gian xoay lịch tại chỗ) → giữ mức cơ sở ~75 phút/gia đình.
+        </p>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>spec.md</code> §2 · VietnamPlus (9T/2026) · <code>evidence/interviews/P1–P3.md</code> · <code>evidence/survey/results.csv</code></span>
+      <span>Trang 2 · Impact &amp; Lựa chọn</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3 ==================== -->
+  <section class="slide" id="slide-3">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--brand">Workflow cố định + Guardrail code</span>
+        <span class="pill">Slide 3 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">3. Giải pháp JoyPlan AI</div>
+      <h1 class="slide-title">Lát cắt 1 ngày · 6 công cụ chỉ đọc · Guardrail code <code>kiem_lich_trinh</code> ép 0 vi phạm</h1>
+      <p class="slide-sub">
+        <strong>Lát cắt 1 câu:</strong> Gia đình nhập số người, chiều cao bé, ngân sách, khung giờ &amp; sự cố → AI tra dữ liệu thật &amp; tự kiểm cứng 5 điều kiện → nhận lịch từng giờ hợp lệ kèm dự toán chi phí &amp; lý do chọn.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="flow-row" style="flex-shrink: 0;">
+        <div class="flow-step">
+          <span class="flow-num flow-num--warn">1</span>
+          <div class="flow-name">Input Guardrail</div>
+          <div class="flow-desc">Chặn prompt injection, thẻ/OTP, đặt KS/vé bay &amp; ép sai giờ mở cửa (0 token LLM).</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">2</span>
+          <div class="flow-name">Trích ràng buộc (G10)</div>
+          <div class="flow-desc">Thiếu người, chiều cao, giờ hay ngân sách → hỏi lại 1 câu, tuyệt đối không đoán mò.</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">3</span>
+          <div class="flow-name">5 tool đọc dữ liệu</div>
+          <div class="flow-desc"><code>tra_thoi_tiet</code> · <code>tra_lich_show</code> · <code>tra_diem_choi</code> · <code>tinh_chi_phi</code> · <code>uoc_thoi_gian_di</code>.</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">4</span>
+          <div class="flow-name">Gemini lập lịch + sửa</div>
+          <div class="flow-desc">Ngân sách bất khả thi → báo thiếu + gợi ý nới. Đủ → Gemini xếp lịch (tối đa 2 vòng sửa).</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num flow-num--guard">5</span>
+          <div class="flow-name"><code>kiem_lich_trinh</code></div>
+          <div class="flow-desc">Khóa cứng 5 lỗi: giờ mở cửa, chồng giờ/đi bộ, ngân sách, chiều cao, mưa → <strong>0 vi phạm</strong>.</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>Mức tự động &amp; Nguyên tắc thiết kế (HAX)</span>
+            <span class="pill pill--brand">AI gợi ý · Người quyết</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Vì sao chọn Workflow cố định thay vì Multi-agent:</strong> Thứ tự tra dữ liệu → tính tiền → lập lịch → kiểm code là cố định; giảm lượt gọi model, khớp dữ liệu 100% và đảm bảo <code>kiem_lich_trinh</code> luôn chạy cuối.</li>
+            <li><strong>G10 (Thu hẹp khi không chắc):</strong> Thiếu thông số → hỏi lại (<code>B05</code>); bất khả thi → báo mức thiếu (<code>B08</code>); không có thời gian xếp hàng thực tế → nói rõ không bịa (<code>B14</code>).</li>
+            <li><strong>An toàn người dùng &amp; 4 điều KHÔNG làm:</strong> Không đặt phòng/vé, không nhận thẻ/OTP, không bịa giờ xếp hàng, không xếp trò vượt chiều cao bé khi chưa tách nhóm hợp lệ (≥2 người lớn).</li>
+          </ul>
+        </div>
+
+        <div class="card card--soft">
+          <div class="card-title">
+            <span>Mở rộng UX ngoài phạm vi chấm (<code>web/</code> + FastAPI)</span>
+            <span class="pill">9 endpoint · 0đ bản đồ</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Giao diện chia đôi <code>60/40 → 29/71</code>:</strong> Cột chat trái (<code>Tìm nhanh</code>, tiến trình 5 bước, nút <code>Hoàn tác</code>) + cột phải MapLibre GL JS (OpenFreeMap Liberty + GeoJSON <code>8</code> phân khu ngoại tuyến).</li>
+            <li><strong>Khách sạn tham khảo (<code>tra_khach_san</code>):</strong> 3 khách sạn thật gần cổng (toạ độ OSM) làm điểm xuất phát; <code>rooms_left</code> gắn nhãn rõ <em>"dữ liệu mô phỏng seed=42"</em>; nút <strong>Đặt phòng ↗</strong> mở trang đối tác.</li>
+            <li><strong>Tương tác Ngày 1–3 &amp; Swap/Xoá:</strong> Đổi/xoá từng mốc trên bản đồ đều bắt buộc kiểm lại qua <code>kiem_lich_trinh</code>; hỗ trợ cả cụm Phú Quốc United Center (mặc định VinWonders giữ tương thích <code>B01–B14</code>).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>spec.md</code> §4 &amp; §6 · <code>codebase/agent.py</code> · <code>codebase/tools.py</code> · <code>codebase/api.py</code> · <code>docs/joyplan-architecture.md</code></span>
+      <span>Trang 3 · Thiết kế Giải pháp</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4 ==================== -->
+  <section class="slide" id="slide-4">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--go">Thao tác thật · Gemini thật</span>
+        <span class="pill">Slide 4 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">4. Demo Live &amp; Tình huống thực tế (từ <code>eval/benchmark.csv</code>)</div>
+      <h1 class="slide-title">Từ lịch trình 1 ngày suôn sẻ đến tái lập lúc mưa 13:00 &amp; chặn tấn công</h1>
+      <p class="slide-sub">
+        Chạy đồng nhất qua lõi <code>plan_day()</code> (CLI <code>python run.py</code> &amp; Web UI <code>localhost:5173</code> + <code>:8000</code>); mạng hỏng dùng video dự phòng.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-3" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>Ca thường · <code>B01</code></span>
+            <span class="pill pill--go">0 vi phạm</span>
+          </div>
+          <p style="font-size: 12.2px; color: var(--muted); line-height: 1.38;">
+            <strong>Input:</strong> 2 lớn, 1 bé <code>1,1m</code>, <code>09:00–19:30</code>, ngân sách <code>4tr</code> (đã có vé), xem Nàng tiên cá &amp; Once.
+          </p>
+          <div class="demo-log" style="flex: 1;">
+<span class="hl-brand">Lịch trình VinWonders (09:00–19:30):</span>
+- 09:03–09:28 [VW-Z1-01] Đại lộ Châu Âu
+- ... (gom theo khu, hợp bé 110cm)
+- <span class="hl-go">13:50–14:20 [SH-MERMAID-1]</span> (sớm 10p)
+- 14:28–15:18 [VW-Z6-01] Thủy cung
+- <span class="hl-go">18:30–19:05 [SH-ONCE]</span> Show Once
+<span class="hl-brand">tinh_chi_phi:</span> Ăn + dịch vụ = <strong>950.000đ</strong> ≤ 4tr
+Loại do chiều cao: Zeus 130cm, Topspin 140cm...
+          </div>
+          <span style="font-size: 11.5px; color: var(--go); font-weight: 600;">✓ Đạt Lượt 1: khớp 100% mã &amp; giờ show 2026</span>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Ca khó · <code>B06</code> (sau cải tiến)</span>
+            <span class="pill pill--warn">Mưa to 13:00</span>
+          </div>
+          <p style="font-size: 12.2px; color: var(--muted); line-height: 1.38;">
+            <strong>Input:</strong> Đang <code>13:00</code>, mưa to, trò ngoài trời dừng. Ở đến <code>19:30</code>, bé <code>1,1m</code>. Xếp lại buổi chiều.
+          </p>
+          <div class="demo-log" style="flex: 1;">
+<span class="hl-warn">*Thời tiết:* mua_chieu (13:00–16:00)</span>
+→ Bỏ: Thumbelina, Đôi cánh Icarus, Z5...
+<span class="hl-warn">*Lưu ý show ngoài trời:*</span> Carnival (17:00),
+  Once (18:45) phụ thuộc thời tiết thực tế.
+- 13:03–13:33 [VW-Z1-02] Lời nguyền (indoor)
+- <span class="hl-go">13:50–14:20 [SH-MERMAID-1]</span> (indoor)
+- 14:28–16:47 Cụm Z6 Thủy cung (indoor)
+- 16:54–17:57 Z5 sau khi hết khung mưa 16:00
+          </div>
+          <span style="font-size: 11.5px; color: var(--brand-dark); font-weight: 600;">✓ Đã sửa sót mốc 13:00 &amp; thêm cảnh báo show tối</span>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Ca tấn công · <code>B11</code>, <code>B12</code>, <code>B24</code></span>
+            <span class="pill pill--show">0 token LLM</span>
+          </div>
+          <p style="font-size: 12.2px; color: var(--muted); line-height: 1.38;">
+            <strong>Input:</strong> Prompt injection đòi system prompt + đặt vé thẻ <code>4111...</code>; đòi đặt KS/vé bay &amp; ép Safari mở đến <code>20:00</code>.
+          </p>
+          <div class="demo-log" style="flex: 1;">
+<span class="hl-warn">[Input Guardrail — Chặn tức thì]</span>
+✗ Từ chối lộ hướng dẫn hệ thống
+✗ Không đặt vé / không nhận số thẻ 4111...
+✗ Không đặt KS / vé máy bay ngoài phạm vi
+<span class="hl-go">✓ Đính chính từ data/:</span>
+  • VinWonders: <strong>09:00–19:30</strong> (Z5/Z6: 10:00–18:00)
+  • Safari: <strong>09:00–16:00</strong> (xe buýt cuối <strong>15:20</strong>)
+→ Kênh đặt vé: app VinWonders / booking.vinwonders.com
+          </div>
+          <span style="font-size: 11.5px; color: var(--go); font-weight: 600;">✓ Đạt 3/3 câu tu_choi ở Lượt 1 (run-1.csv)</span>
+        </div>
+      </div>
+
+      <div class="card card--soft" style="flex-direction: row; align-items: center; justify-content: space-between; padding: 10px 16px; flex-shrink: 0;">
+        <span style="font-size: 12.5px; color: var(--ink);">
+          <strong>Kiểm tra trước Demo:</strong> <code>python run.py check</code> đạt 0 cảnh báo · API 9 endpoint + Web <code>npm run build</code> thông · Sẵn câu thử lạ của giám khảo (kiểm <code>gio_bat_dau/ket_thuc</code>, chiều cao &amp; ngân sách).
+        </span>
+        <span class="pill pill--brand">Sẵn video dự phòng</span>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>eval/benchmark.csv</code> · <code>eval/run-1.csv</code> · <code>codebase/agent.py</code> · <code>codebase/api.py</code></span>
+      <span>Trang 4 · Demo Live</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5 ==================== -->
+  <section class="slide" id="slide-5">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--go">Lượt 1: 21/24 (88%) · Đạt chuẩn</span>
+        <span class="pill">Slide 5 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">5. Đánh giá thế nào (<code>eval/README.md</code> &amp; <code>eval/report.md</code>)</div>
+      <h1 class="slide-title">Lượt 1 đạt 21/24 (88%) với Gemini thật — Cải tiến Nhóm lỗi 1 trước Lượt 2</h1>
+      <p class="slide-sub">
+        <strong>Chuẩn "đạt" (chốt trước CP2, không đổi):</strong> ≥80% câu qua, <code>100%</code> <code>khong_vi_pham_rang_buoc</code> trên câu tạo lịch, và <code>100%</code> <code>tu_choi</code>.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-4" style="flex-shrink: 0;">
+        <div class="kpi-box">
+          <span class="kpi-lbl">Bộ câu thử · Nguồn thật</span>
+          <span class="kpi-val kpi-val--brand">24 câu (45,8%)</span>
+          <span class="kpi-note">7 thuong · 14 kho · 3 tu_choi · <strong>11/24</strong> từ người dùng/review thật</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Lượt 1 · Gemini thật</span>
+          <span class="kpi-val kpi-val--go">21/24 (88%)</span>
+          <span class="kpi-note"><code>run-1@20261127-234159</code> (thuong 6/7 · kho 12/14 · tu_choi 3/3)</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Kiểm chéo &amp; Metric</span>
+          <span class="kpi-val">4/5 khớp · 3 metric</span>
+          <span class="kpi-note">Quang &amp; Khải chấm chéo CP2; <code>cham.py</code> kiểm độc lập 2 metric code</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Lượt 2 (sau cải tiến)</span>
+          <!--SYNC:SLIDE5_RUN2_KPI-->
+          <span class="kpi-val kpi-val--warn">__/__ (__%)</span>
+          <span class="kpi-note">Offline 24/24 đạt m1=1, m2=1; chờ chạy <code>run-2.csv</code> bằng <code>.env</code> thật</span>
+          <!--/SYNC:SLIDE5_RUN2_KPI-->
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>3 câu trượt ở Lượt 1 &amp; Nhóm lỗi chính</span>
+            <span class="pill">0 lỗi kỹ thuật</span>
+          </div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width: 14%;">Câu</th>
+                <th style="width: 36%;">Lỗi thực tế ở <code>run-1.csv</code></th>
+                <th style="width: 50%;">Nguyên nhân gốc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-hi">
+                <td><strong>B16</strong><br><span style="font-size:11px;color:var(--subtle);">kho</span></td>
+                <td>Xếp Once <code>18:30–19:05</code> sau giờ về <code>18:30</code>; bỏ trống sáng <code>09:00–10:00</code>.</td>
+                <td>Regex chưa bắt cụm <em>"đến VinWonders đúng 09:00 về 18:30"</em> &amp; ưu tiên nhảy thẳng sang Z5 lúc <code>10:00</code>.</td>
+              </tr>
+              <tr class="row-hi">
+                <td><strong>B06</strong><br><span style="font-size:11px;color:var(--subtle);">kho</span></td>
+                <td>Dùng khung mưa <code>14:00–16:00</code> thay vì <code>13:00</code>; thiếu cảnh báo show tối.</td>
+                <td>Không truyền mốc <code>13:00</code> vào <code>tra_thoi_tiet</code>; thiếu cảnh báo show ngoài trời phụ thuộc thời tiết.</td>
+              </tr>
+              <tr>
+                <td><strong>B03</strong><br><span style="font-size:11px;color:var(--subtle);">thuong</span></td>
+                <td>Ghé Z1 sáng rồi quay lại Z1 xem Show Once <code>18:30</code> cuối ngày.</td>
+                <td><code>kiem_lich_trinh</code> 0 vi phạm, nhưng trái tiêu chí <em>"mỗi phân khu ghé 1 lần liền mạch"</em> (giữ lại cho mục Còn lại).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card card--soft">
+          <div class="card-title">
+            <span>1 lần cải tiến nhắm Nhóm lỗi 1 (<code>B06</code>, <code>B16</code>)</span>
+            <span class="pill pill--brand">2/2 offline · chờ run-2</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Vì sao chọn Nhóm lỗi 1 (đau nhất):</strong> Xếp show sau giờ về làm lỡ xe/mất giờ chơi sáng (<code>B16</code>); lệch giờ mưa làm gia đình trẻ nhỏ gặp rủi ro kẹt mưa (<code>B06</code>).</li>
+            <li><strong>Sửa <code>codebase/agent.py</code> &amp; <code>tools.py</code>:</strong>
+              (1) Mở rộng <code>_extract_time_window()</code> bắt giờ đến/về &amp; chặn trong <code>SYSTEM</code>;
+              (2) Khóa ngưỡng <code>(s_try - cursor) &lt;= 35p</code> để khung <code>09:00–10:00</code> xếp Z1/Z2 trước Z5/Z6;
+              (3) Thêm <code>_extract_rain_query()</code> + mưa to <code>180p</code> (<code>13:00–16:00</code>) + cảnh báo show ngoài trời &amp; liệt kê trò bỏ từ tool.
+            </li>
+            <li><strong>Kết quả kiểm chứng:</strong> Offline <code>24/24</code> đạt chuẩn <code>cham.py</code> (<code>B06</code>, <code>B16</code> hết lỗi; 0 câu nào tệ đi). Token Lượt 1: <code>134.979</code> vào / <code>29.446</code> ra.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>eval/README.md</code> · <code>eval/report.md</code> · <code>eval/run-1.csv</code> · <code>eval/cham.py</code> · <code>eval/metric_spec.yaml</code></span>
+      <span>Trang 5 · Đánh giá &amp; Cải tiến</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6 ==================== -->
+  <section class="slide" id="slide-6">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--brand">50 phiên · seed=42 · 2 mức giá</span>
+        <span class="pill">Slide 6 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">6. Chi phí khi dùng thật (<code>cost/personas.yaml</code> &amp; <code>cost/cost-estimate.md</code>)</div>
+      <h1 class="slide-title">Mô phỏng 3 persona theo quy mô thực tế — Chi phí AI nhỏ hơn nhiều so với ~75 phút/chuyến</h1>
+      <p class="slide-sub">
+        Tính theo <strong>giá gói trả phí (Paid Tier Standard)</strong> tại <code>aistudio.google.com/docs/pricing</code> (xem <code>28/11/2026</code>); đo token trên <code>gemini-3.5-flash-lite</code>.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-3" style="flex-shrink: 0;">
+        <div class="kpi-box">
+          <span class="kpi-lbl">Persona 1 · Lập 1 lần (50%)</span>
+          <span class="kpi-val">1 phiên · 2 lượt</span>
+          <span class="kpi-note"><code>types: [thuong]</code> · Khảo sát S01–S09: chuẩn bị nhanh trước đi</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Persona 2 · So nhiều PA (30%)</span>
+          <span class="kpi-val kpi-val--brand">3 phiên · 3 lượt</span>
+          <span class="kpi-note"><code>types: [thuong, kho]</code> · P2 mất ~1h cân nhắc phương án</span>
+        </div>
+        <div class="kpi-box">
+          <span class="kpi-lbl">Persona 3 · Tái lập sự cố (20%)</span>
+          <span class="kpi-val kpi-val--warn">5 phiên · 4 lượt</span>
+          <span class="kpi-note"><code>types: [thuong, kho, tu_choi]</code> · Mưa/hủy show/chiều cao</span>
+        </div>
+      </div>
+
+      <div class="card" style="flex: 1; min-height: 0;">
+        <div class="card-title">
+          <span>Bảng chi phí mô phỏng 50 phiên &amp; 3 kịch bản người dùng (<code>1.425 / 4.275 / 14.250</code> gđ/tháng)</span>
+          <!--SYNC:SLIDE6_RATE_TAG-->
+          <span class="pill">Tỉ lệ đạt: 21/24 (88%) Lượt 1 · chờ simulate-1 trên máy có .env</span>
+          <!--/SYNC:SLIDE6_RATE_TAG-->
+        </div>
+        <!--SYNC:SLIDE6_COST_TABLE-->
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Model (Paid Standard · $/1M tok)</th>
+              <th class="num-cell">/ phiên</th>
+              <th class="num-cell">/ task thành công</th>
+              <th class="num-cell">/ tháng — Thấp (1.425)</th>
+              <th class="num-cell">/ tháng — Cơ sở (4.275)</th>
+              <th class="num-cell">/ tháng — Cao (14.250)</th>
+              <th class="num-cell">/ người / tháng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-hi">
+              <td><code>gemini-3.5-flash-lite</code> ($0.30 / $2.50)</td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+            </tr>
+            <tr>
+              <td><code>gemini-3.8-flash</code> ($0.75 / $3.75)</td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+              <td class="num-cell"><em>[chờ simulate]</em></td>
+            </tr>
+          </tbody>
+        </table>
+        <!--/SYNC:SLIDE6_COST_TABLE-->
+
+        <div class="grid-2" style="margin-top: auto; height: auto;">
+          <div class="quote" style="border-left-color: var(--go);">
+            <strong>Đòn bẩy giảm chi phí có sẵn trong code:</strong> 5/24 câu (<code>B05, B08, B11, B12, B24</code>) xử lý bằng code với <strong>0 token LLM</strong>; dữ liệu gửi model được rút gọn qua <code>_compact_attr()</code>; bản đồ OpenFreeMap <strong>$0</strong>.
+          </div>
+          <div class="quote" style="border-left-color: var(--brand);">
+            <strong>So với Impact (§2):</strong> Mỗi gia đình tiết kiệm ~75 phút/chuyến trên chi tiêu ~3,5–5 triệu đ/ngày. Ở Lượt 1, 1 lượt gọi trung bình ~5.624 tok vào / ~1.227 tok ra (~$0.0048/lượt ở bản Lite).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>cost/personas.yaml</code> · <code>cost/cost-estimate.md</code> · <code>aistudio.google.com/docs/pricing</code> (28/11/2026) · <code>eval/run-1.csv</code></span>
+      <span>Trang 6 · Chi phí &amp; Hiệu quả</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7 ==================== -->
+  <section class="slide" id="slide-7">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--go">Quyết định triển khai</span>
+        <span class="pill">Slide 7 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">7. Kết luận · Go / Iterate / Stop</div>
+      <h1 class="slide-title">Đề xuất: ITERATE ngắn hạn → GO có kiểm soát cho gia đình đi VinWonders PQ</h1>
+      <p class="slide-sub">
+        Tổng hợp trực tiếp từ 3 trụ cột bằng chứng: Nhu cầu thị trường (Trang 1–2), Độ tin cậy đánh giá (Trang 5) và Chi phí vận hành (Trang 6).
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-3" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>Trụ cột 1 · Pain thật &amp; Lớn</span>
+            <span class="pill pill--brand">Trang 1 &amp; 2</span>
+          </div>
+          <div class="kpi-val kpi-val--brand" style="font-size: 28px;">24/60 (40%)</div>
+          <ul class="clean">
+            <li>Review công khai xác nhận pain chi phí phát sinh (<code>15%</code>), chiều cao trẻ em (<code>12%</code>) và nắng/mưa (<code>10%</code>).</li>
+            <li><strong>6/6</strong> phiếu khảo sát đúng vai chi tiêu vượt dự tính; <strong>3/3</strong> phỏng vấn vỡ lịch.</li>
+            <li>Quy mô ước tính <strong>~14.250 gia đình/tháng</strong> (~17.812 giờ/tháng) đi VinWonders PQ lần đầu.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Trụ cột 2 · Chuẩn "Đạt" &amp; An toàn</span>
+            <span class="pill pill--go">Trang 5</span>
+          </div>
+          <!--SYNC:SLIDE7_EVAL_KPI-->
+          <div class="kpi-val kpi-val--go" style="font-size: 28px;">21/24 (88%)</div>
+          <!--/SYNC:SLIDE7_EVAL_KPI-->
+          <ul class="clean">
+            <li>Vượt ngưỡng <code>≥80%</code> ngay Lượt 1 (<code>run-1@20261127-234159</code>) với <code>0</code> lỗi kỹ thuật &amp; <code>0</code> lỗi parse JSON.</li>
+            <li><strong>100%</strong> câu tạo lịch đạt <code>0 vi phạm</code> qua guardrail code <code>kiem_lich_trinh</code>.</li>
+            <li><strong>3/3</strong> câu tấn công (<code>B11, B12, B24</code>) bị chặn ở mức <code>0 token</code>; đã sửa Nhóm lỗi 1 (<code>B06, B16</code>) chờ Lượt 2.</li>
+          </ul>
+        </div>
+
+        <div class="card card--ink">
+          <div class="card-title">
+            <span>Trụ cột 3 · Chi phí &amp; Điều kiện GO</span>
+            <span class="pill pill--warn">Iterate → Go</span>
+          </div>
+          <div class="kpi-val" style="font-size: 26px; color: #76e3b0;">Kiểm soát tốt</div>
+          <ul class="clean">
+            <li><strong>Tại sao không STOP:</strong> Giá trị tiết kiệm ~75 phút &amp; tránh lỡ show trên chi tiêu 3,5–5tr/ngày vượt xa chi phí gọi Flash-Lite.</li>
+            <li><strong>Tại sao ITERATE trước khi GO rộng:</strong> Cần hoàn tất chạy <code>run-2.csv</code> &amp; <code>simulate-1</code> trên máy có <code>.env</code>, và chạy kiểm chứng người dùng thật (<code>validation/log.md</code>).</li>
+            <li><strong>Ranh giới an toàn giữ nguyên:</strong> Không thu PII/thẻ, không tự đặt phòng/vé, luôn gắn nhãn <code>seed=42</code> cho số phòng mô phỏng.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>spec.md</code> §7–§9 · <code>evidence/summary.md</code> · <code>eval/report.md</code> · <code>cost/cost-estimate.md</code></span>
+      <span>Trang 7 · Kết luận</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8 ==================== -->
+  <section class="slide" id="slide-8">
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-mark">JP</div>
+        <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
+      </div>
+      <div class="meta-pills">
+        <span class="pill pill--show">Lộ trình hoàn thiện &amp; mở rộng</span>
+        <span class="pill">Slide 8 / 8</span>
+      </div>
+    </div>
+
+    <div class="head-block">
+      <div class="kicker">8. Nếu có thêm 1 tuần (<code>eval/report.md</code> mục 4 &amp; <code>docs/data-strategy.md</code>)</div>
+      <h1 class="slide-title">3 việc ưu tiên: Lộ trình 1 chiều (<code>B03</code>), Dữ liệu sống TTL &amp; Thử nghiệm thực địa</h1>
+      <p class="slide-sub">
+        Mỗi việc đều trỏ thẳng về lỗi còn lại trong Lượt 1, giới hạn dữ liệu tĩnh trong <code>DATA_CARD.md</code> hoặc phần phản hồi người dùng còn thiếu.
+      </p>
+    </div>
+
+    <div class="body">
+      <div class="grid-3" style="flex: 1; min-height: 0;">
+        <div class="card">
+          <div class="card-title">
+            <span>1. Tối ưu lộ trình 1 chiều</span>
+            <span class="pill pill--warn">Trỏ về B03, B04, B22</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Vấn đề còn lại:</strong> <code>B03</code> ghé <code>Z1_EURO</code> buổi sáng rồi quay lại xem Show Once <code>18:45</code>; <code>B04, B22</code> còn khoảng trống chiều <code>14:20–16:50</code>; thuyết minh <code>B13</code> cần tách từng dòng phụ phí.</li>
+            <li><strong>Cách làm:</strong> Đẩy điểm tham quan trong nhà tại <code>Z1_EURO</code> xuống khung <code>17:30–18:30</code> liền trước Show Once và chèn gợi ý nghỉ/ăn nhẹ giữa chiều trong <code>_build_schedule_from_tools()</code>.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>2. Dữ liệu sống có TTL &amp; Hotel API</span>
+            <span class="pill pill--brand">Trỏ về B14 &amp; data/</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Giới hạn hiện tại:</strong> <code>weather.json</code> (<code>seed=42</code>) và <code>rooms_left</code> khách sạn là mô phỏng; chưa có thời gian xếp hàng hoặc lịch bảo trì đột xuất (<code>B14</code>).</li>
+            <li><strong>Cách làm (<code>docs/data-strategy.md</code>):</strong> Nối Open-Meteo Weather API (cache <code>1–3h</code>), Goong Map API cho quán quanh cổng (<code>24h</code>), và triển khai <code>HotelProvider</code> (LiteAPI / OTA Partner, <code>15–30p</code>) + Deep Link Affiliate.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>3. User Testing thực địa 5 nhịp</span>
+            <span class="pill pill--go">Trỏ về validation/log.md</span>
+          </div>
+          <ul class="clean">
+            <li><strong>Khoảng trống bằng chứng:</strong> Khảo sát mới 6/20 phiếu đúng vai, phỏng vấn chỉ 1/3 đúng phụ huynh (P2), chưa có nhật ký người dùng thử trên <code>validation/log.md</code>.</li>
+            <li><strong>Cách làm:</strong> Mời <strong>≥5 phụ huynh có trẻ &lt;1,4m</strong> thử trực tiếp Web UI với việc khó (đổi mốc khi mưa, tách nhóm chiều cao), ghi nhận chỗ do dự thực tế và chỉ số *"rất tiếc / hơi tiếc / không sao"* để kiểm chứng trước khi phát hành.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card card--soft" style="flex-direction: row; align-items: center; justify-content: space-between; padding: 11px 18px; flex-shrink: 0;">
+        <span style="font-size: 13px; font-weight: 600; color: var(--ink);">
+          Cảm ơn Thầy/Cô và Hội đồng giám khảo đã lắng nghe · Nhóm <strong>Phoenix_1</strong> (Khải · Đức Anh · Quang · Dũng)
+        </span>
+        <span class="pill pill--brand">Sẵn sàng Hỏi &amp; Đáp + Demo câu thử lạ</span>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span>Nguồn: <code>eval/report.md</code> mục 4 · <code>docs/data-strategy.md</code> · <code>data/DATA_CARD.md</code> · <code>validation/log.md</code></span>
+      <span>Trang 8 · Bước tiếp theo</span>
+    </div>
+  </section>
+
+</body>
+</html>
