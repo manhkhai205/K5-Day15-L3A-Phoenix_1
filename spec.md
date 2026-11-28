@@ -112,7 +112,7 @@ flowchart TD
 
 - **Phần nào còn giả (ghi rõ, không giả làm thật):**
 
-  - Từ CP3, `codebase/ai.py` gọi **model thật** Google Gemini `gemini-3.5-flash-lite` qua `.env` (không commit key); Lượt 1 `run-1@20261127-234159` có token thật ở mọi câu gọi model. Chế độ `fake` chỉ còn dùng khi máy chưa có `.env`.
+  - Từ CP3, `codebase/ai.py` gọi **model thật** Google Gemini qua `.env` (không commit key): Lượt 1 `run-1@20261127-234159` dùng `gemini-3.5-flash-lite`, Lượt 2 `run-2@20261128-142324` và mô phỏng `simulate-1` dùng `gemini-3.1-flash-lite` (có token thật ở mọi câu gọi model). Chế độ `fake` chỉ còn dùng khi máy chưa có `.env`.
   - `tra_khach_san` (`codebase/tools.py`) và giao diện web là phần mở rộng **ngoài phạm vi chấm** `eval/`: chỉ đọc `data/hotels.json`, `rooms_left` mô phỏng (`seed=42`), không đặt phòng hay thanh toán.
   - Trong `data/`, kịch bản thời tiết (`data/weather.json`, `seed=42`), thời lượng chơi, ma trận đi bộ 6×6 và một số phụ phí ước lượng là `synthetic` (mô tả đầy đủ trong `data/DATA_CARD.md`).
 
@@ -146,14 +146,14 @@ flowchart TD
 
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — `24` câu (`thuong 7 · kho 14 · tu_choi 3`; `11/24` nguồn thật; `B01–B14` chốt ở CP2, `B15–B24` thêm ở CP3) · metric: `eval/metric_spec.yaml` (`3` metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): `"Đạt khi ≥ 80% câu qua, và khong_vi_pham_rang_buoc đạt 100% trên mọi câu có tạo lịch, và 100% câu tu_choi bị từ chối đúng"`
-- Kết quả: lượt 1 `21/24 (88%)` — **đạt chuẩn** (`khong_vi_pham_rang_buoc` 100% câu có lịch, `tu_choi` 3/3; trượt `B03`, `B06`, `B16`) · lượt 2 `__/__ (__%)` — run ID: `run-1@20261127-234159` (model `gemini-3.5-flash-lite`) / `__` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Kết quả: lượt 1 `21/24 (88%)` — **đạt chuẩn** (`khong_vi_pham_rang_buoc` 100% câu có lịch, `tu_choi` 3/3; trượt `B03`, `B06`, `B16`) · lượt 2 `23/24 (96%)` — run ID: `run-1@20261127-234159` (model `gemini-3.5-flash-lite`) / `run-2@20261128-142324` (model `gemini-3.1-flash-lite`) → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 
-- Persona + giá: `cost/personas.yaml` (`3` persona, bình quân `2,4` phiên/gia đình/tháng) · lượt mô phỏng: `cost/simulate-1.csv` (`50` phiên, `seed 42` — `[chờ chạy trên máy có .env]`)
-- Chi phí / task thành công: `[chờ simulate]` (`gemini-3.5-flash-lite` `$0.30/$2.50` trên 1M token) · `[chờ simulate]` (`gemini-3.8-flash` `$0.75/$3.75` trên 1M token, giá tới 31/12/2026)
-- Chi phí / tháng ở quy mô thật: thấp `1.425` gđ `[chờ simulate]` · cơ sở `4.275` gđ `[chờ simulate]` · cao `14.250` gđ `[chờ simulate]` → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao: `[chờ số từ simulate-1]` (trên quy mô `~14.250` gia đình/tháng tiết kiệm `~75` phút/chuyến trên tổng chi `~3,5–5 triệu đ/ngày`; kiến trúc dùng workflow cố định + 5 nhánh chặn `0` token giúp giữ chi phí AI/gia đình ở mức thấp).
+- Persona + giá: `cost/personas.yaml` (`3` persona, bình quân `2,4` phiên/gia đình/tháng) · lượt mô phỏng: `cost/simulate-1.csv` (`50` phiên, `seed 42`, run ID `simulate-1@20261128-143602`)
+- Chi phí / task thành công: $0.0114 (`gemini-3.1-flash-lite`) · $0.0166 (`gemini-3.5-flash-lite`) · $0.0310 (`gemini-3.8-flash`)
+- Chi phí / tháng ở quy mô thật (`gemini-3.1-flash-lite`): thấp `1.425` gđ $42.21 · cơ sở `4.275` gđ $126.63 ($0.0296/người/tháng) · cao `14.250` gđ $422.09 → chi tiết `cost/cost-estimate.md`
+- So với impact / người / tháng (§2): đáng làm không, vì sao: **Rất đáng làm** — chỉ tốn $0.0296/người/tháng để tiết kiệm ~75 phút ghép lịch/chuyến và hạn chế vỡ ngân sách 3,5–5 triệu đ/ngày.
 
 ## §9. Rủi ro & an toàn
 
@@ -175,7 +175,7 @@ flowchart TD
 - Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"):
   - **Chặng CP1–CP2 (Cặp X + Cặp Y):** **Nguyễn Viết Mạnh Khải (`2A202603664`, Đội trưởng · Cặp X)** điều phối, `canvas.md`, `spec.md` §3–§7, `codebase/agent.py`, `codebase/ai.py`; **Vũ Đức Anh (`2A202603573` · Cặp X)** dữ liệu `data/` + `data/DATA_CARD.md` + 6 `@tool` `codebase/tools.py`; **Nguyễn Đình Quang (`2A202603620` · Cặp Y)** đào 60 review (`evidence/data-mining.md`), `eval/metric_spec.yaml`, `eval/README.md` mục 1–4, chấm chéo CP2 cùng Khải (`4/5`); **Phạm Công Dũng (`2A202603428` · Cặp Y)** khảo sát (`evidence/survey/`), phỏng vấn (`evidence/interviews/`), `eval/benchmark.csv` (`B01–B14`).
   - **Chặng CP3–CP4:** **Khải** thiết kế kiến trúc JoyPlan AI đa tổ hợp, viết `codebase/api.py` (9 endpoint), mở rộng `agent.py`/`tools.py` và điều phối cải tiến CP4; **Đức Anh** kiểm toạ độ WGS84/GeoJSON 8 phân khu & xây toàn bộ Web UI `web/` (React + MapLibre + offline fallback); **Quang** mở rộng `eval/benchmark.csv` (`B15–B24`), viết `eval/cham.py`, chấm Lượt 1 `eval/run-1.csv` (`21/24 = 88%`), hoàn thiện `eval/report.md` & `eval/README.md`; **Dũng** hoàn tất phỏng vấn `P1–P3` + `evidence/summary.md`, tạo `data/hotels.json` + `data/media.json`, điền `cost/personas.yaml`, `cost/cost-estimate.md` & dàn slide CP4 (`slides/`, `demo-slides.pdf`).
-- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`): Nhóm dùng coding agent & Claude/LLM để gợi ý khung code `codebase/` + giao diện React `web/`, đề xuất nhãn 60 review, soạn nháp câu thử mở rộng `B15–B24`, rà cấu trúc tài liệu và tạo khung HTML trình chiếu; dùng model thật Gemini `gemini-3.5-flash-lite` cho lõi lập lịch của bản chạy thử. Toàn bộ lựa chọn lát cắt, quy tắc lấy mẫu/đối soát nhãn review, phỏng vấn/khảo sát người thật ngoài nhóm, chấm tay `24/24` câu Lượt 1 (cùng chấm chéo CP2 `4/5`) và kiểm chứng mã nguồn đều do 4 thành viên tự thực hiện và chịu trách nhiệm (`docs/ai-usage.md`).
+- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`): Nhóm dùng coding agent & Claude/LLM để gợi ý khung code `codebase/` + giao diện React `web/`, đề xuất nhãn 60 review, soạn nháp câu thử mở rộng `B15–B24`, rà cấu trúc tài liệu và tạo khung HTML trình chiếu; dùng model thật Google Gemini (`gemini-3.5-flash-lite` ở Lượt 1; `gemini-3.1-flash-lite` ở Lượt 2 & mô phỏng 50 phiên) cho lõi lập lịch của bản chạy thử. Toàn bộ lựa chọn lát cắt, quy tắc lấy mẫu/đối soát nhãn review, phỏng vấn/khảo sát người thật ngoài nhóm, chấm tay `24/24` câu Lượt 1 & Lượt 2 (cùng chấm chéo CP2 `4/5`) và kiểm chứng mã nguồn đều do 4 thành viên tự thực hiện và chịu trách nhiệm (`docs/ai-usage.md`).
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
 **CP2 → CP4** (vd thu hẹp lát cắt, hỏi thêm người dùng, lần cải tiến trước lượt 2)
@@ -193,6 +193,7 @@ flowchart TD
 | 28/11 09:25 | Cập nhật §1 (bằng chứng nguồn 2 từ phỏng vấn P1–P3 + khảo sát 9 phiếu, ghi rõ mới đạt một phần: 1/3 đúng vai) và §2 (hiệu chuẩn bước đầu \~75 phút bằng thời gian tìm hiểu 20–60 phút của P1–P3); điền `docs/ai-usage.md`. Không sửa chuẩn "đạt", câu thử, kết quả Lượt 1. | Đồng bộ `spec.md` với `evidence/summary.md` (Dũng, nhánh `cp3-dung`) trước khi nộp CP3 |
 | 28/11 12:05 | **Cải tiến CP4 (Nhóm lỗi 1 — `B06, B16`):** mở rộng `_extract_time_window` bắt giờ đến/về (`09:00–18:30`), giữ khoảng `09:00–10:00` ở `Z1/Z2`, bổ sung `_extract_rain_query` + khung mưa to 180 phút trong `tools.py` (`13:00–16:00`) + danh sách trò ngoài trời bỏ qua & cảnh báo show ngoài trời phụ thuộc thời tiết trong `_format_output`. Không sửa §7, `metric_spec.yaml`, `benchmark.csv`, `run-1.csv`. | Xử lý 2/3 câu trượt ở Lượt 1 (`B16`, `B06`) trong `eval/report.md` mục 2–3; giữ nguyên hành vi `B03` để ghi trung thực ở mục 4 |
 | 28/11 12:10 | Bổ sung toạ độ WGS84 từ OpenStreetMap cho 3 khách sạn trong `data/hotels.json`, cập nhật `DATA_CARD.md` (Dataset 6–7) & sửa đọc trường null-safe trong `tra_khach_san`; hoàn thiện `spec.md` §8–§10, `eval/report.md`, `cost/cost-estimate.md`, `slides/` & `demo-slides.pdf`. | Hoàn thiện hồ sơ CP4 và đảm bảo `ParkMap` hiển thị pin 3 khách sạn ngoài phạm vi đánh giá; hỗ trợ `--sync-docs` tự cập nhật số `run-2`/`simulate-1` khi chạy trên máy có `.env` |
+| 28/11 14:58 | Chạy thật **Lượt 2** `eval/run-2.csv` (`run-2@20261128-142324`, model `gemini-3.1-flash-lite`, `0` lỗi) → chấm `24/24` câu đạt **`23/24 (96%)`** (`B06, B16` hết lỗi; giữ nguyên `B03 = 0` đúng `pass_criterion`), thêm giá `gemini-3.1-flash-lite` (`$0.25/$1.50`) vào `cost/personas.yaml`, chạy mô phỏng `cost/simulate-1.csv` (`50` phiên, `seed 42`, `0/50` lỗi, `$0.0114`/task thành công), đồng bộ số thật vào tài liệu & xuất lại `demo-slides.pdf`. Không sửa chuẩn "đạt" §7, `metric_spec.yaml`, `benchmark.csv`, `run-1.csv`. | Hoàn tất hạng mục đánh giá Lượt 2 và mô phỏng chi phí thực tế ≥50 phiên cho CP4 — `eval/run-2.csv`, `traces/run-2.jsonl`, `cost/simulate-1.csv`, `cost/simulate-1-summary.md`, `eval/report.md`, `cost/cost-estimate.md`, `demo-slides.pdf` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

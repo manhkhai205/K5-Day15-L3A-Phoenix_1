@@ -9,9 +9,9 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-234159` | 21/24 | 88% | 6/7 | 12/14 | 3/3 | **Đạt** (`≥80%`, `khong_vi_pham_rang_buoc` 100%, `tu_choi` 3/3) |
-| 2 | `[chờ chạy trên máy có .env]` | __/__ | __% | __/__ | __/__ | __/__ | `[chờ run-2]` |
+| 2 | `run-2@20261128-142324` | 23/24 | 96% | 6/7 | 14/14 | 3/3 | **Đạt** |
 
-Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv` *(chạy sau cải tiến trên máy có `.env`)*. Trace: `traces/run-1.jsonl` (`134.979` token vào · `29.446` token ra · `0` lỗi kỹ thuật), `traces/run-2.jsonl`.
+Kết quả từng câu: `eval/run-1.csv` (`gemini-3.5-flash-lite`), `eval/run-2.csv` (`gemini-3.1-flash-lite`). Trace: `traces/run-1.jsonl` (`134.979` token vào · `29.446` token ra · `0` lỗi kỹ thuật), `traces/run-2.jsonl` (`182.024` token vào · `36.949` token ra · `0` lỗi kỹ thuật).
 
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
@@ -40,14 +40,14 @@ Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv` *(chạy sau cải t
   3. Bổ sung `_extract_rain_query()` trong `codebase/agent.py` bắt mốc giờ mưa thực tế (`"Đang 13:00, mưa to"` → `"mua to 13:00"`), nâng độ dài khung mưa to trong `_get_weather()` (`codebase/tools.py`) lên `180` phút (`13:00–16:00`), và thêm trong `_format_output()` danh sách trò ngoài trời bị bỏ khớp `tra_diem_choi` kèm cảnh báo show ngoài trời phụ thuộc thời tiết từ `tra_lich_show`.
 - **Kết quả:**
   - Kiểm chứng offline trước Lượt 2 (`MODEL_PROVIDER=fake` + kiểm độc lập qua `eval/cham.py` trên đủ `24/24` câu): nhóm lỗi `B06, B16` đạt **`2/2`** (sửa dứt điểm giờ về `18:30`, khung `09:00–10:00` tại `Z1_EURO`, khung mưa `13:00–16:00` và cảnh báo show ngoài trời), cả `19/19` câu tạo lịch đạt `m1=1, m2=1` và `5/5` câu còn lại (`B05, B08, B11, B12, B24`) giữ nguyên hành vi đúng.
-  - Kết quả chạy model thật Lượt 2 (`eval/run-2.csv`): nhóm lỗi đó `0/2` → `__/__` · tổng `88%` → `__%` *(chờ chạy `python run.py eval --wait 4` trên máy có `.env`)*.
-- **Câu nào tệ đi sau khi sửa:** Chưa ghi nhận câu nào tệ đi khi kiểm thử hồi quy offline `24/24` câu (`B01–B24`); sẽ đối soát lại từng câu sau khi có `eval/run-2.csv` trên Gemini thật.
+  - Kết quả chạy model thật Lượt 2 (`eval/run-2.csv`, model `gemini-3.1-flash-lite`): nhóm lỗi đó `0/2` → **`2/2`** · tổng `88%` → `96%` (`23/24`, run ID `run-2@20261128-142324`).
+- **Câu nào tệ đi sau khi sửa:** `0` câu tệ đi khi đối soát từng câu trên cả `24/24` câu của `eval/run-2.csv` (`21/24` → `23/24`, tăng `+2` câu `B06, B16`; riêng `B23` vẫn đạt `pass=1` nhưng xuất hiện lưu ý chất lượng xếp 2 bữa trưa liên tiếp `SF-MEAL-01` & `VW-MEAL-02`).
 
 ## 4. Còn lại
 
 - **Lỗi chưa sửa + nguy hiểm thế nào:**
   - `B03` (ghé lại `Z1_EURO` cuối ngày để xem `SH-ONCE` sau khi đã đi `Z1_EURO` buổi sáng): giữ nguyên để bảo đảm đúng phạm vi 1 nhóm lỗi cho Lượt 2. Mức rủi ro trung bình — không vi phạm ràng buộc cứng nào nhưng tăng ~5–10 phút đi bộ quay lại khu cổng lúc cuối ngày.
-  - Một số lịch còn khoảng trống giữa chiều (`B04` `14:20–16:50`, `B22` `14:55–16:50` khi chờ show tối), cảnh báo đệm `0` phút trước show ở vài ca (`B09`), hoặc chưa liệt kê chi tiết từng dòng phụ phí nhỏ trong thuyết minh (`B13`).
+  - Một số lịch còn khoảng trống giữa chiều (`B04`, `B22` khi chờ show tối), cảnh báo đệm `0` phút trước show ở vài ca (`B09`), chưa liệt kê chi tiết từng dòng phụ phí nhỏ trong thuyết minh (`B13`), hoặc xếp 2 bữa trưa liên tiếp khi ghép đa khu (`B23`: `SF-MEAL-01` và `VW-MEAL-02`).
   - Giới hạn nguồn dữ liệu tĩnh: hệ thống chưa có thời gian xếp hàng thực tế hoặc lịch bảo trì trò đột xuất (`B14`), phải dựa vào xác nhận trực tiếp của gia đình trên app chính thức.
 - **Nếu có thêm 1 tuần:**
   1. Tối ưu thuật toán & prompt sắp phân khu một chiều (đẩy `Z1_EURO` về cuối ngày liền trước `SH-ONCE` để hết lỗi `B03` và lấp khoảng trống `14:20–16:50` hợp lý hơn).

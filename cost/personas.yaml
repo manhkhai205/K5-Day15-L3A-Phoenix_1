@@ -37,7 +37,11 @@ personas:           # ≥3 kiểu người dùng; share cộng lại = 1 · đơ
 # Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv theo `types` của persona.
 
 prices:             # USD / 1 triệu token, gói trả phí Standard
-  - model: gemini-3.5-flash-lite      # model nhóm đang dùng (spec.md, run-1)
+  - model: gemini-3.1-flash-lite      # model chạy thật ở Lượt 2 (run-2) và mô phỏng (simulate-1)
+    input: 0.25
+    output: 1.50
+    source: "https://ai.google.dev/gemini-api/docs/pricing · Gemini 3.1 Flash-Lite, Paid Tier Standard · xem 28/11/2026"
+  - model: gemini-3.5-flash-lite      # model chạy ở Lượt 1 (run-1), giữ để đối chiếu
     input: 0.30
     output: 2.50
     source: "https://aistudio.google.com/docs/pricing (chuyển hướng từ ai.google.dev/gemini-api/docs/pricing) · Gemini 3.5 Flash-Lite, Paid Tier Standard · xem 28/11/2026"

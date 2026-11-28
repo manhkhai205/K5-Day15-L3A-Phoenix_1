@@ -48,7 +48,7 @@ Dữ liệu chạy thử kết hợp thông tin vận hành công khai 2025–20
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-234159` | `gemini-3.5-flash-lite` | Workflow cố định: trích ràng buộc → 6 công cụ → model lập lịch → `kiem_lich_trinh` + tối đa 2 vòng sửa; Input Guardrail; 24 câu `B01–B24` | 21/24 | 88% (thuong 6/7 · kho 12/14 · tu_choi 3/3) | **Đạt** (≥80%; `khong_vi_pham_rang_buoc` 100% câu có lịch; `tu_choi` 3/3) |
-| 2 | `[chờ chạy trên máy có .env]` | `gemini-3.5-flash-lite` | Sau 1 lần cải tiến Nhóm lỗi 1 (`B06`, `B16`): mở rộng `_extract_time_window` & ưu tiên sáng `Z1/Z2`; bổ sung `_extract_rain_query` (mưa to 180p) & cảnh báo show ngoài trời | __/__ | __% | `[chờ run-2]` |
+| 2 | `run-2@20261128-142324` | `gemini-3.1-flash-lite` | Sau 1 lần cải tiến Nhóm lỗi 1 (`B06`, `B16`): mở rộng `_extract_time_window`, `_extract_rain_query` & cảnh báo show ngoài trời | 23/24 | 96% (thuong 6/7 · kho 14/14 · tu_choi 3/3) | **Đạt** |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 

@@ -177,14 +177,18 @@ def sync_docs_and_slides() -> None:
 
     if run2_info:
         spec_txt = spec_txt.replace("lượt 2 `__/__ (__%)`", f"lượt 2 `{run2_info['passed']}/{run2_info['total']} ({run2_info['pct']}%)`")
-        spec_txt = spec_txt.replace("(model `gemini-3.5-flash-lite`) / `__`", f"(model `gemini-3.5-flash-lite`) / `{run2_info['run_id']}`")
+        spec_txt = spec_txt.replace("(model `gemini-3.5-flash-lite`) / `__`", f"(model `gemini-3.5-flash-lite`) / `{run2_info['run_id']}` (model `{run2_info['model']}`)")
 
     if sim_info and sim_info["rows"]:
         ce_path = os.path.join(ROOT, "cost", "cost-estimate.md")
         with open(ce_path, encoding="utf-8") as f:
             ce = f.read()
         r0 = sim_info["rows"][0]
-        r1 = sim_info["rows"][1] if len(sim_info["rows"]) > 1 else r0
+        r_mid = sim_info["rows"][1] if len(sim_info["rows"]) > 2 else None
+        r_high = sim_info["rows"][-1] if len(sim_info["rows"]) > 1 else r0
+        m0 = r0["label"].split(" ", 1)[0]
+        m_mid = r_mid["label"].split(" ", 1)[0] if r_mid else ""
+        m_high = r_high["label"].split(" ", 1)[0]
         ce = re.sub(
             r"Lượt mô phỏng:.*",
             "Lượt mô phỏng: `cost/%s.csv` · run ID `%s` · `50` phiên · `seed 42` · tỉ lệ đạt: %s"
@@ -202,9 +206,9 @@ def sync_docs_and_slides() -> None:
             ce,
         )
         ce = re.sub(
-            r"- \*\*Chi phí / người / tháng \(cơ sở, model `gemini-3\.5-flash-lite`\):\*\*.*",
-            "- **Chi phí / người / tháng (cơ sở, model `gemini-3.5-flash-lite`):** %s (%s / task thành công)"
-            % (r0["per_user"], r0["per_task"]),
+            r"- \*\*Chi phí / người / tháng \(cơ sở, model `[^`]+`\):\*\*.*",
+            "- **Chi phí / người / tháng (cơ sở, model `%s`):** %s (%s / task thành công)"
+            % (m0, r0["per_user"], r0["per_task"]),
             ce,
         )
         ce = re.sub(
@@ -224,16 +228,20 @@ def sync_docs_and_slides() -> None:
             % (sim_info["stem"], sim_info["run_id"]),
             spec_txt,
         )
+        task_parts = [f"{r0['per_task']} (`{m0}`)"]
+        if r_mid:
+            task_parts.append(f"{r_mid['per_task']} (`{m_mid}`)")
+        if r_high is not r0:
+            task_parts.append(f"{r_high['per_task']} (`{m_high}`)")
         spec_txt = re.sub(
             r"- Chi phí / task thành công:.*",
-            "- Chi phí / task thành công: %s (`gemini-3.5-flash-lite`) · %s (`gemini-3.8-flash`)"
-            % (r0["per_task"], r1["per_task"]),
+            "- Chi phí / task thành công: " + " · ".join(task_parts),
             spec_txt,
         )
         spec_txt = re.sub(
             r"- Chi phí / tháng ở quy mô thật:.*",
-            "- Chi phí / tháng ở quy mô thật (`gemini-3.5-flash-lite`): thấp `1.425` gđ %s · cơ sở `4.275` gđ %s (%s/người/tháng) · cao `14.250` gđ %s → chi tiết `cost/cost-estimate.md`"
-            % (r0["low"], r0["base"], r0["per_user"], r0["high"]),
+            "- Chi phí / tháng ở quy mô thật (`%s`): thấp `1.425` gđ %s · cơ sở `4.275` gđ %s (%s/người/tháng) · cao `14.250` gđ %s → chi tiết `cost/cost-estimate.md`"
+            % (m0, r0["low"], r0["base"], r0["per_user"], r0["high"]),
             spec_txt,
         )
         spec_txt = re.sub(

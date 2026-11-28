@@ -944,8 +944,8 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
         <div class="kpi-box">
           <span class="kpi-lbl">Lượt 2 (sau cải tiến)</span>
           <!--SYNC:SLIDE5_RUN2_KPI-->
-          <span class="kpi-val kpi-val--warn">__/__ (__%)</span>
-          <span class="kpi-note">Offline 24/24 đạt m1=1, m2=1; chờ chạy <code>run-2.csv</code> bằng <code>.env</code> thật</span>
+          <span class="kpi-val kpi-val--go">23/24 (96%)</span>
+          <span class="kpi-note"><code>run-2@20261128-142324</code> (Đạt · thuong 6/7 · kho 14/14 · tu_choi 3/3)</span>
           <!--/SYNC:SLIDE5_RUN2_KPI-->
         </div>
       </div>
@@ -987,7 +987,7 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
         <div class="card card--soft">
           <div class="card-title">
             <span>1 lần cải tiến nhắm Nhóm lỗi 1 (<code>B06</code>, <code>B16</code>)</span>
-            <span class="pill pill--brand">2/2 offline · chờ run-2</span>
+            <span class="pill pill--go">2/2 đạt trên run-2</span>
           </div>
           <ul class="clean">
             <li><strong>Vì sao chọn Nhóm lỗi 1 (đau nhất):</strong> Xếp show sau giờ về làm lỡ xe/mất giờ chơi sáng (<code>B16</code>); lệch giờ mưa làm gia đình trẻ nhỏ gặp rủi ro kẹt mưa (<code>B06</code>).</li>
@@ -996,14 +996,14 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
               (2) Khóa ngưỡng <code>(s_try - cursor) &lt;= 35p</code> để khung <code>09:00–10:00</code> xếp Z1/Z2 trước Z5/Z6;
               (3) Thêm <code>_extract_rain_query()</code> + mưa to <code>180p</code> (<code>13:00–16:00</code>) + cảnh báo show ngoài trời &amp; liệt kê trò bỏ từ tool.
             </li>
-            <li><strong>Kết quả kiểm chứng:</strong> Offline <code>24/24</code> đạt chuẩn <code>cham.py</code> (<code>B06</code>, <code>B16</code> hết lỗi; 0 câu nào tệ đi). Token Lượt 1: <code>134.979</code> vào / <code>29.446</code> ra.</li>
+            <li><strong>Kết quả kiểm chứng:</strong> Lượt 2 <code>run-2.csv</code> (<code>gemini-3.1-flash-lite</code>) đạt <code>23/24 (96%)</code>, sửa dứt điểm <code>B06, B16</code>, <code>0</code> câu tệ đi (<code>182.024</code> vào / <code>36.949</code> ra).</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="foot-bar">
-      <span>Nguồn: <code>eval/README.md</code> · <code>eval/report.md</code> · <code>eval/run-1.csv</code> · <code>eval/cham.py</code> · <code>eval/metric_spec.yaml</code></span>
+      <span>Nguồn: <code>eval/README.md</code> · <code>eval/report.md</code> · <code>eval/run-1.csv</code> · <code>eval/run-2.csv</code> · <code>eval/cham.py</code></span>
       <span>Trang 5 · Đánh giá &amp; Cải tiến</span>
     </div>
   </section>
@@ -1016,7 +1016,7 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
         <div class="brand-name">JOYPLAN <span>/ AI</span> · Nhóm Phoenix_1 (L3A)</div>
       </div>
       <div class="meta-pills">
-        <span class="pill pill--brand">50 phiên · seed=42 · 2 mức giá</span>
+        <span class="pill pill--brand">50 phiên · seed=42 · 3 mức giá</span>
         <span class="pill">Slide 6 / 8</span>
       </div>
     </div>
@@ -1025,7 +1025,7 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
       <div class="kicker">6. Chi phí khi dùng thật (<code>cost/personas.yaml</code> &amp; <code>cost/cost-estimate.md</code>)</div>
       <h1 class="slide-title">Mô phỏng 3 persona theo quy mô thực tế — Chi phí AI nhỏ hơn nhiều so với ~75 phút/chuyến</h1>
       <p class="slide-sub">
-        Tính theo <strong>giá gói trả phí (Paid Tier Standard)</strong> tại <code>aistudio.google.com/docs/pricing</code> (xem <code>28/11/2026</code>); đo token trên <code>gemini-3.5-flash-lite</code>.
+        Tính theo <strong>giá gói trả phí (Paid Tier Standard)</strong> tại <code>ai.google.dev/gemini-api/docs/pricing</code> (xem <code>28/11/2026</code>); đo token trên <code>gemini-3.1-flash-lite</code>.
       </p>
     </div>
 
@@ -1052,58 +1052,43 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
         <div class="card-title">
           <span>Bảng chi phí mô phỏng 50 phiên &amp; 3 kịch bản người dùng (<code>1.425 / 4.275 / 14.250</code> gđ/tháng)</span>
           <!--SYNC:SLIDE6_RATE_TAG-->
-          <span class="pill">Tỉ lệ đạt: 21/24 (88%) Lượt 1 · chờ simulate-1 trên máy có .env</span>
+          <span class="pill pill--go">simulate-1@20261128-143602 · 23/24 (96%) — lượt run-2@20261128-142324</span>
           <!--/SYNC:SLIDE6_RATE_TAG-->
         </div>
         <!--SYNC:SLIDE6_COST_TABLE-->
-        <table class="tbl">
+          <table class="tbl">
           <thead>
             <tr>
               <th>Model (Paid Standard · $/1M tok)</th>
               <th class="num-cell">/ phiên</th>
               <th class="num-cell">/ task thành công</th>
-              <th class="num-cell">/ tháng — Thấp (1.425)</th>
-              <th class="num-cell">/ tháng — Cơ sở (4.275)</th>
-              <th class="num-cell">/ tháng — Cao (14.250)</th>
+              <th class="num-cell">/ tháng — Thấp</th>
+              <th class="num-cell">/ tháng — Cơ sở</th>
+              <th class="num-cell">/ tháng — Cao</th>
               <th class="num-cell">/ người / tháng</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="row-hi">
-              <td><code>gemini-3.5-flash-lite</code> ($0.30 / $2.50)</td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-            </tr>
-            <tr>
-              <td><code>gemini-3.8-flash</code> ($0.75 / $3.75)</td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-              <td class="num-cell"><em>[chờ simulate]</em></td>
-            </tr>
+            <tr class="row-hi"><td><code>gemini-3.1-flash-lite (vào 0.25 · ra 1.5 $/1M)</code></td><td class="num-cell">$0.0109</td><td class="num-cell">$0.0114</td><td class="num-cell">$42.21</td><td class="num-cell">$126.63</td><td class="num-cell">$422.09</td><td class="num-cell"><strong>$0.0296</strong></td></tr>
+            <tr><td><code>gemini-3.5-flash-lite (vào 0.3 · ra 2.5 $/1M)</code></td><td class="num-cell">$0.0159</td><td class="num-cell">$0.0166</td><td class="num-cell">$61.50</td><td class="num-cell">$184.50</td><td class="num-cell">$614.98</td><td class="num-cell"><strong>$0.0432</strong></td></tr>
+            <tr><td><code>gemini-3.8-flash (vào 0.75 · ra 3.75 $/1M)</code></td><td class="num-cell">$0.0297</td><td class="num-cell">$0.0310</td><td class="num-cell">$115.01</td><td class="num-cell">$345.02</td><td class="num-cell">$1,150.06</td><td class="num-cell"><strong>$0.0807</strong></td></tr>
           </tbody>
         </table>
-        <!--/SYNC:SLIDE6_COST_TABLE-->
+          <!--/SYNC:SLIDE6_COST_TABLE-->
 
         <div class="grid-2" style="margin-top: auto; height: auto;">
           <div class="quote" style="border-left-color: var(--go);">
             <strong>Đòn bẩy giảm chi phí có sẵn trong code:</strong> 5/24 câu (<code>B05, B08, B11, B12, B24</code>) xử lý bằng code với <strong>0 token LLM</strong>; dữ liệu gửi model được rút gọn qua <code>_compact_attr()</code>; bản đồ OpenFreeMap <strong>$0</strong>.
           </div>
           <div class="quote" style="border-left-color: var(--brand);">
-            <strong>So với Impact (§2):</strong> Mỗi gia đình tiết kiệm ~75 phút/chuyến trên chi tiêu ~3,5–5 triệu đ/ngày. Ở Lượt 1, 1 lượt gọi trung bình ~5.624 tok vào / ~1.227 tok ra (~$0.0048/lượt ở bản Lite).
+            <strong>So với Impact (§2):</strong> Tiết kiệm ~75 phút/chuyến trên chi tiêu ~3,5–5 triệu đ/ngày; mô phỏng thật 50 phiên (<code>gemini-3.1-flash-lite</code>) chỉ tốn <strong>$0.0114/task thành công</strong> ($0.0296/người/tháng).
           </div>
         </div>
       </div>
     </div>
 
     <div class="foot-bar">
-      <span>Nguồn: <code>cost/personas.yaml</code> · <code>cost/cost-estimate.md</code> · <code>aistudio.google.com/docs/pricing</code> (28/11/2026) · <code>eval/run-1.csv</code></span>
+      <span>Nguồn: <code>cost/personas.yaml</code> · <code>cost/simulate-1-summary.md</code> · <code>cost/cost-estimate.md</code> · <code>eval/run-2.csv</code></span>
       <span>Trang 6 · Chi phí &amp; Hiệu quả</span>
     </div>
   </section>
@@ -1150,12 +1135,12 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
             <span class="pill pill--go">Trang 5</span>
           </div>
           <!--SYNC:SLIDE7_EVAL_KPI-->
-          <div class="kpi-val kpi-val--go" style="font-size: 28px;">21/24 (88%)</div>
+          <div class="kpi-val kpi-val--go" style="font-size: 28px;">23/24 (96%)</div>
           <!--/SYNC:SLIDE7_EVAL_KPI-->
           <ul class="clean">
             <li>Vượt ngưỡng <code>≥80%</code> ngay Lượt 1 (<code>run-1@20261127-234159</code>) với <code>0</code> lỗi kỹ thuật &amp; <code>0</code> lỗi parse JSON.</li>
             <li><strong>100%</strong> câu tạo lịch đạt <code>0 vi phạm</code> qua guardrail code <code>kiem_lich_trinh</code>.</li>
-            <li><strong>3/3</strong> câu tấn công (<code>B11, B12, B24</code>) bị chặn ở mức <code>0 token</code>; đã sửa Nhóm lỗi 1 (<code>B06, B16</code>) chờ Lượt 2.</li>
+            <li><strong>3/3</strong> câu tấn công (<code>B11, B12, B24</code>) bị chặn ở mức <code>0 token</code>; sửa Nhóm lỗi 1 (<code>B06, B16</code>) đưa Lượt 2 lên <code>23/24 (96%)</code>.</li>
           </ul>
         </div>
 
@@ -1166,8 +1151,8 @@ Loại do chiều cao: Zeus 130cm, Topspin 140cm...
           </div>
           <div class="kpi-val" style="font-size: 26px; color: #76e3b0;">Kiểm soát tốt</div>
           <ul class="clean">
-            <li><strong>Tại sao không STOP:</strong> Giá trị tiết kiệm ~75 phút &amp; tránh lỡ show trên chi tiêu 3,5–5tr/ngày vượt xa chi phí gọi Flash-Lite.</li>
-            <li><strong>Tại sao ITERATE trước khi GO rộng:</strong> Cần hoàn tất chạy <code>run-2.csv</code> &amp; <code>simulate-1</code> trên máy có <code>.env</code>, và chạy kiểm chứng người dùng thật (<code>validation/log.md</code>).</li>
+            <li><strong>Tại sao không STOP:</strong> Giá trị tiết kiệm ~75 phút &amp; tránh lỡ show trên chi tiêu 3,5–5tr/ngày vượt xa chi phí <code>$0.0114/task</code> (<code>gemini-3.1-flash-lite</code>).</li>
+            <li><strong>Tại sao ITERATE trước khi GO rộng:</strong> Cần chạy kiểm chứng thực địa với người dùng thật (<code>validation/log.md</code>), tối ưu lộ trình 1 chiều (<code>B03</code>) và nối API thời tiết/khách sạn thay <code>seed=42</code>.</li>
             <li><strong>Ranh giới an toàn giữ nguyên:</strong> Không thu PII/thẻ, không tự đặt phòng/vé, luôn gắn nhãn <code>seed=42</code> cho số phòng mô phỏng.</li>
           </ul>
         </div>
