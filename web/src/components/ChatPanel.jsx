@@ -103,6 +103,7 @@ export default function ChatPanel({
   const [input, setInput] = useState("");
   const [showSteps, setShowSteps] = useState(false);
   const [showQuick, setShowQuick] = useState(false);
+  const [failedHotelImgs, setFailedHotelImgs] = useState({});
 
   const [adults, setAdults] = useState(2);
   const [heightsInput, setHeightsInput] = useState("110, 95");
@@ -493,18 +494,34 @@ export default function ChatPanel({
                   const extraNote = h.family_room_note || h.price_note || "";
                   return (
                     <div key={h.id} className={`hotel-card ${isSelected ? "hotel-card--selected" : ""}`}>
-                      <div className="hotel-top">
-                        <span className="hotel-name">{h.name}</span>
-                        {h.fit_score != null && <span className="hotel-fit">Phù hợp {h.fit_score}%</span>}
-                      </div>
-                      <div className="hotel-meta">
-                        <span>{priceLabel}</span>
-                        {locationLabel && <span>• {locationLabel}</span>}
-                        {h.rooms_left != null && (
-                          <span>
-                            • Còn {h.rooms_left} phòng <em>(mô phỏng)</em>
-                          </span>
+                      <div className="hotel-card-row">
+                        {h.image_url && !failedHotelImgs[h.id] && (
+                          <img
+                            className="hotel-thumb"
+                            src={h.image_url}
+                            alt={h.name}
+                            width="76"
+                            height="58"
+                            loading="lazy"
+                            referrerPolicy="no-referrer"
+                            onError={() => setFailedHotelImgs((prev) => ({ ...prev, [h.id]: true }))}
+                          />
                         )}
+                        <div className="hotel-card-info">
+                          <div className="hotel-top">
+                            <span className="hotel-name">{h.name}</span>
+                            {h.fit_score != null && <span className="hotel-fit">Phù hợp {h.fit_score}%</span>}
+                          </div>
+                          <div className="hotel-meta">
+                            <span>{priceLabel}</span>
+                            {locationLabel && <span>• {locationLabel}</span>}
+                            {h.rooms_left != null && (
+                              <span>
+                                • Còn {h.rooms_left} phòng <em>(mô phỏng)</em>
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                       {extraNote && (
                         <div style={{ fontSize: 12, color: "var(--subtle)", lineHeight: 1.4 }}>{extraNote}</div>

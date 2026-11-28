@@ -1,23 +1,486 @@
 {
   "_meta": {
-    "description": "Link media chính thức theo item_id (attractions.json / shows.json). Không tải ảnh/video về repo.",
-    "rule": "Chỉ link ảnh chính thức trên static.vinwonders.com, mỗi link đã kiểm HTTP 200 ngày 28/11/2026. youtube_url để trống vì chưa xác minh được video ID chính thức; UI dùng onError fallback.",
+    "description": "Link ảnh và video YouTube embed chính thức theo item_id (44 điểm chơi/ăn nghỉ, 10 show, 3 khách sạn) kèm zone_fallbacks theo phân khu. Không tải ảnh/video về repo.",
+    "rule": "100% ảnh dùng domain chính thức static.vinwonders.com (đã kiểm HTTP 200 image/* ngày 28/11/2026); 100% video dùng youtube-nocookie.com/embed từ kênh chính thức VinWonders & Safari (UCmd0YiHAqLcBxjg47cnSJuA) và VINPEARL (UC2tvH7ONGc-UTyEeVg-ojfQ) đã kiểm oEmbed playableInEmbed=true. Mục tổng quát dùng ảnh đại diện phân khu ghi rõ trong caption.",
     "verified_date": "2026-11-28"
+  },
+  "zone_fallbacks": {
+    "Z1_EURO": {
+      "image_url": "https://static.vinwonders.com/production/JUN_7368.jpeg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+      "caption": "Phân khu Đại lộ Châu Âu — VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z2_FAIRY": {
+      "image_url": "https://static.vinwonders.com/production/vui-choi-tai-the-gioi-dieu-ky-vinwonders-phu-quoc.jpeg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/the-gioi-dieu-ky-vinwonders-phu-quoc/",
+      "caption": "Phân khu Thế giới diệu kỳ — VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z3_ADVENTURE": {
+      "image_url": "https://static.vinwonders.com/production/2025/03/What-rides-are-at-VinWonders-Phu-Quoc-The-Wrath-of-Zeus.jpg",
+      "source_url": "https://vinwonders.com/en/wonderpedia/news/vinwonders-phu-quoc-rides/",
+      "caption": "Phân khu Thế giới phiêu lưu — VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z4_VIKING": {
+      "image_url": "https://static.vinwonders.com/production/khu-lang-bi-mat-vinwonders-phu-quoc.jpeg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khu-lang-bi-mat-vinwonders-phu-quoc/",
+      "caption": "Phân khu Ngôi làng bí mật — VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z5_TYPHOON": {
+      "image_url": "https://static.vinwonders.com/2022/07/vinwonders-phu-quoc-co-cong-vien-nuoc-khong-4.jpg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinwonders-phu-quoc-co-cong-vien-nuoc-khong/",
+      "caption": "Phân khu Thế giới lốc xoáy — Công viên nước VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z6_SEASHELL": {
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-vuong-quoc-khong-lo.jpg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cung-dien-hai-vuong-phu-quoc/",
+      "caption": "Cung điện Hải Vương (The Sea Shell) — VinWonders Phú Quốc (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z7_SAFARI": {
+      "image_url": "https://static.vinwonders.com/production/SAF_Social_1856x937-scaled-1.jpg",
+      "source_url": "https://vinwonders.com/en/vinpearl-safari-phu-quoc/",
+      "caption": "Vinpearl Safari Phú Quốc (ảnh đại diện tổ hợp)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "Z8_GRANDWORLD": {
+      "image_url": "https://static.vinwonders.com/production/kinh-nghiem-di-grand-world-phu-quoc-1.jpg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/kinh-nghiem-di-grand-world-phu-quoc/",
+      "caption": "Grand World Phú Quốc (ảnh đại diện tổ hợp)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    },
+    "HOTEL": {
+      "image_url": "https://static.vinwonders.com/production/2025/11/vinpearl-resort-spa-phu-quoc.jpg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "caption": "Khách sạn khu vực Bãi Dài / Phú Quốc United Center (ảnh đại diện)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — ảnh đại diện phân khu"
+    }
   },
   "items": [
     {
+      "item_id": "VW-Z1-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/production/JUN_7368.jpeg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/jVIPDXmVEiY",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/lich-trinh-vinwonders-phu-quoc/",
+      "caption": "Check-in kiến trúc Đại lộ Châu Âu — VinWonders Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z1-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/2022/04/dai-lo-chau-au-phu-quoc-6.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+      "caption": "Lời nguyền ác long — Trò chơi tương tác trong nhà tại Đại lộ Châu Âu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z1-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/2022/04/dai-lo-chau-au-phu-quoc-8.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+      "caption": "Cửa hàng lưu niệm & không gian có mái che Đại lộ Châu Âu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z1-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/2022/04/dai-lo-chau-au-phu-quoc-4.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+      "caption": "Không gian lâu đài trung cổ Đại lộ Châu Âu (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-MEAL-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/2022/04/dai-lo-chau-au-phu-quoc-10.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+      "caption": "Khu ẩm thực & đồ ăn nhanh tại Đại lộ Châu Âu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "SH-CARNIVAL",
+      "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
+      "image_url": "https://static.vinwonders.com/production/2025/08/Anh-chup-man-hinh-2025-08-05-152810-1.png",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/whIyfoTfiTw",
+      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+      "caption": "Carnival Parade — Đại lộ Châu Âu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
       "item_id": "SH-ONCE",
       "venue_id": "vinwonders",
+      "zone_id": "Z1_EURO",
       "image_url": "https://static.vinwonders.com/production/once-show.jpg",
-      "youtube_url": "",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/ipAunJY5jSo",
       "source_url": "https://vinwonders.com/en/once-show/",
-      "caption": "Once Show — VinWonders Phú Quốc",
+      "caption": "Once Show (Phượng hoàng lửa) — VinWonders Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z2-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/production/2025/03/The-cutting-edge-technology-behind-VinWonders-Phu-Quoc-rides-ensures-a-world-class-experience.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/wonderpedia/news/vinwonders-phu-quoc-rides/",
+      "caption": "Đu quay Thumbelina — Thế giới diệu kỳ",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/2022/08/tro-choi-cam-giac-manh-o-vinpearl-phu-quoc-3.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Đôi cánh Icarus — VinWonders Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/production/tro-choi-tuong-tac-tren-cat-tai-thung-lung-co-dai.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/the-gioi-dieu-ky-vinwonders-phu-quoc/",
+      "caption": "Khu tương tác 3D cổ tích & Thung lũng cổ đại",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/2022/07/cac-tro-choi-trong-vinwonders-phu-quoc-8.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cac-tro-choi-trong-vinwonders-phu-quoc/",
+      "caption": "Trò chơi phiêu lưu tại Khu rừng huyền bí",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-05",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/production/vui-choi-tai-the-gioi-dieu-ky-vinwonders-phu-quoc.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/the-gioi-dieu-ky-vinwonders-phu-quoc/",
+      "caption": "Khu vui chơi gia đình Thế giới diệu kỳ (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-06",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/production/tro-choi-tay-sung-cu-phach-vinwonders-phu-quoc.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/the-gioi-dieu-ky-vinwonders-phu-quoc/",
+      "caption": "Trò bắn súng tương tác trong nhà Miền Tây hoang dã (Tay súng cự phách)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z2-07",
+      "venue_id": "vinwonders",
+      "zone_id": "Z2_FAIRY",
+      "image_url": "https://static.vinwonders.com/2022/07/cac-tro-choi-trong-vinwonders-phu-quoc-4.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/cDQzZ1sfkuU",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cac-tro-choi-trong-vinwonders-phu-quoc/",
+      "caption": "Gặp gỡ nhân vật cổ tích & check-in Vương quốc kỳ thú",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z3-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/production/2025/03/What-rides-are-at-VinWonders-Phu-Quoc-The-Wrath-of-Zeus.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/ZO_57q05DqY",
+      "source_url": "https://vinwonders.com/en/wonderpedia/news/vinwonders-phu-quoc-rides/",
+      "caption": "Cơn thịnh nộ của Zeus (The Wrath of Zeus) — Tàu lượn siêu tốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z3-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/2022/08/tro-choi-cam-giac-manh-o-vinpearl-phu-quoc-5.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Tháp rơi tự do — Thế giới phiêu lưu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z3-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/2022/08/tro-choi-cam-giac-manh-o-vinpearl-phu-quoc-10.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Trò cảm giác mạnh vòng xoay — Thế giới phiêu lưu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z3-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/2022/04/tro-choi-cam-giac-manh-o-vinpearl-phu-quoc-20.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/777Cp_BfMZs",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Chiến binh đại bàng — Tàu lượn siêu tốc trong nhà tối",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z3-05",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/production/2025/03/VinWonders-Phu-Quoc-rides-guarantee-endless-fun.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/wonderpedia/news/vinwonders-phu-quoc-rides/",
+      "caption": "Nemesis Spin — Đĩa quay siêu tốc Thế giới phiêu lưu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z3-06",
+      "venue_id": "vinwonders",
+      "zone_id": "Z3_ADVENTURE",
+      "image_url": "https://static.vinwonders.com/production/Maya.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+      "caption": "Khu trải nghiệm Maya — Thế giới phiêu lưu (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z4-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z4_VIKING",
+      "image_url": "https://static.vinwonders.com/production/game-ngoi-lang-chien-binh-vinwonders-phu-quoc.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+      "caption": "Ngôi làng chiến binh (Thuyền Viking xuôi dòng sông)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z4-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z4_VIKING",
+      "image_url": "https://static.vinwonders.com/2022/07/cac-tro-choi-trong-vinwonders-phu-quoc-11.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cac-tro-choi-trong-vinwonders-phu-quoc/",
+      "caption": "Thử thách thần sấm — Cấp độ gia đình",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z4-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z4_VIKING",
+      "image_url": "https://static.vinwonders.com/production/thu-thach-than-sam-tai-vinwonders-phu-quoc.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khu-lang-bi-mat-vinwonders-phu-quoc/",
+      "caption": "Thử thách thần sấm — Zipline & cầu dây cao cấp",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z4-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z4_VIKING",
+      "image_url": "https://static.vinwonders.com/production/khu-lang-bi-mat-vinwonders-phu-quoc.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khu-lang-bi-mat-vinwonders-phu-quoc/",
+      "caption": "Không gian văn hóa Bắc Âu — Ngôi làng bí mật (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z5-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/02/cong-vien-nuoc-phu-quoc-6.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/review-cong-vien-nuoc-phu-quoc-hap-dan-hang-dau-dao-ngoc/",
+      "caption": "Dòng sông lười / Dòng sông kỳ bí — Thế giới lốc xoáy",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z5-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/05/tro-choi-mao-hiem-vinpearl-phu-quoc-2.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/ECMkArRHYDk",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Bể tạo sóng khổng lồ Oahu — Thế giới lốc xoáy",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z5-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/07/vinwonders-phu-quoc-co-cong-vien-nuoc-khong-4.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinwonders-phu-quoc-co-cong-vien-nuoc-khong/",
+      "caption": "Khu vui chơi nước trẻ em — Thế giới lốc xoáy (ảnh đại diện phân khu)",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z5-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/02/cong-vien-nuoc-phu-quoc-4.jpeg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/review-cong-vien-nuoc-phu-quoc-hap-dan-hang-dau-dao-ngoc/",
+      "caption": "Đường trượt phao gia đình (Cầu vồng Honolulu) — Thế giới lốc xoáy",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z5-05",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/04/tro-choi-cam-giac-manh-o-vinpearl-phu-quoc-17.jpeg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/EqR7ebjR9Ek",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Nọc độc mãng xà — Đường trượt nước cảm giác mạnh",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z5-06",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/05/tro-choi-mao-hiem-vinpearl-phu-quoc-the-gioi-loc-xoay.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/19-tro-choi-cam-giac-manh-o-vinwonders-phu-quoc-cang-choi-cang-me/",
+      "caption": "Lốc xoáy Tornado / Boomerang khổng lồ — Thế giới lốc xoáy",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-MEAL-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z5_TYPHOON",
+      "image_url": "https://static.vinwonders.com/2022/04/nha-hang-trong-vinwonders-phu-quoc-4.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/nha-hang-trong-vinwonders-phu-quoc-dia-chi-gio-mo-cua-co-gi-ngon/",
+      "caption": "Nhà hàng Buffet The Gateway — gần Công viên nước",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z6-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-lanh-dia-ca-map.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/Z_GO1PwXz94",
+      "source_url": "https://vinwonders.com/en/sea-shell/",
+      "caption": "Cung điện Hải Vương (The Sea Shell) — Bể chính & đường hầm cá mập",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-Z6-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-cung-dien-bang-gia.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/sea-shell/",
+      "caption": "Thế giới chim cánh cụt Gentoo — Cung điện Băng giá",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z6-03",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-vung-bien-lang-du.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/sea-shell/",
+      "caption": "Thế giới sứa phát sáng & sinh vật biển — Vùng biển lãng du",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-Z6-04",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-kho-bau-dai-duong.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/sea-shell/",
+      "caption": "Khu khám phá & tương tác đại dương — Kho báu đại dương",
+      "verified_date": "2026-11-28",
+      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "VW-MEAL-02",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/production/Deep-Sea.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/PKc19BZP9Ns",
+      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+      "caption": "Nhà hàng Deep Sea — Trong Cung điện Hải Vương",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "VW-REST-01",
+      "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-vuong-quoc-khong-lo.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/en/sea-shell/",
+      "caption": "Không gian điều hòa Cung điện Hải Vương (ảnh đại diện phân khu)",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
       "item_id": "SH-FEED-FISH",
       "venue_id": "vinwonders",
+      "zone_id": "Z6_SEASHELL",
       "image_url": "https://static.vinwonders.com/2022/11/cho-ca-an.jpg",
       "youtube_url": "",
       "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
@@ -26,124 +489,213 @@
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
-      "item_id": "VW-Z6-01",
+      "item_id": "SH-PENGUIN",
       "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/2026/02/CDHV-EN.png",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/04/cung-dien-hai-vuong-phu-quoc-09.jpg",
       "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/sea-shell/",
-      "caption": "Cung điện Hải Vương (The Sea Shell)",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cung-dien-hai-vuong-phu-quoc/",
+      "caption": "Giao lưu & bữa ăn của chim cánh cụt — Cung điện Hải Vương",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
-      "item_id": "SH-CARNIVAL",
+      "item_id": "SH-MERMAID-1",
       "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/2025/08/Anh-chup-man-hinh-2025-08-05-152810-1.png",
-      "youtube_url": "",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/production/2026/03/tien-ca.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/GHgihwv_-9A",
       "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
-      "caption": "Carnival Parade — Đại lộ châu Âu",
+      "caption": "Biểu diễn Nàng tiên cá (suất 1) — Cung điện Hải Vương",
       "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
     },
     {
-      "item_id": "VW-Z2-07",
+      "item_id": "SH-MERMAID-2",
       "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/l85X6tMf-vinwonders-phu-quoc-4.jpg",
-      "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
-      "caption": "Ảnh phân khu Fantasy World (Vương quốc kỳ thú)",
+      "zone_id": "Z6_SEASHELL",
+      "image_url": "https://static.vinwonders.com/2022/06/gap-go-nang-tien-ca-xinh-dep.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/Izi8mK1SrvM",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/cung-dien-hai-vuong-phu-quoc/",
+      "caption": "Biểu diễn Nàng tiên cá (suất 2) — Cung điện Hải Vương",
       "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
-    },
-    {
-      "item_id": "VW-Z4-01",
-      "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/game-ngoi-lang-chien-binh-vinwonders-phu-quoc.jpg",
-      "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
-      "caption": "Ngôi làng chiến binh (Mysterious Viking Village)",
-      "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
-    },
-    {
-      "item_id": "VW-Z3-06",
-      "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/Maya.jpg",
-      "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
-      "caption": "Ảnh phân khu Adventure World (Maya)",
-      "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
-    },
-    {
-      "item_id": "VW-MEAL-02",
-      "venue_id": "vinwonders",
-      "image_url": "https://static.vinwonders.com/production/Deep-Sea.jpg",
-      "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
-      "caption": "Nhà hàng Deep Sea — Cung điện Hải Vương",
-      "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
     },
     {
       "item_id": "SF-Z7-01",
       "venue_id": "safari",
-      "image_url": "https://static.vinwonders.com/production/SAF_Social_1856x937-scaled-1.jpg",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/2022/07/Safari2.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/FiQSdnD72ZA",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinpearl-safari-phu-quoc/",
+      "caption": "Xe buýt chuyên dụng khu thú bán hoang dã — Vinpearl Safari Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "SF-Z7-02",
+      "venue_id": "safari",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/2022/07/VINPEARL-SAFARI-PHU-QUOC-85.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/W9V0VzmNdco",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinpearl-safari-phu-quoc/",
+      "caption": "Vườn thú mở Open Zoo — Vinpearl Safari Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "SF-Z7-03",
+      "venue_id": "safari",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/2022/07/7N2A1988.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/GeLaQF0f2-8",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/lich-bieu-dien-safari-phu-quoc/",
+      "caption": "Khu Kid Zoo & tương tác cho thú ăn — Vinpearl Safari Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "SF-MEAL-01",
+      "venue_id": "safari",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/2022/11/Vinpearl-safari-nha-hang-giraffe.jpg",
       "youtube_url": "",
       "source_url": "https://vinwonders.com/en/vinpearl-safari-phu-quoc/",
-      "caption": "Vinpearl Safari Phú Quốc (ảnh chung)",
+      "caption": "Nhà hàng Giraffe — Vinpearl Safari Phú Quốc",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
-      "item_id": "SH-GW-TINHHOA",
-      "venue_id": "grandworld",
-      "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-tinh-hoa-Viet-Nam-2.jpg",
+      "item_id": "SH-SF-ZULU",
+      "venue_id": "safari",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/production/Vinpearl-Safari-Phu-Quoc-Zulu-Dance.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/hpGgCLZg3mg",
+      "source_url": "https://vinwonders.com/en/vinpearl-safari-phu-quoc/",
+      "caption": "Múa thổ dân châu Phi (Zulu Dance) — Vinpearl Safari Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "SH-SF-ANIMAL",
+      "venue_id": "safari",
+      "zone_id": "Z7_SAFARI",
+      "image_url": "https://static.vinwonders.com/2022/07/VINPEARL-SAFARI-PHU-QUOC-8.jpg",
       "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
-      "caption": "Show Tinh hoa Việt Nam — Grand World",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/lich-bieu-dien-safari-phu-quoc/",
+      "caption": "Biểu diễn động vật (Animal Show) — Vinpearl Safari Phú Quốc",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
       "item_id": "GW-Z8-01",
       "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
       "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-BAO-TANG-GAU.jpg",
-      "youtube_url": "",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/fnlvCUwm2ms",
       "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
-      "caption": "Bảo tàng Gấu Teddy",
+      "caption": "Bảo tàng Gấu Teddy (Teddy Bear Museum) — Grand World Phú Quốc",
       "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
     },
     {
       "item_id": "GW-Z8-02",
       "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
       "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-di-thuyen-Gondola.jpg",
-      "youtube_url": "",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/EwK5B3xmF64",
       "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
-      "caption": "Đi thuyền Gondola — Hồ Tình Yêu",
+      "caption": "Đi thuyền Gondola trên sông Venice — Grand World Phú Quốc",
       "verified_date": "2026-11-28",
-      "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
     },
     {
       "item_id": "GW-Z8-03",
       "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
       "image_url": "https://static.vinwonders.com/2022/11/Grand-World-PhuQuoc-cong-vien-nghe-thuat-duong-dai.jpg",
-      "youtube_url": "",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/ypyw2C2mq68",
       "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
-      "caption": "Công viên Nghệ thuật đương đại",
+      "caption": "Công viên Nghệ thuật đương đại & phố Venice — Grand World Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "GW-Z8-04",
+      "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
+      "image_url": "https://static.vinwonders.com/production/kinh-nghiem-di-grand-world-phu-quoc-1.jpg",
+      "youtube_url": "",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/kinh-nghiem-di-grand-world-phu-quoc/",
+      "caption": "Khu phố mua sắm & shophouse Grand World (ảnh đại diện tổ hợp)",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
     },
     {
-      "item_id": "SH-GW-VENICE",
+      "item_id": "GW-MEAL-01",
       "venue_id": "grandworld",
-      "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-SAC-MAU-VENICE.jpg",
+      "zone_id": "Z8_GRANDWORLD",
+      "image_url": "https://static.vinwonders.com/production/kinh-nghiem-di-grand-world-phu-quoc-6.jpg",
       "youtube_url": "",
-      "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
-      "caption": "Sắc màu Venice",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/kinh-nghiem-di-grand-world-phu-quoc/",
+      "caption": "Phố ẩm thực & nhà hàng Grand World Phú Quốc",
       "verified_date": "2026-11-28",
       "license_note": "Link chính thức VinWonders — chỉ dẫn link, không lưu ảnh vào repo"
+    },
+    {
+      "item_id": "SH-GW-TINHHOA",
+      "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
+      "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-tinh-hoa-Viet-Nam-2.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/2C2Y8m94Iac",
+      "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
+      "caption": "Show thực cảnh Tinh hoa Việt Nam — Grand World Phú Quốc",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "SH-GW-VENICE",
+      "venue_id": "grandworld",
+      "zone_id": "Z8_GRANDWORLD",
+      "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-SAC-MAU-VENICE.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/UOdfnpUA3Lo",
+      "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
+      "caption": "Show nhạc nước Sắc màu Venice — Hồ Tình Yêu",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VinWonders & Safari"
+    },
+    {
+      "item_id": "HT-01",
+      "venue_id": "hotel",
+      "zone_id": "HOTEL",
+      "image_url": "https://static.vinwonders.com/production/2025/11/vinpearl-resort-spa-phu-quoc.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/eaMAcJcsGew",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "caption": "Vinpearl Resort & Spa Phú Quốc — Khu Bãi Dài",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VINPEARL"
+    },
+    {
+      "item_id": "HT-02",
+      "venue_id": "hotel",
+      "zone_id": "HOTEL",
+      "image_url": "https://static.vinwonders.com/production/2025/11/vinpearl-wonderworld-phu-quoc.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/u2Rcl5esOEs",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/khach-san-bac-dao-phu-quoc/",
+      "caption": "Vinpearl Wonderworld Phú Quốc — Biệt thự gia đình gần VinWonders",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VINPEARL"
+    },
+    {
+      "item_id": "HT-03",
+      "venue_id": "hotel",
+      "zone_id": "HOTEL",
+      "image_url": "https://static.vinwonders.com/production/VinHolidays-Fiesta-Phu-Quoc-1.jpg",
+      "youtube_url": "https://www.youtube-nocookie.com/embed/RqKgjGtmdmg",
+      "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinholidays-fiesta-phu-quoc/",
+      "caption": "VinHolidays Fiesta Phú Quốc — Trung tâm Grand World",
+      "verified_date": "2026-11-28",
+      "license_note": "Link ảnh chính thức VinWonders & video embed kênh chính thức VINPEARL"
     }
   ]
 }

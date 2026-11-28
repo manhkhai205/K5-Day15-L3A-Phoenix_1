@@ -201,4 +201,5 @@ flowchart TD
 
 | Thời điểm | Đổi gì | Vì sao |
 | --------- | ------ | ------ |
-|           |        |        |
+| 28/11 16:48 | Bổ sung trần `MAX_DAILY_STOPS = 10` và phân bổ đều lịch theo khung giờ/tổ hợp trong `codebase/agent.py` (tối đa 1 bữa trưa, hạn chế quay lại phân khu, cắt gọn lịch LLM nếu vượt 10 điểm). Không sửa §7, `eval/metric_spec.yaml`, `eval/benchmark.csv`, `eval/run-*.csv`. | Giảm mật độ lịch trình từ 14–19 mốc xuống tối đa 10 điểm/ngày cho gia đình có trẻ nhỏ dễ đi và đồng bộ giao diện — `codebase/agent.py` |
+| 28/11 16:50 | Mở rộng `data/media.json` phủ **57/57** link ảnh chính thức `static.vinwonders.com` (kiểm HTTP 200) + **24** video YouTube embed (`youtube-nocookie.com/embed`) từ 2 kênh chính thức VinWonders & Safari và VINPEARL; thêm `zone_fallbacks` (8 phân khu + HOTEL) trong `codebase/api.py`; gắn `image_url` vào `tra_khach_san`; nâng cấp `ItemDetailModal.jsx` (tab Ảnh/Video, sửa Xem mẫu UI), `ChatPanel.jsx` (thumbnail khách sạn), `web/src/mock/plan.json`, `data/DATA_CARD.md`. Giữ nguyên chuẩn "đạt" §7, `metric_spec.yaml`, `benchmark.csv`, kết quả `eval/`. | Khắc phục thiếu ảnh (trước 14/57) và video (0/57) trên modal, thẻ khách sạn và Xem mẫu UI mà không ảnh hưởng lõi chấm `eval/` |

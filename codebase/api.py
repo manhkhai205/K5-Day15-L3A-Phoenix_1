@@ -102,9 +102,10 @@ def _load_catalog() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]
     return catalog, zones_by_id, attractions, shows
 
 
-def _load_media_map() -> Dict[str, Dict[str, Any]]:
+def _load_media_store() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     raw = _load_optional_json("media.json", {})
     mapping: Dict[str, Dict[str, Any]] = {}
+    zone_fallbacks: Dict[str, Dict[str, Any]] = {}
     if isinstance(raw, dict):
         items = raw.get("items") if isinstance(raw.get("items"), list) else None
         if items is not None:
@@ -113,20 +114,41 @@ def _load_media_map() -> Dict[str, Dict[str, Any]]:
                     mapping[str(row["item_id"])] = row
         else:
             for k, v in raw.items():
-                if isinstance(v, dict):
+                if k not in ("_meta", "zone_fallbacks") and isinstance(v, dict):
                     mapping[str(v.get("item_id") or k)] = v
+        raw_zf = raw.get("zone_fallbacks")
+        if isinstance(raw_zf, dict):
+            for zk, zv in raw_zf.items():
+                if isinstance(zv, dict):
+                    zone_fallbacks[str(zk)] = zv
     elif isinstance(raw, list):
         for row in raw:
             if isinstance(row, dict) and row.get("item_id"):
                 mapping[str(row["item_id"])] = row
-    return mapping
+    return mapping, zone_fallbacks
 
 
-def _get_media_payload(item_id: str, media_map: Optional[Dict[str, Dict[str, Any]]] = None) -> Dict[str, Any]:
-    mmap = media_map if media_map is not None else _load_media_map()
+def _load_media_map() -> Dict[str, Dict[str, Any]]:
+    return _load_media_store()[0]
+
+
+def _get_media_payload(
+    item_id: str,
+    media_map: Optional[Dict[str, Dict[str, Any]]] = None,
+    zone_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    mmap, zone_fallbacks = _load_media_store()
+    if media_map is not None:
+        mmap = media_map
     entry = mmap.get(item_id) or {}
     img = (entry.get("image_url") or "").strip() or None
     yt = (entry.get("youtube_url") or "").strip() or None
+    is_zone_fallback = False
+    if not img and not yt and zone_id and zone_id in zone_fallbacks:
+        entry = zone_fallbacks[zone_id] or {}
+        img = (entry.get("image_url") or "").strip() or None
+        yt = (entry.get("youtube_url") or "").strip() or None
+        is_zone_fallback = bool(img or yt)
     return {
         "has_media": bool(img or yt),
         "image_url": img,
@@ -135,6 +157,7 @@ def _get_media_payload(item_id: str, media_map: Optional[Dict[str, Dict[str, Any
         "caption": entry.get("caption") or None,
         "verified_date": entry.get("verified_date") or None,
         "license_note": entry.get("license_note") or None,
+        "is_zone_fallback": is_zone_fallback,
         "fallback_text": "Chưa có media",
     }
 
@@ -797,7 +820,7 @@ def get_attraction_detail(item_id: str, heights: Optional[str] = Query(default=N
             "lat": hotel.get("lat"),
             "lng": hotel.get("lng"),
             "detail": hotel,
-            "media": _get_media_payload(item_id),
+            "media": _get_media_payload(item_id, zone_id="HOTEL"),
             "height_labels": [],
         }
 
@@ -826,7 +849,7 @@ def get_attraction_detail(item_id: str, heights: Optional[str] = Query(default=N
         "lat": item.get("lat"),
         "lng": item.get("lng"),
         "notes": item.get("notes", ""),
-        "media": _get_media_payload(item["id"]),
+        "media": _get_media_payload(item["id"], zone_id=item.get("zone_id")),
     }
 
 

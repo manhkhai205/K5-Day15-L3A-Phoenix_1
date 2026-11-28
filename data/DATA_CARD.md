@@ -91,18 +91,18 @@
 
 ---
 
-## Dataset 7 · `data/media.json` (14 liên kết ảnh chính thức theo `item_id` — ngoài phạm vi `eval/`)
+## Dataset 7 · `data/media.json` (57/57 liên kết ảnh + 24 video YouTube chính thức & fallback 8 phân khu — ngoài phạm vi `eval/`)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn cho endpoint `/api/attractions/{id}` và `ItemDetailModal` trên Web UI (hiển thị ảnh minh hoạ kèm liên kết nguồn chính thức). |
-| Từ đâu | Các liên kết ảnh chính thức trên `static.vinwonders.com` (đều đã kiểm tra phản hồi `HTTP 200` ngày `28/11/2026`). |
-| Xử lý những bước gì | Ánh xạ theo `item_id` (`14` điểm/show tiêu biểu của 3 tổ hợp), ghi rõ `source_url`, `caption`, `verified_date`, `license_note`; để trống `youtube_url` khi chưa xác minh video ID chính thức và áp dụng cơ chế `onError` fallback trên UI (tuyệt đối không tải `.mp4`/ảnh vào repo). |
-| Số dòng / số đoạn | **14 mục media** gắn với `item_id` trong `attractions.json` / `shows.json`. |
+| Dùng để làm gì | Nguồn cho endpoint `/api/attractions/{id}`, `tra_khach_san` (ảnh thumbnail khách sạn), `ItemDetailModal` và chế độ Xem mẫu UI trên Web UI (hiển thị ảnh/video minh hoạ kèm liên kết nguồn chính thức). |
+| Từ đâu | Liên kết ảnh chính thức trên `static.vinwonders.com` (đã kiểm `HTTP 200` với `Content-Type: image/*` ngày `28/11/2026`) và `24` video YouTube từ 2 kênh chính thức **VinWonders & Safari** (`UCmd0YiHAqLcBxjg47cnSJuA`) & **VINPEARL** (`UC2tvH7ONGc-UTyEeVg-ojfQ`) (đã kiểm oEmbed `playableInEmbed=true` ngày `28/11/2026`). |
+| Xử lý những bước gì | Ánh xạ theo `item_id` phủ **100% `57/57` mục** (`44` điểm trong `attractions.json` + `10` show trong `shows.json` + `3` khách sạn trong `hotels.json`), gắn `24` link video dạng `youtube-nocookie.com/embed/...` cho các show, điểm nhấn và 3 khách sạn (mục tổng quát dùng ảnh đại diện phân khu ghi rõ trong `caption`), bổ sung bảng `zone_fallbacks` (`8` phân khu + `HOTEL`) và cơ chế `onError` fallback trên UI (tuyệt đối không tải `.mp4`/ảnh vào repo). |
+| Số dòng / số đoạn | **57 mục media** (`57/57` có `image_url`, `24/57` có `youtube_url`) + **9 cấu hình `zone_fallbacks`**. |
 | Phiên bản / ngày lấy | 28/11/2026 |
-| Nhãn | **Thật** (liên kết công khai chính thức `static.vinwonders.com` & `vinwonders.com`) |
-| Giới hạn | Mới phủ `14` điểm/show tiêu biểu; nếu liên kết hotlink bị chặn hoặc điểm chưa có media thì modal tự fallback sang `"Chưa có media / Xem trang chính thức ↗"`. |
+| Nhãn | **Thật** (liên kết công khai chính thức `static.vinwonders.com`, `vinwonders.com` & kênh YouTube chính thức VinWonders / Vinpearl) |
+| Giới hạn | Một số điểm tổng quát (lối dạo mái che, khu nghỉ điều hoà…) không có trang riêng nên dùng ảnh đại diện của đúng phân khu kèm chú thích; trò nhỏ chưa có clip chính thức riêng để trống `youtube_url`. Nếu hotlink bị chặn hoặc mất mạng, UI tự fallback sang `"Chưa có media / Xem trang chính thức ↗"`. |
 
 ---
 
-**Kiểm chứng dữ liệu:** Toàn bộ 7 file JSON trong `data/` đã được **Vũ Đức Anh** và **Phạm Công Dũng** đối chiếu bản đồ OpenStreetMap Nominatim (28/11/2026) và kiểm chứng tự động (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín bám ranh giới đất liền thật, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng; 3 khách sạn có tọa độ OSM và nhãn `rooms_left` `synthetic seed=42`; 14 link ảnh `static.vinwonders.com` kiểm HTTP 200; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` và CP3 `B15–B24`.
+**Kiểm chứng dữ liệu:** Toàn bộ 7 file JSON trong `data/` đã được **Vũ Đức Anh** và **Phạm Công Dũng** đối chiếu bản đồ OpenStreetMap Nominatim (28/11/2026) và kiểm chứng tự động (VinWonders 2026 chính thức + thông số tham chiếu Safari & Grand World; 8 GeoJSON polygon khép kín bám ranh giới đất liền thật, 100% 44/44 điểm và 10/10 show có tọa độ `(lat, lng)` nằm gọn trong polygon phân khu tương ứng; 3 khách sạn có tọa độ OSM và nhãn `rooms_left` `synthetic seed=42`; 57/57 link ảnh `static.vinwonders.com` kiểm HTTP 200 & 24 video YouTube chính thức kiểm oEmbed `playableInEmbed=true`; nhãn `thật` / `synthetic` tách bạch ở từng bảng) để giữ 100% tương thích với bộ câu thử CP2 `B01–B14` và CP3 `B15–B24`.

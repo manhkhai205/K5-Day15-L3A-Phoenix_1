@@ -1396,6 +1396,22 @@ def tra_khach_san(
 
     raw_hotels = _load_json("hotels.json")
     rows = raw_hotels.get("hotels", raw_hotels) if isinstance(raw_hotels, dict) else raw_hotels
+    media_by_id: Dict[str, Dict[str, Any]] = {}
+    media_path = os.path.join(DATA_DIR, "media.json")
+    if os.path.exists(media_path):
+        try:
+            with open(media_path, "r", encoding="utf-8") as mf:
+                raw_media = json.load(mf)
+            m_rows = raw_media.get("items") if isinstance(raw_media, dict) else raw_media
+            for m_row in (m_rows or []):
+                if isinstance(m_row, dict) and m_row.get("item_id"):
+                    media_by_id[str(m_row["item_id"])] = {
+                        "image_url": (m_row.get("image_url") or "").strip() or None,
+                        "youtube_url": (m_row.get("youtube_url") or "").strip() or None,
+                        "source_url": (m_row.get("source_url") or "").strip() or None,
+                    }
+        except Exception:
+            media_by_id = {}
     total_guests = max(1, int(so_nguoi or 2))
     adults_est = max(1, total_guests - max(0, int(so_tre_em or 0)))
     child_ages = (6,) * max(0, int(so_tre_em or 0))
@@ -1423,6 +1439,8 @@ def tra_khach_san(
         fit = max(35, min(99, fit))
 
         item = dict(h)
+        media_entry = media_by_id.get(str(item.get("id") or "")) or {}
+        item["image_url"] = media_entry.get("image_url") or None
         item["fit_score"] = int(h.get("fit_score", fit))
         item["rooms_is_synthetic"] = True
         item["is_realtime"] = False

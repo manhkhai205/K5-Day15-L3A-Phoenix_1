@@ -28,6 +28,7 @@ from tools import (
 from tracing import note
 
 MAX_REPAIR_ROUNDS = 2
+MAX_DAILY_STOPS = 10
 
 SYSTEM = """Bạn là trợ lý lập & tái lập lịch trình cụm Phú Quốc United Center cho gia đình có trẻ nhỏ (mặc định VinWonders Phú Quốc nếu người dùng không nhắc khu khác; hỗ trợ thêm Vinpearl Safari và Grand World).
 Quy tắc bắt buộc:
@@ -39,8 +40,9 @@ Quy tắc bắt buộc:
    - Grand World (Z8_GRANDWORLD): 08:00–22:30; chuyển giữa 2 tổ hợp cần >= 15–20 phút VinBus.
    - Tuyệt đối không xếp bất kỳ mục nào kết thúc sau giờ về trong `rang_buoc.gio`; nếu khách đến từ 09:00 và muốn đi Z5_TYPHOON/Z6_SEASHELL (10:00 mới mở), hãy xếp 1 điểm ở Z1_EURO hoặc Z2_FAIRY trong khung 09:00–09:50 trước khi vào Z5/Z6 lúc 10:00.
 4. Có thể giữ nguyên hoặc tinh chỉnh từ `lich_goi_y_tu_cong_cu` (đã đạt 0 vi phạm), nhưng vẫn phải đảm bảo 0 chồng giờ, đủ thời gian di chuyển, đúng chiều cao từng bé và không dùng điểm ngoài trời trong giờ mưa.
-5. Không bao giờ đặt vé, nhận số thẻ/OTP, đặt khách sạn/vé máy bay hay xác nhận thông tin trái dữ liệu chính thức.
-6. Chỉ trả về đúng 1 khối JSON theo mẫu:
+5. Giữ lịch trình gọn, vừa sức gia đình: tối đa `10` mốc/ngày (gồm điểm chơi, show và bữa ăn; ngày trọn vẹn khoảng `8–10` mốc, nửa ngày/buổi tối `3–7` mốc), phân bổ đều sáng–trưa–chiều–tối; tối đa 1 bữa trưa trong khung `11:00–15:00` (không xếp 2 bữa trưa liên tiếp khi đi nhiều tổ hợp); hạn chế quay lại phân khu đã rời (nếu cuối ngày có `SH-ONCE` ở `Z1_EURO` thì buổi sáng ưu tiên bắt đầu từ `Z2_FAIRY`).
+6. Không bao giờ đặt vé, nhận số thẻ/OTP, đặt khách sạn/vé máy bay hay xác nhận thông tin trái dữ liệu chính thức.
+7. Chỉ trả về đúng 1 khối JSON theo mẫu:
 {
   "lich": [{"id": "MA_ID_CHINH_XAC", "start": "HH:MM", "end": "HH:MM", "tach_nhom": false}],
   "ghi_chu_rieng": ["..."],
@@ -530,13 +532,164 @@ def _pick_meal_option(constraints: Dict[str, Any]) -> Tuple[str, List[str]]:
     return "fastfood", []
 
 
+def _safe_parse_min(hhmm: Any) -> Optional[int]:
+    """Đổi chuỗi 'HH:MM' sang phút an toàn (trả None nếu sai định dạng)."""
+    s = str(hhmm or "").strip()
+    if len(s) == 5 and s[2] == ":" and s[:2].isdigit() and s[3:].isdigit():
+        hh, mm = int(s[:2]), int(s[3:])
+        if 0 <= hh <= 23 and 0 <= mm <= 59:
+            return hh * 60 + mm
+    return None
+
+
+def _allocate_slot_quotas(weights: List[int], total_slots: int, min_per_nonzero: int = 0) -> List[int]:
+    """Phân bổ số mốc tối đa theo tỉ lệ trọng số (Hamilton) cho các khoảng có weight > 0."""
+    quotas = [0] * len(weights)
+    if total_slots <= 0 or not weights:
+        return quotas
+    pos_indices = [i for i, w in enumerate(weights) if w > 0]
+    if not pos_indices:
+        return quotas
+
+    rem = int(total_slots)
+    if min_per_nonzero > 0:
+        pos_count = len(pos_indices)
+        if rem >= pos_count:
+            base = min(min_per_nonzero, rem // pos_count)
+            for idx in pos_indices:
+                quotas[idx] = base
+                rem -= base
+        else:
+            ranked = sorted(pos_indices, key=lambda idx: (-weights[idx], idx))
+            for idx in ranked[:rem]:
+                quotas[idx] += 1
+            return quotas
+
+    if rem > 0:
+        total_w = sum(weights[i] for i in pos_indices)
+        raw = [(i, (rem * weights[i]) / total_w) for i in pos_indices]
+        for i, val in raw:
+            fl = int(val)
+            quotas[i] += fl
+            rem -= fl
+        if rem > 0:
+            remainders = sorted(
+                [(val - int(val), weights[i], -i, i) for i, val in raw],
+                reverse=True,
+            )
+            for _, _, _, idx in remainders[:rem]:
+                quotas[idx] += 1
+    return quotas
+
+
+def _trim_schedule_to_limit(
+    schedule: List[Dict[str, Any]],
+    max_stops: int,
+    constraints: Dict[str, Any],
+    catalog_by_id: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Cắt gọn lịch vượt quá max_stops theo độ ưu tiên, giữ show bắt buộc, bữa ăn và đủ tổ hợp."""
+    if len(schedule) <= max_stops:
+        return list(schedule)
+
+    def _entry_id(entry: Dict[str, Any]) -> str:
+        return str(entry.get("id", entry.get("ma", ""))).strip()
+
+    def _entry_start(entry: Dict[str, Any]) -> Optional[int]:
+        return _safe_parse_min(entry.get("start", entry.get("bat_dau")))
+
+    def _entry_end(entry: Dict[str, Any]) -> Optional[int]:
+        return _safe_parse_min(entry.get("end", entry.get("ket_thuc")))
+
+    items = [dict(x) for x in schedule]
+    items.sort(key=lambda x: (_entry_start(x) is None, _entry_start(x) or 0))
+    want_shows = set(constraints.get("want_shows") or [])
+    prefer_water = bool(constraints.get("prefer_water_park"))
+
+    while len(items) > max_stops:
+        meal_indices: List[int] = []
+        midday_meal_indices: List[int] = []
+        venue_counts: Dict[str, int] = {}
+        zone_counts: Dict[str, int] = {}
+        water_count = 0
+
+        metas: List[Tuple[str, Dict[str, Any], str, str, str]] = []
+        for idx, entry in enumerate(items):
+            eid = _entry_id(entry)
+            meta = catalog_by_id.get(eid) or {}
+            cat = str(
+                meta.get("category")
+                or entry.get("category")
+                or ("show" if eid.startswith("SH-") else ("meal" if "-MEAL-" in eid else "ride"))
+            )
+            zone_id = str(meta.get("zone_id") or entry.get("zone_id") or "")
+            venue_id = str(meta.get("venue_id") or entry.get("venue_id") or "")
+            metas.append((eid, meta, cat, zone_id, venue_id))
+            if cat == "meal":
+                meal_indices.append(idx)
+                s_min = _entry_start(entry)
+                e_min = _entry_end(entry)
+                if s_min is not None and 660 <= s_min < 900 and (e_min is None or e_min > 660):
+                    midday_meal_indices.append(idx)
+            if venue_id:
+                venue_counts[venue_id] = venue_counts.get(venue_id, 0) + 1
+            if zone_id:
+                zone_counts[zone_id] = zone_counts.get(zone_id, 0) + 1
+            if meta.get("is_water_park"):
+                water_count += 1
+
+        best_drop_idx: Optional[int] = None
+        best_score: Optional[Tuple[int, int, int, int, int]] = None
+
+        for idx, entry in enumerate(items):
+            eid, meta, cat, zone_id, venue_id = metas[idx]
+            if eid in want_shows:
+                continue
+            if cat == "meal" and len(meal_indices) <= 1:
+                continue
+            if venue_id and venue_counts.get(venue_id, 0) <= 1:
+                continue
+            if eid == "SF-Z7-01":
+                continue
+            if prefer_water and meta.get("is_water_park") and water_count <= 1:
+                continue
+
+            is_dup_midday_meal = 1 if (len(midday_meal_indices) >= 2 and idx in midday_meal_indices) else 0
+            is_non_show = 0 if cat == "show" else 1
+            z_cnt = zone_counts.get(zone_id, 0)
+
+            s_cur = _entry_start(entry)
+            e_cur = _entry_end(entry)
+            gaps: List[int] = []
+            if idx > 0:
+                e_prev = _entry_end(items[idx - 1])
+                if s_cur is not None and e_prev is not None:
+                    gaps.append(max(0, s_cur - e_prev))
+            if idx + 1 < len(items):
+                s_next = _entry_start(items[idx + 1])
+                if s_next is not None and e_cur is not None:
+                    gaps.append(max(0, s_next - e_cur))
+            min_neighbor_gap_min = min(gaps) if gaps else 999
+
+            score = (is_dup_midday_meal, is_non_show, z_cnt, -min_neighbor_gap_min, idx)
+            if best_score is None or score > best_score:
+                best_score = score
+                best_drop_idx = idx
+
+        if best_drop_idx is None:
+            break
+        del items[best_drop_idx]
+
+    return items
+
+
 def _build_schedule_from_tools(
     constraints: Dict[str, Any],
     shows_data: Dict[str, Any],
     attractions_data: Dict[str, Any],
     weather_data: Dict[str, Any],
 ) -> List[Dict[str, Any]]:
-    """Xếp lịch hợp lệ trực tiếp từ kết quả công cụ (hỗ trợ cả đơn khu VinWonders và đa tổ hợp Safari + Grand World)."""
+    """Xếp lịch hợp lệ trực tiếp từ kết quả công cụ (tối đa MAX_DAILY_STOPS mốc, hỗ trợ đơn khu và đa tổ hợp)."""
     t_start = _to_min(constraints["gio_bat_dau"])
     t_end = _to_min(constraints["gio_ket_thuc"])
     zones_by_id = {z["id"]: z for z in shows_data["phan_khu"]}
@@ -591,7 +744,7 @@ def _build_schedule_from_tools(
             }
         )
 
-    # Nhánh 1: Thuần VinWonders Phú Quốc — giữ nguyên luồng 100% tương thích B01–B14
+    # Nhánh 1: Thuần VinWonders Phú Quốc — giữ tương thích B01–B14 với trần MAX_DAILY_STOPS
     if venues == ["vinwonders"]:
         preferred_show_ids = list(dict.fromkeys(constraints["want_shows"]))
         if not preferred_show_ids:
@@ -623,18 +776,52 @@ def _build_schedule_from_tools(
                 if any(x["id"].startswith("VW-MEAL") for x in chosen):
                     break
 
-        candidates = [a for a in attractions_data["diem_choi"] if a.get("category") not in ("meal", "rest")]
         chosen.sort(key=lambda x: _to_min(x["start"]))
-        cursor = t_start
+        remaining_slots = max(0, MAX_DAILY_STOPS - len(chosen))
+        if remaining_slots <= 0:
+            return chosen
+
+        candidates = [a for a in attractions_data["diem_choi"] if a.get("category") not in ("meal", "rest")]
         used_ids = {x["id"] for x in chosen}
         anchors = list(chosen) + [{"start": _to_hhmm(t_end), "end": _to_hhmm(t_end), "zone_id": "Z1_EURO"}]
+
+        gaps: List[Tuple[int, int, Dict[str, Any]]] = []
+        gap_weights: List[int] = []
+        temp_cursor = t_start
         for anchor in anchors:
-            gap_end = _to_min(anchor["start"])
-            prev_items = [c for c in chosen if _to_min(c["end"]) <= cursor]
-            prev_zone = prev_items[-1]["zone_id"] if prev_items else "Z1_EURO"
-            while cursor < gap_end:
+            g_start = temp_cursor
+            g_end = _to_min(anchor["start"])
+            dur_gap = max(0, g_end - g_start)
+            gaps.append((g_start, g_end, anchor))
+            gap_weights.append(dur_gap if dur_gap >= 25 else 0)
+            temp_cursor = max(temp_cursor, _to_min(anchor["end"]))
+
+        gap_quotas = _allocate_slot_quotas(gap_weights, remaining_slots)
+        has_evening_once = any(x["id"] == "SH-ONCE" for x in chosen)
+        initial_zone = "Z2_FAIRY" if (has_evening_once and t_start < _to_min("17:00")) else "Z1_EURO"
+        zone_ride_counts: Dict[str, int] = {}
+        left_zones: set = set()
+        water_count = 0
+        carryover = 0
+        cursor = t_start
+
+        for (g_start, gap_end, anchor), base_quota in zip(gaps, gap_quotas):
+            cursor = max(cursor, g_start)
+            quota_for_gap = base_quota + carryover
+            placed_in_gap = 0
+            prev_items = sorted(
+                [c for c in chosen if _to_min(c["end"]) <= cursor],
+                key=lambda c: _to_min(c["end"]),
+            )
+            prev_zone = prev_items[-1]["zone_id"] if prev_items else initial_zone
+            for pi in prev_items:
+                if pi["zone_id"] != prev_zone and zone_ride_counts.get(pi["zone_id"], 0) > 0:
+                    left_zones.add(pi["zone_id"])
+
+            while cursor < gap_end and placed_in_gap < quota_for_gap and len(chosen) < MAX_DAILY_STOPS:
                 best_pick = None
                 best_key = None
+                remaining_in_gap = quota_for_gap - placed_in_gap
                 for item in candidates:
                     if item["id"] in used_ids:
                         continue
@@ -644,37 +831,77 @@ def _build_schedule_from_tools(
                         continue
                     walk_in = _walk(prev_zone, item["zone_id"]) if prev_items or chosen else 0
                     walk_out = _walk(item["zone_id"], anchor["zone_id"]) if anchor.get("id") else 0
-                    s_try = max(cursor + walk_in, _to_min(item["open_time"]), _to_min(zones_by_id[item["zone_id"]]["open_time"]))
-                    e_try = s_try + int(item.get("duration_min", 30))
-                    if e_try + walk_out > gap_end:
+                    min_start = max(
+                        cursor + walk_in,
+                        _to_min(item["open_time"]),
+                        _to_min(zones_by_id[item["zone_id"]]["open_time"]),
+                    )
+                    dur = int(item.get("duration_min", 30))
+                    if min_start + dur + walk_out > gap_end:
                         continue
+
+                    s_try = min_start
+                    if prev_items:
+                        cushioned_s = max(min_start, cursor + 10)
+                        if (
+                            cushioned_s + dur + walk_out <= gap_end
+                            and _can_place(cushioned_s, cushioned_s + dur, item["zone_id"], item.get("indoor", False), item)
+                        ):
+                            s_try = cushioned_s
+                    e_try = s_try + dur
                     if not _can_place(s_try, e_try, item["zone_id"], item.get("indoor", False), item):
                         continue
+
                     water_pref = (
                         0
                         if (
                             constraints["prefer_water_park"]
                             and item.get("is_water_park")
-                            and cursor < _to_min("12:00")
-                            and (s_try - cursor) <= 35
+                            and water_count < 2
+                            and (
+                                (cursor < _to_min("12:00") and (s_try - cursor) <= (65 if remaining_in_gap <= 1 else 45))
+                                or (water_count == 0 and cursor >= _to_min("12:00"))
+                            )
                         )
                         else 1
                     )
                     thrill_pref = 0 if (constraints["prefer_thrill"] and item.get("thrill_level") in ("medium", "high")) else 1
+                    revisit_penalty = 1 if item["zone_id"] in left_zones else 0
+                    avoid_z1_early = 1 if (has_evening_once and item["zone_id"] == "Z1_EURO" and cursor < _to_min("16:30")) else 0
+                    zone_saturated = 1 if zone_ride_counts.get(item["zone_id"], 0) >= 2 else 0
                     same_zone = 0 if item["zone_id"] == prev_zone else 1
                     next_zone = 0 if (anchor.get("id") and item["zone_id"] == anchor["zone_id"]) else 1
-                    key = (water_pref, thrill_pref, same_zone, walk_in, next_zone, s_try, item["id"])
+                    key = (
+                        water_pref,
+                        thrill_pref,
+                        revisit_penalty,
+                        avoid_z1_early,
+                        zone_saturated,
+                        same_zone,
+                        walk_in,
+                        next_zone,
+                        s_try,
+                        item["id"],
+                    )
                     if best_key is None or key < best_key:
                         best_key = key
                         best_pick = (item, s_try, e_try)
                 if best_pick is None:
                     break
                 item, s_try, e_try = best_pick
+                if prev_zone != item["zone_id"] and zone_ride_counts.get(prev_zone, 0) > 0:
+                    left_zones.add(prev_zone)
                 _add_item(item, s_try, e_try)
                 used_ids.add(item["id"])
+                zone_ride_counts[item["zone_id"]] = zone_ride_counts.get(item["zone_id"], 0) + 1
+                if item.get("is_water_park"):
+                    water_count += 1
+                placed_in_gap += 1
                 prev_items.append(chosen[-1])
                 prev_zone = item["zone_id"]
                 cursor = e_try
+
+            carryover = max(0, quota_for_gap - placed_in_gap)
             cursor = max(cursor, _to_min(anchor["end"]))
 
         chosen.sort(key=lambda x: _to_min(x["start"]))
@@ -720,8 +947,8 @@ def _build_schedule_from_tools(
     dinner_placed = False
     want_paid_set = set(constraints.get("want_paid_items") or [])
 
+    # Lượt 1: Đặt trước show tiêu biểu, bữa trưa (tối đa 1 lần) và bữa tối Grand World cho mọi tổ hợp
     for vid, v_start, v_end in venue_slices:
-        # 1) Đặt show tiêu biểu của từng tổ hợp trong cửa sổ v_start..v_end
         venue_shows: List[str] = [
             sid for sid in constraints["want_shows"]
             if sid in shows_by_id and shows_by_id[sid].get("venue_id") == vid
@@ -748,7 +975,6 @@ def _build_schedule_from_tools(
                 _add_item(sh, sh_s, sh_e)
                 used_ids.add(sid)
 
-        # 2) Đặt bữa trưa (1 lần trong ngày ở cụm đang đứng khung trưa) hoặc bữa tối tại Grand World
         if not midday_meal_placed and t_end - t_start >= 240 and v_start <= _to_min("13:00") and v_end >= _to_min("12:30"):
             meal_ids = (
                 ["SF-MEAL-01"] if vid == "safari"
@@ -770,7 +996,7 @@ def _build_schedule_from_tools(
 
         if vid == "grandworld" and not dinner_placed and v_end >= _to_min("20:30"):
             gw_meal = items_by_id.get("GW-MEAL-01")
-            if gw_meal:
+            if gw_meal and "GW-MEAL-01" not in used_ids:
                 for m_start in (_to_min("19:25"), _to_min("19:00"), _to_min("18:30"), _to_min("19:45")):
                     m_end = m_start + int(gw_meal.get("duration_min", 50))
                     if m_start >= v_start and m_end <= v_end and _can_place(m_start, m_end, gw_meal["zone_id"], True, gw_meal):
@@ -779,63 +1005,143 @@ def _build_schedule_from_tools(
                         dinner_placed = True
                         break
 
-        # 3) Lấp điểm chơi / tham quan trong khung giờ v_start..v_end của riêng tổ hợp `vid`
-        v_candidates = [
-            a for a in attractions_data["diem_choi"]
-            if a.get("venue_id", "vinwonders") == vid
-            and a.get("category") not in ("meal", "rest")
-            and (not a.get("paid_ticket_key") or a["paid_ticket_key"] in want_paid_set or a.get("venue_id") != "grandworld")
-        ]
-        slice_items = sorted(
-            [c for c in chosen if c.get("venue_id") == vid],
-            key=lambda x: _to_min(x["start"]),
-        )
-        default_z = "Z7_SAFARI" if vid == "safari" else ("Z8_GRANDWORLD" if vid == "grandworld" else "Z1_EURO")
-        anchors = slice_items + [{"start": _to_hhmm(v_end), "end": _to_hhmm(v_end), "zone_id": default_z}]
-        cursor = v_start
-        for anchor in anchors:
-            gap_end = _to_min(anchor["start"])
-            prev_in_slice = [c for c in chosen if _to_min(c["end"]) <= cursor]
-            prev_zone = prev_in_slice[-1]["zone_id"] if prev_in_slice else default_z
-            while cursor < gap_end:
-                best_pick = None
-                best_key = None
-                for item in v_candidates:
-                    if item["id"] in used_ids:
-                        continue
-                    if not item.get("indoor", False) and rain_span and cursor < rain_span[1] and rain_span[0] < gap_end:
-                        continue
-                    if constraints["prefer_indoor_midday"] and _to_min("11:30") <= cursor < _to_min("15:00") and not item.get("indoor"):
-                        continue
-                    walk_in = _walk(prev_zone, item["zone_id"]) if prev_in_slice else 0
-                    walk_out = _walk(item["zone_id"], anchor["zone_id"]) if anchor.get("id") else 0
-                    s_try = max(cursor + walk_in, _to_min(item["open_time"]), _to_min(zones_by_id[item["zone_id"]]["open_time"]))
-                    e_try = s_try + int(item.get("duration_min", 30))
-                    if e_try + walk_out > gap_end:
-                        continue
-                    if not _can_place(s_try, e_try, item["zone_id"], item.get("indoor", False), item):
-                        continue
+    # Lượt 2: Điền điểm chơi / tham quan trong khung giờ từng tổ hợp với trần MAX_DAILY_STOPS
+    remaining_slots = max(0, MAX_DAILY_STOPS - len(chosen))
+    if remaining_slots > 0 and venue_slices:
+        slice_weights = [max(0, ve - vs) for _, vs, ve in venue_slices]
+        slice_quotas = _allocate_slot_quotas(slice_weights, remaining_slots, min_per_nonzero=1)
+        zone_ride_counts_v2: Dict[str, int] = {}
+        left_zones_v2: set = set()
+        has_evening_once_v2 = any(x["id"] == "SH-ONCE" for x in chosen)
+        slice_carryover = 0
 
-                    # Ưu tiên đi Safari Tour xe buýt đầu tiên ở Safari, ưu tiên điểm được yêu cầu ở Grand World
-                    priority = 0
-                    if vid == "safari" and item["id"] == "SF-Z7-01":
-                        priority = -2
-                    elif vid == "grandworld" and item.get("paid_ticket_key") in want_paid_set:
-                        priority = -1
-                    same_zone = 0 if item["zone_id"] == prev_zone else 1
-                    key = (priority, same_zone, walk_in, s_try, item["id"])
-                    if best_key is None or key < best_key:
-                        best_key = key
-                        best_pick = (item, s_try, e_try)
-                if best_pick is None:
-                    break
-                item, s_try, e_try = best_pick
-                _add_item(item, s_try, e_try)
-                used_ids.add(item["id"])
-                prev_in_slice.append(chosen[-1])
-                prev_zone = item["zone_id"]
-                cursor = e_try
-            cursor = max(cursor, _to_min(anchor["end"]))
+        for (vid, v_start, v_end), s_quota in zip(venue_slices, slice_quotas):
+            if len(chosen) >= MAX_DAILY_STOPS:
+                break
+            budget_for_slice = s_quota + slice_carryover
+            if budget_for_slice <= 0:
+                continue
+
+            v_candidates = [
+                a for a in attractions_data["diem_choi"]
+                if a.get("venue_id", "vinwonders") == vid
+                and a.get("category") not in ("meal", "rest")
+                and (not a.get("paid_ticket_key") or a["paid_ticket_key"] in want_paid_set or a.get("venue_id") != "grandworld")
+            ]
+            slice_items = sorted(
+                [c for c in chosen if c.get("venue_id") == vid],
+                key=lambda x: _to_min(x["start"]),
+            )
+            default_z = (
+                "Z7_SAFARI" if vid == "safari"
+                else ("Z8_GRANDWORLD" if vid == "grandworld" else ("Z2_FAIRY" if has_evening_once_v2 and v_start < _to_min("17:00") else "Z1_EURO"))
+            )
+            anchors = slice_items + [{"start": _to_hhmm(v_end), "end": _to_hhmm(v_end), "zone_id": default_z}]
+            v_gaps: List[Tuple[int, int, Dict[str, Any]]] = []
+            v_gap_weights: List[int] = []
+            temp_c = v_start
+            for anchor in anchors:
+                gs = temp_c
+                ge = _to_min(anchor["start"])
+                gd = max(0, ge - gs)
+                v_gaps.append((gs, ge, anchor))
+                v_gap_weights.append(gd if gd >= 25 else 0)
+                temp_c = max(temp_c, _to_min(anchor["end"]))
+
+            v_gap_quotas = _allocate_slot_quotas(v_gap_weights, budget_for_slice)
+            placed_in_slice = 0
+            gap_carryover = 0
+            cursor = v_start
+
+            for (gs, gap_end, anchor), g_q in zip(v_gaps, v_gap_quotas):
+                cursor = max(cursor, gs)
+                q_gap = g_q + gap_carryover
+                placed_in_gap = 0
+                prev_in_slice = sorted(
+                    [c for c in chosen if c.get("venue_id") == vid and _to_min(c["end"]) <= cursor],
+                    key=lambda c: _to_min(c["end"]),
+                )
+                prev_zone = prev_in_slice[-1]["zone_id"] if prev_in_slice else default_z
+                if vid == "vinwonders":
+                    for pi in prev_in_slice:
+                        if pi["zone_id"] != prev_zone and zone_ride_counts_v2.get(pi["zone_id"], 0) > 0:
+                            left_zones_v2.add(pi["zone_id"])
+
+                while cursor < gap_end and placed_in_gap < q_gap and placed_in_slice < budget_for_slice and len(chosen) < MAX_DAILY_STOPS:
+                    best_pick = None
+                    best_key = None
+                    for item in v_candidates:
+                        if item["id"] in used_ids:
+                            continue
+                        if not item.get("indoor", False) and rain_span and cursor < rain_span[1] and rain_span[0] < gap_end:
+                            continue
+                        if constraints["prefer_indoor_midday"] and _to_min("11:30") <= cursor < _to_min("15:00") and not item.get("indoor"):
+                            continue
+                        walk_in = _walk(prev_zone, item["zone_id"]) if prev_in_slice else 0
+                        walk_out = _walk(item["zone_id"], anchor["zone_id"]) if anchor.get("id") else 0
+                        min_start = max(
+                            cursor + walk_in,
+                            _to_min(item["open_time"]),
+                            _to_min(zones_by_id[item["zone_id"]]["open_time"]),
+                        )
+                        dur = int(item.get("duration_min", 30))
+                        if min_start + dur + walk_out > gap_end:
+                            continue
+
+                        s_try = min_start
+                        if prev_in_slice:
+                            cushioned_s = max(min_start, cursor + 10)
+                            if (
+                                cushioned_s + dur + walk_out <= gap_end
+                                and _can_place(cushioned_s, cushioned_s + dur, item["zone_id"], item.get("indoor", False), item)
+                            ):
+                                s_try = cushioned_s
+                        e_try = s_try + dur
+                        if not _can_place(s_try, e_try, item["zone_id"], item.get("indoor", False), item):
+                            continue
+
+                        # Ưu tiên đi Safari Tour xe buýt đầu tiên ở Safari, ưu tiên điểm được yêu cầu ở Grand World
+                        priority = 0
+                        if vid == "safari" and item["id"] == "SF-Z7-01":
+                            priority = -2
+                        elif vid == "grandworld" and item.get("paid_ticket_key") in want_paid_set:
+                            priority = -1
+                        revisit_penalty = 1 if (vid == "vinwonders" and item["zone_id"] in left_zones_v2) else 0
+                        avoid_z1_early = 1 if (vid == "vinwonders" and has_evening_once_v2 and item["zone_id"] == "Z1_EURO" and cursor < _to_min("16:30")) else 0
+                        zone_saturated = 1 if (vid == "vinwonders" and zone_ride_counts_v2.get(item["zone_id"], 0) >= 2) else 0
+                        same_zone = 0 if item["zone_id"] == prev_zone else 1
+                        key = (
+                            priority,
+                            revisit_penalty,
+                            avoid_z1_early,
+                            zone_saturated,
+                            same_zone,
+                            walk_in,
+                            s_try,
+                            item["id"],
+                        )
+                        if best_key is None or key < best_key:
+                            best_key = key
+                            best_pick = (item, s_try, e_try)
+                    if best_pick is None:
+                        break
+                    item, s_try, e_try = best_pick
+                    if vid == "vinwonders" and prev_zone != item["zone_id"] and zone_ride_counts_v2.get(prev_zone, 0) > 0:
+                        left_zones_v2.add(prev_zone)
+                    _add_item(item, s_try, e_try)
+                    used_ids.add(item["id"])
+                    if vid == "vinwonders":
+                        zone_ride_counts_v2[item["zone_id"]] = zone_ride_counts_v2.get(item["zone_id"], 0) + 1
+                    placed_in_gap += 1
+                    placed_in_slice += 1
+                    prev_in_slice.append(chosen[-1])
+                    prev_zone = item["zone_id"]
+                    cursor = e_try
+
+                gap_carryover = max(0, q_gap - placed_in_gap)
+                cursor = max(cursor, _to_min(anchor["end"]))
+
+            slice_carryover = max(0, budget_for_slice - placed_in_slice)
 
     chosen.sort(key=lambda x: _to_min(x["start"]))
     return chosen
@@ -1325,6 +1631,7 @@ def plan_day(
             "ngan_sach_vnd": constraints["ngan_sach_vnd"],
             "thoi_tiet": weather_data["trang_thai"],
             "khung_mua": rang_buoc["khung_gio_mua"],
+            "so_diem_toi_da": MAX_DAILY_STOPS,
         },
         "show_bat_buoc": required_show_payload,
         "show_kha_dung": [
@@ -1354,6 +1661,8 @@ def plan_day(
         parsed = _parse_model_json(reply.get("text", ""))
         if parsed and isinstance(parsed.get("lich"), list):
             schedule = parsed["lich"]
+            if len(schedule) > MAX_DAILY_STOPS:
+                schedule = _trim_schedule_to_limit(schedule, MAX_DAILY_STOPS, constraints, catalog_by_id)
             ghi_chu_rieng = parsed.get("ghi_chu_rieng") if isinstance(parsed.get("ghi_chu_rieng"), list) else []
             diem_bo_qua = parsed.get("diem_bo_qua") if isinstance(parsed.get("diem_bo_qua"), list) else []
 
@@ -1382,6 +1691,7 @@ def plan_day(
                 "goi_y": check_res["goi_y_noi_rang_buoc"],
                 "id_hop_le": valid_ids_list,
                 "lich_mau_0_vi_pham": baseline_compact,
+                "so_diem_toi_da": MAX_DAILY_STOPS,
             }
             repair_reply = call_model(
                 SYSTEM,
@@ -1391,6 +1701,8 @@ def plan_day(
             parsed_repair = _parse_model_json(repair_reply.get("text", ""))
             if parsed_repair and isinstance(parsed_repair.get("lich"), list):
                 schedule = parsed_repair["lich"]
+                if len(schedule) > MAX_DAILY_STOPS:
+                    schedule = _trim_schedule_to_limit(schedule, MAX_DAILY_STOPS, constraints, catalog_by_id)
                 if isinstance(parsed_repair.get("ghi_chu_rieng"), list):
                     ghi_chu_rieng = parsed_repair["ghi_chu_rieng"]
                 if isinstance(parsed_repair.get("diem_bo_qua"), list):
@@ -1443,6 +1755,15 @@ def plan_day(
             "steps": steps,
             "model_used": model_used,
         }
+
+    if len(schedule) > MAX_DAILY_STOPS:
+        trimmed = _trim_schedule_to_limit(schedule, MAX_DAILY_STOPS, constraints, catalog_by_id)
+        trimmed_check = kiem_lich_trinh(trimmed, rang_buoc)
+        trimmed_missing = _check_missing_required_shows(trimmed, constraints, shows_by_id, zones_by_id, t_start_min, t_end_min)
+        if trimmed_check["hop_le"] and not trimmed_missing:
+            schedule = trimmed
+            check_res = trimmed_check
+            missing_req = trimmed_missing
 
     # Bước 5: Làm giàu dữ liệu mốc, ghi chặng di chuyển thực tế và tổng hợp kết quả
     enriched_schedule = _enrich_schedule(schedule, catalog_by_id, constraints["heights_cm"])

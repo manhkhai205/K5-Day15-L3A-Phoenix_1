@@ -535,6 +535,31 @@ a {
   gap: 6px;
 }
 
+.hotel-card-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.hotel-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hotel-thumb {
+  width: 76px;
+  height: 58px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+  display: block;
+}
+
 .hotel-card--selected {
   border-color: var(--brand);
   background: var(--bg-pale);
@@ -1453,6 +1478,42 @@ a {
   overflow: hidden;
   border: 1px solid var(--line-soft);
   background: var(--bg-soft);
+}
+
+.media-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.media-tab {
+  position: relative;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: color 150ms ease;
+}
+
+.media-tab:hover {
+  color: var(--ink);
+}
+
+.media-tab[aria-selected="true"] {
+  color: var(--brand);
+}
+
+.media-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 8px 0;
+  border-block-end: 2.5px solid var(--brand);
 }
 
 .media-caption {

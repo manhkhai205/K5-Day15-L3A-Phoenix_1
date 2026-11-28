@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { fetchAlternatives, fetchAttractionDetail } from "../utils/api.js";
 import { toYoutubeEmbedUrl } from "../utils/mapFallbackStyle.js";
 
@@ -17,21 +17,50 @@ export default function ItemDetailModal({
   const [alternatives, setAlternatives] = useState([]);
   const [loadingInfo, setLoadingInfo] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
+  const [mediaTab, setMediaTab] = useState("image");
   const [actionError, setActionError] = useState("");
+
+  const tabBaseId = useId();
+  const imageTabId = `${tabBaseId}-tab-image`;
+  const videoTabId = `${tabBaseId}-tab-video`;
+  const imageTabRef = useRef(null);
+  const videoTabRef = useRef(null);
 
   useEffect(() => {
     if (!item) return undefined;
     let cancelled = false;
     setImgFailed(false);
+    setMediaTab("image");
     setActionError("");
     setDetail(null);
     setAlternatives([]);
 
-    if (isMockMode || item.is_free_rest) {
+    if (item.is_free_rest) {
+      setLoadingInfo(false);
       return undefined;
     }
 
     const heights = (item.height_labels || []).map((hl) => hl.child_cm);
+
+    if (isMockMode) {
+      if (item.media) {
+        setDetail({ media: item.media, notes: item.notes });
+        setLoadingInfo(false);
+        return undefined;
+      }
+      setLoadingInfo(true);
+      fetchAttractionDetail(item.id, heights)
+        .catch(() => null)
+        .then((det) => {
+          if (cancelled) return;
+          setDetail(det);
+          setLoadingInfo(false);
+        });
+      return () => {
+        cancelled = true;
+      };
+    }
+
     setLoadingInfo(true);
 
     const detailPromise = fetchAttractionDetail(item.id, heights).catch(() => null);
@@ -54,15 +83,34 @@ export default function ItemDetailModal({
 
   if (!item) return null;
 
-  const media = detail?.media || {};
+  const media = detail?.media || item?.media || {};
   const embedUrl = toYoutubeEmbedUrl(media.youtube_url);
   const hasWorkingImage = Boolean(media.image_url) && !imgFailed;
+  const hasBoth = hasWorkingImage && Boolean(embedUrl);
+  const activeTab = hasBoth ? mediaTab : hasWorkingImage ? "image" : embedUrl ? "video" : "none";
+
   const openHours =
     detail?.open_time && detail?.close_time
       ? `${detail.open_time}–${detail.close_time}`
       : `${item.start}–${item.end}`;
   const canModify = !isMockMode && Boolean(sessionId) && item.type !== "hotel" && !item.is_free_rest;
   const canRemove = canModify && parkItemCount > 1;
+
+  function handleTabKeyDown(e, currentKey) {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      const targetKey =
+        e.key === "Home"
+          ? "image"
+          : e.key === "End"
+          ? "video"
+          : currentKey === "image"
+          ? "video"
+          : "image";
+      const targetRef = targetKey === "image" ? imageTabRef : videoTabRef;
+      targetRef.current?.focus();
+    }
+  }
 
   async function handleSwapClick(newId) {
     setActionError("");
@@ -97,73 +145,117 @@ export default function ItemDetailModal({
           </button>
         </div>
 
-        {/* Media Hybrid (YouTube embed hoặc ảnh link chính thức + onError fallback) */}
+        {/* Media Hybrid (tab Ảnh / Video youtube-nocookie + ảnh link chính thức + onError fallback) */}
         <div className="media-box">
           {loadingInfo ? (
             <div className="media-empty">
               <span>Đang tải media...</span>
             </div>
-          ) : embedUrl ? (
-            <>
-              <iframe
-                className="media-frame"
-                src={embedUrl}
-                title={item.name}
-                referrerPolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-              {(media.caption || media.source_url) && (
-                <div className="media-caption">
-                  <span>{media.caption || item.name}</span>
-                  {media.source_url && (
-                    <a
-                      href={media.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "var(--brand)", fontWeight: 600, whiteSpace: "nowrap" }}
-                    >
-                      Nguồn chính thức ↗
-                    </a>
-                  )}
-                </div>
-              )}
-            </>
-          ) : hasWorkingImage ? (
-            <>
-              <img
-                className="media-img"
-                src={media.image_url}
-                alt={media.caption || item.name}
-                loading="lazy"
-                referrerPolicy="no-referrer"
-                onError={() => setImgFailed(true)}
-              />
-              {(media.caption || media.source_url) && (
-                <div className="media-caption">
-                  <span>{media.caption || item.name}</span>
-                  {media.source_url && (
-                    <a
-                      href={media.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "var(--brand)", fontWeight: 600, whiteSpace: "nowrap" }}
-                    >
-                      Nguồn chính thức ↗
-                    </a>
-                  )}
-                </div>
-              )}
-            </>
           ) : (
-            <div className="media-empty">
-              <span>Chưa có media</span>
-              {media.source_url && (
-                <a className="btn-outline-sm" href={media.source_url} target="_blank" rel="noopener noreferrer">
-                  Xem trang chính thức ↗
-                </a>
+            <>
+              {hasBoth && (
+                <div className="media-tabs" role="tablist" aria-label="Loại media">
+                  <button
+                    ref={imageTabRef}
+                    type="button"
+                    role="tab"
+                    id={imageTabId}
+                    className="media-tab"
+                    aria-selected={activeTab === "image"}
+                    tabIndex={activeTab === "image" ? 0 : -1}
+                    onClick={() => setMediaTab("image")}
+                    onKeyDown={(e) => handleTabKeyDown(e, "image")}
+                  >
+                    Ảnh
+                  </button>
+                  <button
+                    ref={videoTabRef}
+                    type="button"
+                    role="tab"
+                    id={videoTabId}
+                    className="media-tab"
+                    aria-selected={activeTab === "video"}
+                    tabIndex={activeTab === "video" ? 0 : -1}
+                    onClick={() => setMediaTab("video")}
+                    onKeyDown={(e) => handleTabKeyDown(e, "video")}
+                  >
+                    Video
+                  </button>
+                </div>
               )}
-            </div>
+
+              {hasBoth ? (
+                <>
+                  <div role="tabpanel" aria-labelledby={imageTabId} hidden={activeTab !== "image"}>
+                    {activeTab === "image" && (
+                      <img
+                        className="media-img"
+                        src={media.image_url}
+                        alt={media.caption || item.name}
+                        referrerPolicy="no-referrer"
+                        onError={() => setImgFailed(true)}
+                      />
+                    )}
+                  </div>
+                  <div role="tabpanel" aria-labelledby={videoTabId} hidden={activeTab !== "video"}>
+                    {activeTab === "video" && embedUrl && (
+                      <iframe
+                        className="media-frame"
+                        src={embedUrl}
+                        title={`Video giới thiệu ${item.name}`}
+                        loading="lazy"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
+                  </div>
+                </>
+              ) : activeTab === "image" ? (
+                <img
+                  className="media-img"
+                  src={media.image_url}
+                  alt={media.caption || item.name}
+                  referrerPolicy="no-referrer"
+                  onError={() => setImgFailed(true)}
+                />
+              ) : activeTab === "video" && embedUrl ? (
+                <iframe
+                  className="media-frame"
+                  src={embedUrl}
+                  title={`Video giới thiệu ${item.name}`}
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="media-empty">
+                  <span>Chưa có media</span>
+                  {media.source_url && (
+                    <a className="btn-outline-sm" href={media.source_url} target="_blank" rel="noopener noreferrer">
+                      Xem trang chính thức ↗
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {(activeTab === "image" || activeTab === "video") && (media.caption || media.source_url) && (
+                <div className="media-caption">
+                  <span>{media.caption || item.name}</span>
+                  {media.source_url && (
+                    <a
+                      href={media.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--brand)", fontWeight: 600, whiteSpace: "nowrap" }}
+                    >
+                      Nguồn chính thức ↗
+                    </a>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
 

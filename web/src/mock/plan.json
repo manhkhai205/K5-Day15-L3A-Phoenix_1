@@ -6,16 +6,18 @@
   "hotels": [
     {
       "id": "HT-01",
-      "name": "VinHolidays Fiesta Phú Quốc",
-      "lat": 10.32423,
-      "lng": 103.85817,
-      "distance_to_gate_m": 800,
-      "price_ref_vnd": 1450000,
-      "rooms_left": 3,
+      "name": "Vinpearl Resort & Spa Phú Quốc",
+      "lat": 10.3279,
+      "lng": 103.8512,
+      "distance_to_gate_m": 950,
+      "rooms_left": 2,
       "rooms_is_synthetic": true,
-      "fit_score": 92,
-      "fit_note": "Còn 3 phòng gia đình (dữ liệu mô phỏng) · Trung tâm Grand World",
-      "booking_url": "https://booking.vinpearl.com/hotel/VHD1PQ"
+      "fit_score": 96,
+      "family_room_note": "Có villa 3 phòng ngủ ven biển 340 m², tối đa 12 khách (nguồn mục 1.1)",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "booking_url": "https://booking.vinpearl.com/vi-VND/bestprice/VPQR?checkin=2026-12-12&checkout=2026-12-13&adults=2&children=2",
+      "image_url": "https://static.vinwonders.com/production/2025/11/vinpearl-resort-spa-phu-quoc.jpg"
     },
     {
       "id": "HT-02",
@@ -23,28 +25,32 @@
       "lat": 10.3298,
       "lng": 103.8528,
       "distance_to_gate_m": 1100,
-      "price_ref_vnd": 3200000,
       "rooms_left": 1,
       "rooms_is_synthetic": true,
-      "fit_score": 87,
-      "fit_note": "Còn 1 phòng villa gia đình (dữ liệu mô phỏng) · Gần VinWonders",
-      "booking_url": "https://booking.vinpearl.com/vi-VND/bestprice/VPDS1PQ"
+      "fit_score": 93,
+      "family_room_note": "Có Deluxe family villa 3 phòng ngủ (279 m², 12 khách) và 4 phòng ngủ (405 m², 16 khách) (nguồn mục 2.1)",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "booking_url": "https://booking.vinpearl.com/vi-VND/bestprice/VPDS1PQ?checkin=2026-12-12&checkout=2026-12-13&adults=2&children=2",
+      "image_url": "https://static.vinwonders.com/production/2025/11/vinpearl-wonderworld-phu-quoc.jpg"
     },
     {
       "id": "HT-03",
-      "name": "Corona Resort & Casino Phú Quốc",
-      "lat": 10.32928,
-      "lng": 103.85529,
-      "distance_to_gate_m": 650,
-      "price_ref_vnd": 2650000,
-      "rooms_left": 2,
+      "name": "VinHolidays Fiesta Phú Quốc",
+      "lat": 10.32423,
+      "lng": 103.85817,
+      "distance_to_gate_m": 1400,
+      "rooms_left": 5,
       "rooms_is_synthetic": true,
-      "fit_score": 84,
-      "fit_note": "Còn 2 phòng hướng vườn (dữ liệu mô phỏng) · Dọc trục ĐT975B",
-      "booking_url": "https://vinpearl.com/vi"
+      "fit_score": 87,
+      "family_room_note": "Nguồn không ghi rõ có phòng gia đình; 687 phòng, đều có ban công riêng",
+      "price_note": "Chưa có giá riêng của khách sạn từ nguồn kiểm được; nguồn chỉ có khung giá theo hạng sao (5 sao từ 3.000.000đ/đêm). Xem giá thật ở booking_url.",
+      "fit_note": "Số phòng trống là dữ liệu mô phỏng (seed=42)",
+      "booking_url": "https://booking.vinpearl.com/hotel/VHD1PQ?checkin=2026-12-12&checkout=2026-12-13&adults=2&children=2",
+      "image_url": "https://static.vinwonders.com/production/VinHolidays-Fiesta-Phu-Quoc-1.jpg"
     }
   ],
-  "selected_hotel_id": "HT-01",
+  "selected_hotel_id": "HT-03",
   "days": [
     {
       "day": 1,
@@ -62,7 +68,7 @@
       },
       "items": [
         {
-          "id": "HT-01",
+          "id": "HT-03",
           "type": "hotel",
           "category": "hotel",
           "name": "VinHolidays Fiesta Phú Quốc",
@@ -79,7 +85,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Điểm xuất phát (tham khảo, ngoài phạm vi chấm eval/)."
+          "notes": "Điểm xuất phát (tham khảo, ngoài phạm vi chấm eval/).",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/VinHolidays-Fiesta-Phu-Quoc-1.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/RqKgjGtmdmg",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinholidays-fiesta-phu-quoc/",
+            "caption": "VinHolidays Fiesta Phú Quốc — Trung tâm Grand World",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "VW-Z2-01",
@@ -99,7 +114,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Đu quay cổ tích nhẹ nhàng, trẻ dưới 100cm cần có người lớn ngồi cùng."
+          "notes": "Đu quay cổ tích nhẹ nhàng, trẻ dưới 100cm cần có người lớn ngồi cùng.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/2025/03/The-cutting-edge-technology-behind-VinWonders-Phu-Quoc-rides-ensures-a-world-class-experience.jpg",
+            "youtube_url": "",
+            "source_url": "https://vinwonders.com/en/wonderpedia/news/vinwonders-phu-quoc-rides/",
+            "caption": "Đu quay Thumbelina — Thế giới diệu kỳ",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "VW-Z2-05",
@@ -119,7 +143,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Không gian có điều hòa, an toàn cho cả bé 95cm và 110cm."
+          "notes": "Không gian có điều hòa, an toàn cho cả bé 95cm và 110cm.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/vui-choi-tai-the-gioi-dieu-ky-vinwonders-phu-quoc.jpeg",
+            "youtube_url": "",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/the-gioi-dieu-ky-vinwonders-phu-quoc/",
+            "caption": "Khu vui chơi gia đình Thế giới diệu kỳ (ảnh đại diện phân khu)",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "VW-Z6-01",
@@ -139,7 +172,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Thủy cung trong nhà có điều hòa, mở 10:00–18:00."
+          "notes": "Thủy cung trong nhà có điều hòa, mở 10:00–18:00.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/05/cung-dien-hai-vuong-lanh-dia-ca-map.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/Z_GO1PwXz94",
+            "source_url": "https://vinwonders.com/en/sea-shell/",
+            "caption": "Cung điện Hải Vương (The Sea Shell) — Bể chính & đường hầm cá mập",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "VW-MEAL-02",
@@ -159,7 +201,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Ăn trưa trong nhà hàng thủy cung mát mẻ, thuận tiện ghép trước show Nàng tiên cá."
+          "notes": "Ăn trưa trong nhà hàng thủy cung mát mẻ, thuận tiện ghép trước show Nàng tiên cá.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/Deep-Sea.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/PKc19BZP9Ns",
+            "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+            "caption": "Nhà hàng Deep Sea — Trong Cung điện Hải Vương",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SH-MERMAID-1",
@@ -179,7 +230,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Đến sớm 10 phút trước 14:00 tại bể chính Cung điện Hải Vương."
+          "notes": "Đến sớm 10 phút trước 14:00 tại bể chính Cung điện Hải Vương.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/2026/03/tien-ca.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/GHgihwv_-9A",
+            "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+            "caption": "Biểu diễn Nàng tiên cá (suất 1) — Cung điện Hải Vương",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "VW-Z1-04",
@@ -199,7 +259,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Trải nghiệm ngồi rạp trong nhà có điều hòa, phù hợp trẻ từ 90cm."
+          "notes": "Trải nghiệm ngồi rạp trong nhà có điều hòa, phù hợp trẻ từ 90cm.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/04/dai-lo-chau-au-phu-quoc-4.jpg",
+            "youtube_url": "",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/dai-lo-chau-au-phu-quoc-diem-check-in-dep-ngat-ngay-tai-vinwonders-phu-quoc/",
+            "caption": "Không gian lâu đài trung cổ Đại lộ Châu Âu (ảnh đại diện phân khu)",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SH-CARNIVAL",
@@ -219,7 +288,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Hoạt náo đường phố ngoài trời tại Đại lộ Châu Âu."
+          "notes": "Hoạt náo đường phố ngoài trời tại Đại lộ Châu Âu.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/2025/08/Anh-chup-man-hinh-2025-08-05-152810-1.png",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/whIyfoTfiTw",
+            "source_url": "https://vinwonders.com/en/vinwonders-phu-quoc/",
+            "caption": "Carnival Parade — Đại lộ Châu Âu",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SH-ONCE",
@@ -239,7 +317,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Đến sớm 15 phút trước 18:45 tại Quảng trường Phượng Hoàng Lửa."
+          "notes": "Đến sớm 15 phút trước 18:45 tại Quảng trường Phượng Hoàng Lửa.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/once-show.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/ipAunJY5jSo",
+            "source_url": "https://vinwonders.com/en/once-show/",
+            "caption": "Once Show (Phượng hoàng lửa) — VinWonders Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         }
       ],
       "check": {
@@ -278,7 +365,7 @@
       },
       "items": [
         {
-          "id": "HT-01",
+          "id": "HT-03",
           "type": "hotel",
           "category": "hotel",
           "name": "VinHolidays Fiesta Phú Quốc",
@@ -295,7 +382,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Xuất phát đi Vinpearl Safari bằng xe VinBus (~20 phút)."
+          "notes": "Xuất phát đi Vinpearl Safari bằng xe VinBus (~20 phút).",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/VinHolidays-Fiesta-Phu-Quoc-1.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/RqKgjGtmdmg",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinholidays-fiesta-phu-quoc/",
+            "caption": "VinHolidays Fiesta Phú Quốc — Trung tâm Grand World",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SF-Z7-02",
@@ -315,7 +411,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Khu đi bộ ngắm thú buổi sáng mát mẻ; Safari đóng cửa 16:00."
+          "notes": "Khu đi bộ ngắm thú buổi sáng mát mẻ; Safari đóng cửa 16:00.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/07/VINPEARL-SAFARI-PHU-QUOC-85.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/W9V0VzmNdco",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinpearl-safari-phu-quoc/",
+            "caption": "Vườn thú mở Open Zoo — Vinpearl Safari Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SF-Z7-01",
@@ -335,7 +440,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Xe buýt kín điều hòa; chuyến cuối xuất phát 15:20."
+          "notes": "Xe buýt kín điều hòa; chuyến cuối xuất phát 15:20.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/07/Safari2.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/FiQSdnD72ZA",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/vinpearl-safari-phu-quoc/",
+            "caption": "Xe buýt chuyên dụng khu thú bán hoang dã — Vinpearl Safari Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SF-MEAL-01",
@@ -355,7 +469,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Nghỉ ăn trưa có mái che trong Safari."
+          "notes": "Nghỉ ăn trưa có mái che trong Safari.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/11/Vinpearl-safari-nha-hang-giraffe.jpg",
+            "youtube_url": "",
+            "source_url": "https://vinwonders.com/en/vinpearl-safari-phu-quoc/",
+            "caption": "Nhà hàng Giraffe — Vinpearl Safari Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SF-Z7-03",
@@ -375,7 +498,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Trải nghiệm gần gũi phù hợp cả 2 bé."
+          "notes": "Trải nghiệm gần gũi phù hợp cả 2 bé.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/07/7N2A1988.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/GeLaQF0f2-8",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/lich-bieu-dien-safari-phu-quoc/",
+            "caption": "Khu Kid Zoo & tương tác cho thú ăn — Vinpearl Safari Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "GW-Z8-01",
@@ -395,7 +527,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Di chuyển VinBus từ Safari sang Grand World (~20 phút)."
+          "notes": "Di chuyển VinBus từ Safari sang Grand World (~20 phút).",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-BAO-TANG-GAU.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/fnlvCUwm2ms",
+            "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
+            "caption": "Bảo tàng Gấu Teddy (Teddy Bear Museum) — Grand World Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "GW-MEAL-01",
@@ -415,7 +556,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Ăn tối ngay gần hồ Venice."
+          "notes": "Ăn tối ngay gần hồ Venice.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/production/kinh-nghiem-di-grand-world-phu-quoc-6.jpg",
+            "youtube_url": "",
+            "source_url": "https://vinwonders.com/vi/wonderpedia/news/kinh-nghiem-di-grand-world-phu-quoc/",
+            "caption": "Phố ẩm thực & nhà hàng Grand World Phú Quốc",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         },
         {
           "id": "SH-GW-VENICE",
@@ -435,7 +585,16 @@
             { "child_cm": 110, "ok": true },
             { "child_cm": 95, "ok": true }
           ],
-          "notes": "Show nhạc nước miễn phí trên mặt hồ Venice."
+          "notes": "Show nhạc nước miễn phí trên mặt hồ Venice.",
+          "media": {
+            "has_media": true,
+            "image_url": "https://static.vinwonders.com/2022/05/Grand-World-PhuQuoc-SAC-MAU-VENICE.jpg",
+            "youtube_url": "https://www.youtube-nocookie.com/embed/UOdfnpUA3Lo",
+            "source_url": "https://vinwonders.com/en/grand-world-phu-quoc/",
+            "caption": "Show nhạc nước Sắc màu Venice — Hồ Tình Yêu",
+            "verified_date": "2026-11-28",
+            "is_zone_fallback": false
+          }
         }
       ],
       "check": {

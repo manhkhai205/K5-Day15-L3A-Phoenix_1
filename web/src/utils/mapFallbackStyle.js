@@ -190,7 +190,7 @@ export function toYoutubeEmbedUrl(rawUrl) {
     let videoId = "";
     if (u.hostname.includes("youtu.be")) {
       videoId = u.pathname.replace("/", "").trim();
-    } else if (u.hostname.includes("youtube.com")) {
+    } else if (u.hostname.includes("youtube.com") || u.hostname.includes("youtube-nocookie.com")) {
       if (u.pathname.startsWith("/embed/")) {
         videoId = u.pathname.split("/embed/")[1].split("/")[0];
       } else if (u.pathname.startsWith("/shorts/")) {
@@ -202,7 +202,7 @@ export function toYoutubeEmbedUrl(rawUrl) {
       }
     }
     if (!videoId || !/^[a-zA-Z0-9_-]{6,20}$/.test(videoId)) return null;
-    return `https://www.youtube.com/embed/${videoId}`;
+    return `https://www.youtube-nocookie.com/embed/${videoId}`;
   } catch {
     return null;
   }
